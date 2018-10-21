@@ -6,27 +6,27 @@
     <group android:id="@+id/group1" android:checkableBehavior="single">
         <item android:id="@+id/manual"
             android:icon="@drawable/ic_manual_icon"
-            android:title="Anleitung"
+            android:title="@string/manual"
             />
         <item android:id="@+id/timeTable"
             android:icon="@drawable/ic_clock_icon"
-            android:title="Zeiten"
+            android:title="@string/timeTable"
             />
         <item android:id="@+id/roomplans"
             android:icon="@drawable/ic_location_icon"
-            android:title="Raumpläne"
+            android:title="@string/roomplans"
             />
         <item android:id="@+id/tasks"
             android:icon="@drawable/ic_check_box_icon"
-            android:title="Aufgaben"
+            android:title="@string/tasks"
             />
         <item android:id="@+id/group"
             android:icon="@drawable/ic_group_icon"
-            android:title="Deine Gruppe"
+            android:title="@string/group"
             />
-        <item android:id="@+id/impressum"
+        <item android:id="@+id/credits"
             android:icon="@drawable/ic_info_icon"
-            android:title="Impressum"
+            android:title="@string/credits"
             />
     </group>
 

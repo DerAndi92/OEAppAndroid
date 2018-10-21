@@ -3,4 +3,10 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="manual">Anleitung</string>
+    <string name="timeTable">Zeiten</string>
+    <string name="roomplans">Raumpläne</string>
+    <string name="tasks">Aufgaben</string>
+    <string name="group">Deine Gruppe</string>
+    <string name="credits">Impressum</string>
 </resources>
