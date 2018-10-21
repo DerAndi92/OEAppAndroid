@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+    <group android:id="@+id/group1" android:checkableBehavior="single">
         <item android:id="@+id/manual"
             android:icon="@drawable/ic_manual_icon"
             android:title="Anleitung"
@@ -24,7 +24,7 @@
             android:icon="@drawable/ic_group_icon"
             android:title="Deine Gruppe"
             />
-        <item android:id="@+id/info"
+        <item android:id="@+id/impressum"
             android:icon="@drawable/ic_info_icon"
             android:title="Impressum"
             />
