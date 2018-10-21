@@ -68,7 +68,7 @@ public class Introduction extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.group:
                 break;
-            case R.id.impressum:
+            case R.id.credits:
                 break;
         }
         drawer.closeDrawer(GravityCompat.START);
