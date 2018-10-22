@@ -11,7 +11,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-public class Introduction extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
 
     @Override
@@ -39,7 +39,7 @@ public class Introduction extends AppCompatActivity implements NavigationView.On
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_icon);
 
         //Startseite
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new introductionFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new IntroductionFragment()).commit();
     }
 
     //Reaktion bei Touch auf Zurück-Button
@@ -50,7 +50,6 @@ public class Introduction extends AppCompatActivity implements NavigationView.On
         } else {
             super.onBackPressed();
         }
-
     }
 
     @Override
@@ -58,7 +57,7 @@ public class Introduction extends AppCompatActivity implements NavigationView.On
 
         switch (menuItem.getItemId()){
             case R.id.manual:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new introductionFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new IntroductionFragment()).commit();
                 break;
             case R.id.timeTable:
                 break;
@@ -69,6 +68,7 @@ public class Introduction extends AppCompatActivity implements NavigationView.On
             case R.id.group:
                 break;
             case R.id.credits:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ImpressumFragment()).commit();
                 break;
         }
         drawer.closeDrawer(GravityCompat.START);

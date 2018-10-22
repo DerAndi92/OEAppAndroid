@@ -3,10 +3,37 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!--Log In-->
+    <string name="oeRallyeAppHead">Herzlich willkommen \n bei der OE-Rallye!</string>
+    <string name="oeRallyeAppText">Bitte melde dich an.</string>
+    <string name="yourname">Vorname Nachname</string>
+    <string name="email">E-Mail</string>
+    <string name="password">Passwort</string>
+    <string name="buttonLogin">Einloggen</string>
+
+    <!--Menu-->
     <string name="manual">Anleitung</string>
     <string name="timeTable">Zeiten</string>
     <string name="roomplans">Raumpläne</string>
     <string name="tasks">Aufgaben</string>
     <string name="group">Deine Gruppe</string>
     <string name="credits">Impressum</string>
+
+    <!--manual_fragment-->
+    <string name="headline_manual">ANLEITUNG</string>
+    <string name="manualText">Um die Gebäude des Departments besser kennenzulernen, habt ihr heute die Aufgabe die Labore und Räumlichkeiten zu erkunden
+        und euch durch die Bonusfragen wichtige Punkte zu sichern. Es gibt tolle Preise zu gewinnen. \n
+        \nBevor ihr in eure Tour startet solltet ihr euch die Aufgaben genauestens durchlesen und euch schon mal einen neuen Gruppennamen überlegen, welcher am
+        Ende mit in den Sieg einberechnet wird, also zeigt eure Kreativität. \n
+        \nBeachtet dabei bitte die Zeiten der Labore, solltet ihr sie nämlich verpassen, gehen wertvolle Punkte verloren. \n
+        \nBleibt in eurer Gruppe, arbeitet zusammen bis zum Schluss. \n
+        \nEure Ergebnisse tragt ihr bitte in die dafür vorgesehenen Felder in der App ein.</string>
+
+    <!--impressum_fragment-->
+    <string name="headline_impressum">IMPRESSUM</string>
+    <string name="impressumText">Studierendenprojekt der HAW Hamburg \n
+        \nCaroline Wolf, Andreas Scholten, Tobias Saladauski \n
+        \nVerantwortlich für Inhalte: \nOE-Team Medientechnik der HAW Hamburg, Fakultät DMI
+    </string>
 </resources>

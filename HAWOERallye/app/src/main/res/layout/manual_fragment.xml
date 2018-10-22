@@ -14,7 +14,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:fontFamily="@font/open_sans_bold"
-        android:text="ANLEITUNG"
+        android:text="@string/headline_manual"
         android:textColor="@color/colorPrimary"
         android:textSize="36sp"
         app:layout_constraintEnd_toStartOf="@+id/scrollView2"
@@ -28,10 +28,12 @@
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/headlineTV"
         app:layout_constraintTop_toBottomOf="@+id/headlineTV"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintVertical_bias="0.0">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -41,11 +43,14 @@
             <TextView
                 android:id="@+id/introductionTV"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:fontFamily="@font/open_sans"
-                android:text="Blabla Text Lorem"
+                android:text="@string/manualText"
                 android:textColor="@color/colorPrimary"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="16dp" />
         </LinearLayout>
     </ScrollView>
+
 </android.support.constraint.ConstraintLayout>
