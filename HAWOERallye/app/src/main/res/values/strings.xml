@@ -4,6 +4,9 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <!--Loading Screen-->
+    <string name="oeRallyeAppLoad">Lädt...</string>
+
     <!--Log In-->
     <string name="oeRallyeAppHead">Herzlich willkommen \n bei der OE-Rallye!</string>
     <string name="oeRallyeAppText">Bitte melde dich an.</string>
