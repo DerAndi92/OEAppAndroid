@@ -36,7 +36,7 @@
     <string name="group">Deine Gruppe</string>
     <string name="credits">Impressum</string>
 
-    <!--manual_fragment-->
+    <!--fragment_manual-->
     <string name="headline_manual">ANLEITUNG</string>
     <string name="manualText">Um die Gebäude des Departments besser kennenzulernen, habt ihr heute die Aufgabe die Labore und Räumlichkeiten zu erkunden
         und euch durch die Bonusfragen wichtige Punkte zu sichern. Es gibt tolle Preise zu gewinnen. \n
@@ -46,7 +46,7 @@
         \nBleibt in eurer Gruppe, arbeitet zusammen bis zum Schluss. \n
         \nEure Ergebnisse tragt ihr bitte in die dafür vorgesehenen Felder in der App ein.</string>
 
-    <!--timetable_fragment-->
+    <!--times_fragment-->
     <string name="headline_timetable">LABOR-ZEITEN</string>
 
     <!--roomplans_fragment-->
@@ -58,10 +58,13 @@
     <!--group_fragment-->
     <string name="headline_group">DEINE GRUPPE</string>
 
-    <!--impressum_fragment-->
+    <!--fragment_impressum-->
     <string name="headline_impressum">IMPRESSUM</string>
     <string name="impressumText">Studierendenprojekt der HAW Hamburg \n
         \nCaroline Wolf, Andreas Scholten, Tobias Saladauski \n
         \nVerantwortlich für Inhalte: \nOE-Team Medientechnik der HAW Hamburg, Fakultät DMI
     </string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

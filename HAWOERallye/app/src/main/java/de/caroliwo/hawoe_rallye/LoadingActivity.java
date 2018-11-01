@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ProgressBar;
 
 import java.io.BufferedReader;
@@ -40,9 +41,7 @@ private ProgressBar progressBar;
                 connection.setRequestMethod("GET"); //GET oder POST-Request? noch klären --> eher PostRequest mit IdentifizierungsDaten
                 //connection.setReadTimeout(10000 /* milliseconds */ );
                 //connection.setConnectTimeout(15000 /* milliseconds */ );
-                connection.connect();
-
-                long contentLength = connection.getContentLength();
+               connection.connect();
 
                 //POST-Request Daten senden
 
@@ -51,12 +50,14 @@ private ProgressBar progressBar;
                 InputStream is = connection.getInputStream();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(is));
                 String line;
+                int counter=0;
                 StringBuffer response = new StringBuffer();
                 while((line = reader.readLine()) != null) {
-                    //publishProgress((int) (((50+1) / (float) contentLength) * 100)); ProgressBar lädt noch nicht
+                    counter++;
                     response.append(line);
                     response.append('\r');
-
+                    //Anzahl der Lines rausbekommen, dann publishProgress(counter/AnzahlLines*100);
+                    publishProgress((int) ((counter+1) / 1*100));
                 }
                 reader.close();
                 return response.toString();
@@ -66,10 +67,12 @@ private ProgressBar progressBar;
                 connection.disconnect();
             }
             return null;
+
         }
 
         @Override
         protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
             progressBar.setProgress(values[0]);
         }
 

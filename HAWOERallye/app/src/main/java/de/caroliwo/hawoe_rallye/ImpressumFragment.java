@@ -13,6 +13,6 @@ public class ImpressumFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.impressum_fragment, container,false);
+        return inflater.inflate(R.layout.fragment_impressum, container,false);
     }
 }
