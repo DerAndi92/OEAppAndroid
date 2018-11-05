@@ -3,23 +3,25 @@ package de.caroliwo.hawoe_rallye;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.ProgressBar;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
-class DownloadJSON extends AsyncTask<String, Integer, String> {
+class DownloadJSON extends AsyncTask<String, Integer, List<Task>> {
     private ProgressBar progressBar;
-    private List<Task> tasks;
     private Context applicationContext;
+    private List<Task> taskList;
 
     public DownloadJSON (ProgressBar progressBar, Context applicationContext){
         this.progressBar = progressBar;
@@ -27,7 +29,7 @@ class DownloadJSON extends AsyncTask<String, Integer, String> {
     }
 
     @Override
-    protected String doInBackground(String... urls) {
+    protected List<Task> doInBackground(String... urls) {
         HttpURLConnection connection = null;
 
         try {
@@ -42,7 +44,6 @@ class DownloadJSON extends AsyncTask<String, Integer, String> {
             //POST-Request IdentifizierungsDaten senden
 
             //GET-Daten verarbeiten
-            //https://www.mkyong.com/java/how-do-convert-java-object-to-from-json-format-gson-api/
             InputStream is = connection.getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             String line;
@@ -57,51 +58,17 @@ class DownloadJSON extends AsyncTask<String, Integer, String> {
             }
             reader.close();
 
-
-            //GSON
+            //https://www.mkyong.com/java/how-do-convert-java-object-to-from-json-format-gson-api/
+            //https://futurestud.io/tutorials/gson-mapping-of-null-values
+            //GSON to JavaObjekt
             Gson gson = new Gson();
-            // JSON to Java object
-            //Task task = gson.fromJson(response.toString(), Task.class);
+            String jsonTest = "[{\"name\":\"Produktionslabor\",\"icon\":\"ic_clapperboard_icon\",\"time\":\"11.15-13.00 Uhr\",\"destination\":\"EG im Neubau\",\"numberOfTasks\":2,\"answerFieldNeeded\":true,\"passwordNeeded\":true,\"buttonNeeded\":true,\"buttonText\":\"Abgeben\"},{\"name\":\"Wettrennen\",\"icon\":\"ic_car_icon\",\"time\":\"12.00-15.00 Uhr\",\"destination\":\"U36 im Altbau\",\"numberOfTasks\":1,\"answerField\":false,\"password\":false,\"button\":true,\"buttonText\":\"Erledigt\"}]";
 
+            //Liste mit JavaObjekten erstellen
+            Type taskListType = new TypeToken<ArrayList<Task>>(){}.getType(); //Typ der Liste erkennen
+            taskList = gson.fromJson(jsonTest, taskListType);
 
-            String jsonStringTest = " [\n" +
-                    "    {\n" +
-                    "    \"name\": \"Produktionslabor\",\n" +
-                    "    \"icon\": \"ic_clapperboard_icon\",\n" +
-                    "    \"time\": \"11.15-13.00 Uhr\",\n" +
-                    "    \"destination\": \"EG im Neubau\",\n" +
-                    "    \"numberOfTasks\": 2,\n" +
-                    "    \"task\": \n" +
-                    "    [\n" +
-                    "      {\"task1\": \"Eine kleine Aufgabe wartet auf euch. Lasst eure Punkte von den Mitarbeitern des Produktionslabors eintragen.\"},\n" +
-                    "      {\"task2\": \"Punkte\"}\n" +
-                    "    ],\n" +
-                    "    \"answerFieldNeeded\":true,\n" +
-                    "    \"passwordNeeded\":true,\n" +
-                    "    \"buttonNeeded\": true,\n" +
-                    "    \"buttonText\":\"Abgeben\"\n" +
-                    "  },\n" +
-                    "  {\n" +
-                    "    \"name\": \"Wettrennen\",\n" +
-                    "    \"icon\": \"ic_car_icon\",\n" +
-                    "    \"time\": \"12.00-15.00 Uhr\",\n" +
-                    "    \"destination\": \"U36 im Altbau\",\n" +
-                    "    \"numberOfTasks\": 1,\n" +
-                    "    \"task\": \n" +
-                    "    [\n" +
-                    "      {\"task1\": \"Tretet in einem spannenden Wettrennen gegen uns OE-Tutoren an!\"}\n" +
-                    "    ],\n" +
-                    "    \"answerField\":false,\n" +
-                    "    \"password\":false,\n" +
-                    "    \"button\": true,\n" +
-                    "    \"buttonText\":\"Erledigt\"\n" +
-                    "  }\n" +
-                    "]\n";
-
-            tasks.add(gson.fromJson(jsonStringTest, Task.class));
-            Log.i("GSON JSON Test", tasks.toString());
-
-            return response.toString();
+            return taskList;
 
         } catch (FileNotFoundException e1) {
             e1.printStackTrace();
@@ -120,7 +87,9 @@ class DownloadJSON extends AsyncTask<String, Integer, String> {
     }
 
     @Override
-    protected void onPostExecute(String s) {
-        applicationContext.startActivity(new Intent(applicationContext, LogInActivity.class));
+    protected void onPostExecute(List<Task> s) {
+        Intent intent = new Intent(applicationContext, LogInActivity.class);
+        //Hier einfügen: Übergabe von TaskList im Intent per Serializable (langsam) oder Parcelable
+        applicationContext.startActivity(intent);
     }
 }
