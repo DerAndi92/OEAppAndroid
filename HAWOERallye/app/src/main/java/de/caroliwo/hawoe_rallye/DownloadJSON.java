@@ -3,6 +3,7 @@ package de.caroliwo.hawoe_rallye;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.ProgressBar;
 
 import com.google.gson.Gson;
@@ -13,10 +14,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 class DownloadJSON extends AsyncTask<String, Integer, String> {
     private ProgressBar progressBar;
-    private Task [] task;
+    private List<Task> tasks;
     private Context applicationContext;
 
     public DownloadJSON (ProgressBar progressBar, Context applicationContext){
@@ -65,7 +67,7 @@ class DownloadJSON extends AsyncTask<String, Integer, String> {
             String jsonStringTest = " [\n" +
                     "    {\n" +
                     "    \"name\": \"Produktionslabor\",\n" +
-                    "    \"icon\": \"clapperboard\",\n" +
+                    "    \"icon\": \"ic_clapperboard_icon\",\n" +
                     "    \"time\": \"11.15-13.00 Uhr\",\n" +
                     "    \"destination\": \"EG im Neubau\",\n" +
                     "    \"numberOfTasks\": 2,\n" +
@@ -81,7 +83,7 @@ class DownloadJSON extends AsyncTask<String, Integer, String> {
                     "  },\n" +
                     "  {\n" +
                     "    \"name\": \"Wettrennen\",\n" +
-                    "    \"icon\": \"car\",\n" +
+                    "    \"icon\": \"ic_car_icon\",\n" +
                     "    \"time\": \"12.00-15.00 Uhr\",\n" +
                     "    \"destination\": \"U36 im Altbau\",\n" +
                     "    \"numberOfTasks\": 1,\n" +
@@ -96,8 +98,8 @@ class DownloadJSON extends AsyncTask<String, Integer, String> {
                     "  }\n" +
                     "]\n";
 
-            task = gson.fromJson(jsonStringTest, Task[].class);
-
+            tasks.add(gson.fromJson(jsonStringTest, Task.class));
+            Log.i("GSON JSON Test", tasks.toString());
 
             return response.toString();
 

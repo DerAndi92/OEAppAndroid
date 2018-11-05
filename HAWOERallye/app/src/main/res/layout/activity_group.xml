@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient"
     tools:context=".GroupActivity">
 
 
@@ -16,7 +17,7 @@
         android:layout_marginEnd="16dp"
         android:fontFamily="@font/open_sans_bold"
         android:text="@string/joinGroupHead"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/colorText"
         android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,7 +32,7 @@
         android:layout_marginEnd="16dp"
         android:fontFamily="@font/open_sans"
         android:text="@string/joinText"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/colorText"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

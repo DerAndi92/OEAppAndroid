@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new IntroductionFragment()).commit();
                 break;
             case R.id.timeTable:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new TimesFragment()).commit();
                 break;
             case R.id.roomplans:
                 break;

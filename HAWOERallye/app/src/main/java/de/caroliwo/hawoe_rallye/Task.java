@@ -15,6 +15,20 @@ public class Task {
     boolean buttonNeeded;
     private String buttonText;
 
+    public Task (String name, String icon, String time, String destination, int numberOfTasks, List<String> tasks,
+                 boolean answerFieldNeeded, boolean passwordNeeded, boolean buttonNeeded, String buttonText) {
+        this.name = name;
+        this.icon = icon;
+        this.time = time;
+        this.destination = destination;
+        this.numberOfTasks = numberOfTasks;
+        this.tasks = tasks;
+        this.answerFieldNeeded = answerFieldNeeded;
+        this.passwordNeeded = passwordNeeded;
+        this.buttonNeeded= buttonNeeded;
+        this.buttonText = buttonText;
+    }
+
     public String getName() {
         return name;
     }
