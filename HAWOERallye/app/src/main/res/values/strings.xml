@@ -11,6 +11,9 @@
     <string name="oeRallyeAppHead">Herzlich willkommen \n bei der OE-Rallye!</string>
     <string name="oeRallyeAppText">Bitte melde dich an.</string>
     <string name="buttonLogin">Einloggen</string>
+    <string name="nameFieldPlaceholder">Vorname Nachname</string>
+    <string name="passwordFieldPlaceholder">Passwort</string>
+    <string name="emailFieldPlaceholder">E-Mail-Adresse</string>
 
     <!--Join Group-->
     <string name="joinGroupHead">GRUPPENWAHL</string>
