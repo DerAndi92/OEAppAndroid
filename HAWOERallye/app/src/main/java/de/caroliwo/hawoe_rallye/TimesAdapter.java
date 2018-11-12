@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TimesAdapter extends ArrayAdapter {
@@ -25,7 +26,7 @@ public class TimesAdapter extends ArrayAdapter {
     private final Activity context;
 
     //Konstruktor
-    public TimesAdapter(Activity context, List<Task> taskList) {
+    public TimesAdapter(Activity context, ArrayList<Task> taskList) {
         super(context, R.layout.times_listview_layout, taskList);
         this.context=context;
         this.taskList=taskList;

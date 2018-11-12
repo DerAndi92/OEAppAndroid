@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,25 +16,21 @@ import java.util.List;
 public class TimesFragment extends Fragment {
 
     TimesAdapter timesAdapter;
-    List<Task> taskList = new ArrayList<>(); //Platzhalter
+    ArrayList<Task> taskList;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_times, container, false);
+
         //ListView mit Zeiten füllen
         ListView timesLV = rootView.findViewById(R.id.timesLV);
-        //PLATZHALTER!!!! Daten aus JSON-Objekt holen
-        taskList.add(new Task ("Wettrennen","ic_car_icon", "12.00 - 15.00 Uhr", "E39 Altbau", 1,  false, false, true, "Erledigt" ));
-        taskList.add(new Task ("Produktionslabor","ic_clapperboard_icon", "11.15 - 13.00 Uhr", "EG im Neubau", 2,  false, true, true, "Abgeben" ));
-        taskList.add(new Task ("Wettrennen","ic_car_icon", "12.00 - 15.00 Uhr", "E39 Altbau", 1,  false, false, true, "Erledigt" ));
-        taskList.add(new Task ("Produktionslabor","ic_clapperboard_icon", "11.15 - 13.00 Uhr", "EG im Neubau", 2, false, true, true, "Abgeben" ));
-        taskList.add(new Task ("Wettrennen","ic_car_icon", "12.00 - 15.00 Uhr", "E39 Altbau", 1,  false, false, true, "Erledigt" ));
-        taskList.add(new Task ("Produktionslabor","ic_clapperboard_icon", "11.15 - 13.00 Uhr", "EG im Neubau", 2, false, true, true, "Abgeben" ));
-        taskList.add(new Task ("Wettrennen","ic_car_icon", "12.00 - 15.00 Uhr", "E39 Altbau", 1,  false, false, true, "Erledigt" ));
-        taskList.add(new Task ("Produktionslabor","ic_clapperboard_icon", "11.15 - 13.00 Uhr", "EG im Neubau", 2,  false, true, true, "Abgeben" ));
-        taskList.add(new Task ("Wettrennen","ic_car_icon", "12.00 - 15.00 Uhr", "E39 Altbau", 1,  false, false, true, "Erledigt" ));
-        taskList.add(new Task ("Produktionslabor","ic_clapperboard_icon", "11.15 - 13.00 Uhr", "EG im Neubau", 2, false, true, true, "Abgeben" ));
+
+        //Daten von Activity Parcelable holen
+        Bundle bundle = getArguments();
+        if(bundle!=null) {
+            taskList = bundle.getParcelableArrayList("Task List");
+        }
 
         timesAdapter = new TimesAdapter(getActivity(), taskList);
         timesLV.setAdapter(timesAdapter);

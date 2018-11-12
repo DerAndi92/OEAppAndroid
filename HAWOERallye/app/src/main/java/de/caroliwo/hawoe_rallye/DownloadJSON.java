@@ -16,12 +16,12 @@ import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
-class DownloadJSON extends AsyncTask<String, Integer, List<Task>> {
+
+class DownloadJSON extends AsyncTask<String, Integer, ArrayList<Task>> {
     private ProgressBar progressBar;
     private Context applicationContext;
-    private List<Task> taskList;
+    private ArrayList<Task> taskList;
 
     public DownloadJSON (ProgressBar progressBar, Context applicationContext){
         this.progressBar = progressBar;
@@ -29,7 +29,7 @@ class DownloadJSON extends AsyncTask<String, Integer, List<Task>> {
     }
 
     @Override
-    protected List<Task> doInBackground(String... urls) {
+    protected ArrayList<Task> doInBackground(String... urls) {
         HttpURLConnection connection = null;
 
         try {
@@ -87,9 +87,10 @@ class DownloadJSON extends AsyncTask<String, Integer, List<Task>> {
     }
 
     @Override
-    protected void onPostExecute(List<Task> s) {
+    protected void onPostExecute(ArrayList<Task> s) {
         Intent intent = new Intent(applicationContext, LogInActivity.class);
-        //Hier einfügen: Übergabe von TaskList im Intent per Serializable (langsam) oder Parcelable
+        //Übergabe von TaskList im Intent per Parcelable:
+        intent.putParcelableArrayListExtra("Task List", s);
         applicationContext.startActivity(intent);
     }
 }
