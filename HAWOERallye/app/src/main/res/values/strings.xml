@@ -57,6 +57,9 @@
 
     <!--task_fragment-->
     <string name="headline_tasks">AUFGABEN</string>
+    <string name="buidling_new">NEUBAU</string>
+    <string name="building_old">ALTBAU</string>
+    <string name="single_task">AUFGABE</string>
 
     <!--group_fragment-->
     <string name="headline_group">DEINE GRUPPE</string>

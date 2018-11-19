@@ -3,10 +3,13 @@ package de.caroliwo.hawoe_rallye;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.ProgressBar;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -22,6 +25,7 @@ class DownloadJSON extends AsyncTask<String, Integer, ArrayList<Task>> {
     private ProgressBar progressBar;
     private Context applicationContext;
     private ArrayList<Task> taskList;
+    private boolean debug = true;
 
     public DownloadJSON (ProgressBar progressBar, Context applicationContext){
         this.progressBar = progressBar;
@@ -36,9 +40,10 @@ class DownloadJSON extends AsyncTask<String, Integer, ArrayList<Task>> {
             //Verbindung aufbauen zu Seite, die JSON zur Verfügung stellt
             URL url = new URL(urls[0]);
             connection = (HttpURLConnection) url.openConnection();
+            JSONObject postData;
             connection.setRequestMethod("GET"); //GET oder POST-Request? noch klären --> eher PostRequest mit IdentifizierungsDaten
-            //connection.setReadTimeout(10000 /* milliseconds */ );
-            //connection.setConnectTimeout(15000 /* milliseconds */ );
+            connection.setReadTimeout(10000 /* milliseconds */ );
+            connection.setConnectTimeout(15000 /* milliseconds */ );
             connection.connect();
 
             //POST-Request IdentifizierungsDaten senden
@@ -57,6 +62,7 @@ class DownloadJSON extends AsyncTask<String, Integer, ArrayList<Task>> {
                 publishProgress((int) ((counter + 1) / 1 * 100));
             }
             reader.close();
+            if (debug) Log.i("DownloadJSON-Log", "response: " + response.toString());
 
             //https://www.mkyong.com/java/how-do-convert-java-object-to-from-json-format-gson-api/
             //https://futurestud.io/tutorials/gson-mapping-of-null-values
@@ -66,7 +72,7 @@ class DownloadJSON extends AsyncTask<String, Integer, ArrayList<Task>> {
 
             //Liste mit JavaObjekten erstellen
             Type taskListType = new TypeToken<ArrayList<Task>>(){}.getType(); //Typ der Liste erkennen
-            taskList = gson.fromJson(jsonTest, taskListType);
+            taskList = gson.fromJson(response.toString(), taskListType);
 
             return taskList;
 

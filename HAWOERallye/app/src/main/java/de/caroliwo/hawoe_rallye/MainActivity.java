@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.roomplans:
                 break;
             case R.id.tasks:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new TasksFragment()).commit();
                 break;
             case R.id.group:
                 break;
