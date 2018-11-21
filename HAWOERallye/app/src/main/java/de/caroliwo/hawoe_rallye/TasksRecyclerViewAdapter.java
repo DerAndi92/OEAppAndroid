@@ -17,14 +17,14 @@ import java.util.List;
 
 public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecyclerViewAdapter.TasksViewHolder> {
 
-    Context context;
-    List<TaskItem> data;
-    Dialog taskDialog;
-    private boolean debug = true;
+    private Context context;
+    private List<TaskItem> taskList;
+    private Dialog taskDialog;
+    private boolean debug = false;
 
     public TasksRecyclerViewAdapter(Context context, List<TaskItem> data) {
         this.context = context;
-        this.data = data;
+        this.taskList = data;
     }
 
     @NonNull
@@ -42,7 +42,7 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
                 if (debug) Toast.makeText(context, "Test Click"+String.valueOf(viewHolder.getAdapterPosition()),Toast.LENGTH_SHORT).show();
                 TextView taskTitle = (TextView) taskDialog.findViewById(R.id.task_dialog_TV);
                 ImageView taskIcon = (ImageView) taskDialog.findViewById(R.id.task_dialog_IV);
-                taskTitle.setText(data.get(viewHolder.getAdapterPosition()).getName());
+                taskTitle.setText(taskList.get(viewHolder.getAdapterPosition()).getName());
                 taskDialog.show();
                 if (debug) Log.i("TasksRVAdapter-Log","taskDialog.isShowing(): " + taskDialog.isShowing());
                 if (debug) Log.i("TasksRVAdapter-Log","taskDialog.getContext(): " + taskDialog.getContext());
@@ -54,12 +54,12 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
 
     @Override
     public void onBindViewHolder(@NonNull TasksViewHolder tasksViewHolder, int i) {
-        tasksViewHolder.textView.setText(data.get(i).getName());
+        tasksViewHolder.textView.setText(taskList.get(i).getName());
     }
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return taskList.size();
     }
 
     public static class TasksViewHolder extends RecyclerView.ViewHolder {

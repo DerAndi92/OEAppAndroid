@@ -17,9 +17,9 @@
 
     <!--Join Group-->
     <string name="joinGroupHead">GRUPPENWAHL</string>
-    <string name="joinText">Bitte Wähle deine Gruppe anhand deiner Armbandfarbe.\n
-    \nWeitere Gruppenmitglieder kannst du im nächsten Schritt hinzufügen.</string>
+    <string name="joinText">Bitte Wähle deine Gruppe anhand deiner Armbandfarbe.\nWeitere Gruppenmitglieder kannst du im nächsten Schritt hinzufügen.</string>
     <string name="buttonJoinGroup">Beitreten</string>
+    <string name="single_group">GRUPPE</string>
     <string name="redButton">ROT</string>
     <string name="yellowButton">GELB</string>
     <string name="greenButton">GRÜN</string>
