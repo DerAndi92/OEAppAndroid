@@ -27,14 +27,14 @@ public class TimesAdapter extends ArrayAdapter {
 
     //Konstruktor
     public TimesAdapter(Activity context, ArrayList<Task> taskList) {
-        super(context, R.layout.times_listview_layout, taskList);
+        super(context, R.layout.times_listview_layout2, taskList);
         this.context=context;
         this.taskList=taskList;
     }
 
     public View getView(int position, View view, ViewGroup parent){
         LayoutInflater inflater=context.getLayoutInflater();
-        View rowView = inflater.inflate(R.layout.times_listview_layout, null, true);
+        View rowView = inflater.inflate(R.layout.times_listview_layout2, null, true);
 
         ImageView laborIconIV = rowView.findViewById(R.id.laborIconIV);
         TextView laborNameTV = rowView.findViewById(R.id.laborNameTV);

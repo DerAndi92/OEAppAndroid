@@ -3,64 +3,63 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_marginTop="2dp"
     android:layout_marginBottom="2dp"
-    android:background="@drawable/gradient">
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="5dp">
+    android:padding="5dp">
 
         <ImageView
             android:id="@+id/laborIconIV"
             android:layout_width="75dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@mipmap/ic_launcher" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/laborNameTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:fontFamily="@font/open_sans_bold"
                 android:text="Laborname"
                 android:textColor="@color/colorText"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@id/laborIconIV"
+                app:layout_constraintBottom_toTopOf="@id/locationTV"
+                android:layout_marginStart="8dp"/>
 
             <TextView
                 android:id="@+id/locationTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:fontFamily="@font/open_sans"
                 android:text="E51 im Altbau"
                 android:textColor="@color/colorText"
                 android:textSize="18sp"
-                tools:layout_editor_absoluteX="125dp" />
+                tools:layout_editor_absoluteX="125dp"
+                app:layout_constraintStart_toEndOf="@id/laborIconIV"
+                app:layout_constraintTop_toBottomOf="@id/laborNameTV"
+                app:layout_constraintBottom_toTopOf="@id/timeTV"
+                android:layout_marginStart="8dp"/>
 
             <TextView
                 android:id="@+id/timeTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:fontFamily="@font/open_sans"
                 android:text="11.15-12.00 und 13.00-15.00 Uhr"
                 android:textColor="@color/colorText"
-                android:textSize="18sp"/>
-                <!--tools:layout_editor_absoluteX="202dp" />-->
-        </LinearLayout>
+                android:textSize="18sp"
+                app:layout_constraintStart_toEndOf="@id/laborIconIV"
+                app:layout_constraintTop_toBottomOf="@id/locationTV"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                android:layout_marginStart="8dp"
+                app:layout_constrainedWidth="true"/>
+            <!--tools:layout_editor_absoluteX="202dp" />-->
 
-    </LinearLayout>
+
 
 </android.support.constraint.ConstraintLayout>

@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="150dp">
+    android:layout_height="150dp"
+    android:id="@+id/task_item_CL">
 
     <ImageView
         android:layout_width="100dp"
@@ -14,16 +15,16 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/task_item_textview"
+        app:layout_constraintBottom_toTopOf="@+id/task_item_TW"
         android:src="@drawable/ic_check_box_icon_big"
-        android:id="@+id/task_item_imageview"/>
+        android:id="@+id/task_item_IW"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:layout_marginBottom="10dp"
-        app:layout_constraintTop_toBottomOf="@id/task_item_imageview"
+        app:layout_constraintTop_toBottomOf="@id/task_item_IW"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,6 +32,6 @@
         android:text="@string/single_task"
         android:textSize="18dp"
         android:textStyle="bold"
-        android:id="@+id/task_item_textview"/>
+        android:id="@+id/task_item_TW"/>
 
 </android.support.constraint.ConstraintLayout>
