@@ -26,10 +26,12 @@ public class GroupActivity extends AppCompatActivity {
         if (debug) Log.i("GroupActivity-Log","3");
         recyclerView = findViewById(R.id.chooseGroupRV);
         if (debug) Log.i("GroupActivity-Log","4");
+
+        //RecyclerView mit Gruppen füllen
         groupList = new ArrayList<>();
         String[] testNames = {"ROT","BLAU","GRÜN","GELB","PINK","LILA","ORANGE","SILBER","SCHWARZ","WEISS"};
         String[] testColors = {"#ff0000","#0000ff","#00ff00","#ffff00","#ff00ff","#9600c8","#ff7d00","#939393","#000000","#ffffff"};
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) { //TODO: 10 is Placeholder for .length from number of Groups in JSON
             groupList.add(new GroupItem(getString(R.string.single_group) + " " + testNames[i], testColors[i]));
         }
         if (debug) Log.i("GroupActivity-Log","5");
@@ -45,6 +47,7 @@ public class GroupActivity extends AppCompatActivity {
         Intent intentFromLogIn = getIntent();
         taskList = intentFromLogIn.getParcelableArrayListExtra("Task List");
 
+        //TODO: Button kann nur geklickt werden, wenn bereits Gruppe ausgewählt wurde. Ansonsten: TOAST "Bitte wähle deine Gruppe".
         joinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -11,26 +11,14 @@ public class Task implements Parcelable {
     private String icon;
     private String time;
     private String destination;
-    private int numberOfTasks;
-    //private List<String> tasks;
-    private boolean answerFieldNeeded;
-    private boolean passwordNeeded;
-    private boolean buttonNeeded;
-    private String buttonText;
+    //private Form form; enthält Aufbaufelder für Layout
 
     //Konstruktor
-    public Task (String name, String icon, String time, String destination, int numberOfTasks, /*List<String> tasks,*/
-                 boolean answerFieldNeeded, boolean passwordNeeded, boolean buttonNeeded, String buttonText) {
+    public Task (String name, String icon, String time, String destination, String buttonText) {
         this.name = name;
         this.icon = icon;
         this.time = time;
         this.destination = destination;
-        this.numberOfTasks = numberOfTasks;
-       // this.tasks = tasks;
-        this.answerFieldNeeded = answerFieldNeeded;
-        this.passwordNeeded = passwordNeeded;
-        this.buttonNeeded= buttonNeeded;
-        this.buttonText = buttonText;
     }
 
     //Parcelable Konstruktor
@@ -39,11 +27,6 @@ public class Task implements Parcelable {
         icon = in.readString();
         time = in.readString();
         destination = in.readString();
-        numberOfTasks = in.readInt();
-        answerFieldNeeded = in.readByte() != 0;
-        passwordNeeded = in.readByte() != 0;
-        buttonNeeded = in.readByte() != 0;
-        buttonText = in.readString();
     }
 
     //Getter
@@ -63,28 +46,6 @@ public class Task implements Parcelable {
         return destination;
     }
 
-    public int getNumberOfTasks() {
-        return numberOfTasks;
-    }
-
-    //public List<String> getTasks() {return tasks;}
-
-    public boolean isAnswerFieldNeeded() {
-        return answerFieldNeeded;
-    }
-
-    public boolean isPasswordNeeded() {
-        return passwordNeeded;
-    }
-
-    public boolean isButtonNeeded() {
-        return buttonNeeded;
-    }
-
-    public String getButtonText() {
-        return buttonText;
-    }
-
 
     //Parcelable Methods
     @Override
@@ -98,11 +59,6 @@ public class Task implements Parcelable {
         dest.writeString(icon);
         dest.writeString(time);
         dest.writeString(destination);
-        dest.writeInt(numberOfTasks);
-        dest.writeByte((byte) (answerFieldNeeded ? 1 : 0));
-        dest.writeByte((byte) (passwordNeeded ? 1 : 0));
-        dest.writeByte((byte) (buttonNeeded ? 1 : 0));
-        dest.writeString(buttonText);
     }
 
     public static final Creator<Task> CREATOR = new Creator<Task>() {

@@ -79,11 +79,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, timesFragment).commit();
                 break;
             case R.id.roomplans:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new RoomplansFragment()).commit();
                 break;
             case R.id.tasks:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new TasksFragment()).commit();
                 break;
             case R.id.group:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new GroupFragment()).commit();
                 break;
             case R.id.credits:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ImpressumFragment()).commit();

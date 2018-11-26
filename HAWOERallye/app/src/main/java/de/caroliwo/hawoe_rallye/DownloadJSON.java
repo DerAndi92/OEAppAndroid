@@ -68,7 +68,6 @@ class DownloadJSON extends AsyncTask<String, Integer, ArrayList<Task>> {
             //https://futurestud.io/tutorials/gson-mapping-of-null-values
             //GSON to JavaObjekt
             Gson gson = new Gson();
-            String jsonTest = "[{\"name\":\"Produktionslabor\",\"icon\":\"ic_clapperboard_icon\",\"time\":\"11.15-13.00 Uhr\",\"destination\":\"EG im Neubau\",\"numberOfTasks\":2,\"answerFieldNeeded\":true,\"passwordNeeded\":true,\"buttonNeeded\":true,\"buttonText\":\"Abgeben\"},{\"name\":\"Wettrennen\",\"icon\":\"ic_car_icon\",\"time\":\"12.00-15.00 Uhr\",\"destination\":\"U36 im Altbau\",\"numberOfTasks\":1,\"answerField\":false,\"password\":false,\"button\":true,\"buttonText\":\"Erledigt\"}]";
 
             //Liste mit JavaObjekten erstellen
             Type taskListType = new TypeToken<ArrayList<Task>>(){}.getType(); //Typ der Liste erkennen

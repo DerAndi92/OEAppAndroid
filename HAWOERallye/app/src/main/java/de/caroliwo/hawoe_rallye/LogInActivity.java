@@ -6,6 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -17,6 +21,10 @@ private ArrayList<Task> taskList;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        final EditText name = findViewById(R.id.nameET);
+        final EditText lastname = findViewById(R.id.lastnameET);
+        final Spinner spinner = findViewById(R.id.MTMS_spinner);
+        final EditText password = findViewById(R.id.passwordET);
         Button loginButton = findViewById(R.id.logInBTN);
 
         //Get putExtra-Data from DownloadJSON
@@ -26,9 +34,15 @@ private ArrayList<Task> taskList;
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LogInActivity.this, GroupActivity.class);
-                intent.putParcelableArrayListExtra("Task List", taskList);
-                startActivity(intent);
+                //TODO: Passwort validieren, Eingaben aus Feldern holen .getText...
+                if(password!=null && name!=null && lastname!=null && !spinner.getSelectedItem().toString().equals("Studiengang wählen")){
+                    Intent intent = new Intent(LogInActivity.this, GroupActivity.class);
+                    intent.putParcelableArrayListExtra("Task List", taskList);
+                    startActivity(intent);
+                }
+                else {
+                    Toast.makeText(LogInActivity.this, "Fülle bitte alle Felder aus.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

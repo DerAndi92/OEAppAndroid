@@ -11,25 +11,20 @@
     <string name="oeRallyeAppHead">Herzlich willkommen \n bei der OE-Rallye!</string>
     <string name="oeRallyeAppText">Bitte melde dich an.</string>
     <string name="buttonLogin">Einloggen</string>
-    <string name="nameFieldPlaceholder">Vorname Nachname</string>
+    <string name="nameFieldPlaceholder">Vorname</string>
+    <string name="lastnameFieldPlaceholder">Nachname</string>
+    <string-array name="subject_array">
+        <item>Studiengang wählen</item>
+        <item>Medientechnik</item>
+        <item>Media Systems</item>
+    </string-array>
     <string name="passwordFieldPlaceholder">Passwort</string>
-    <string name="emailFieldPlaceholder">E-Mail-Adresse</string>
 
     <!--Join Group-->
     <string name="joinGroupHead">GRUPPENWAHL</string>
-    <string name="joinText">Bitte Wähle deine Gruppe anhand deiner Armbandfarbe.\nWeitere Gruppenmitglieder kannst du im nächsten Schritt hinzufügen.</string>
-    <string name="buttonJoinGroup">Beitreten</string>
+    <string name="joinText">Bitte Wähle deine Gruppe anhand deiner Armbandfarbe.\nWeitere Gruppenmitglieder kannst du im Menü unter \"Deine Gruppe\" hinzufügen.</string>
+    <string name="buttonJoinGroup">Fertig</string>
     <string name="single_group">GRUPPE</string>
-    <string name="redButton">ROT</string>
-    <string name="yellowButton">GELB</string>
-    <string name="greenButton">GRÜN</string>
-    <string name="blueButton">BLAU</string>
-    <string name="blackButton">SCHWARZ</string>
-    <string name="whiteButton">WEISS</string>
-    <string name="pinkButton">PINK</string>
-    <string name="silverButton">SILBER</string>
-    <string name="orangeButton">ORANGE</string>
-    <string name="purpleButton">LILA</string>
 
     <!--Menu-->
     <string name="manual">Anleitung</string>
