@@ -1,35 +1,24 @@
 package de.caroliwo.hawoe_rallye;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import java.sql.Time;
 
-import java.util.List;
 
-public class Task implements Parcelable {
+public class Task {
 
+    private int id;
     private String name;
     private String icon;
-    private String time;
     private String destination;
-    //private Form form; enthält Aufbaufelder für Layout
+    private Times times;
+    private boolean completed;
+    //private List<Field> fieldList;
+    private int order;
 
-    //Konstruktor
-    public Task (String name, String icon, String time, String destination, String buttonText) {
-        this.name = name;
-        this.icon = icon;
-        this.time = time;
-        this.destination = destination;
+    //GETTER-Methoden
+    public int getId() {
+        return id;
     }
 
-    //Parcelable Konstruktor
-    protected Task(Parcel in) { //needs to have the same order as writeToParcel-Method
-        name = in.readString();
-        icon = in.readString();
-        time = in.readString();
-        destination = in.readString();
-    }
-
-    //Getter
     public String getName() {
         return name;
     }
@@ -38,17 +27,58 @@ public class Task implements Parcelable {
         return icon;
     }
 
-    public String getTime() {
-        return time;
-    }
-
     public String getDestination() {
         return destination;
     }
 
+    public Times getTime() {
+        return times;
+    }
 
-    //Parcelable Methods
-    @Override
+    public boolean isCompleted() {
+        return completed;
+    }
+
+   /* public List<Field> getFieldList() {
+        return fieldList;
+    }*/
+
+    public int getOrder() {
+        return order;
+    }
+
+
+    public class Times {
+
+        private String time_from;
+        private String time_to;
+
+        public String getTime_from() {
+            return time_from;
+        }
+
+        public String getTime_to() {
+            return time_to;
+        }
+    }
+
+    public class Field {
+        private int id;
+        private String type;
+        private String value;
+        private int order;
+    }
+
+   /* //Parcelable Konstruktor
+    protected Task(Parcel in) { //needs to have the same order as writeToParcel-Method
+        name = in.readString();
+        icon = in.readString();
+        time = in.readString();
+        destination = in.readString();
+    }*/
+
+        //Parcelable Methods
+   /* @Override
     public int describeContents() {
         return 0;
     }
@@ -71,5 +101,9 @@ public class Task implements Parcelable {
         public Task[] newArray(int size) {
             return new Task[size];
         }
-    };
+    }; */
+
 }
+
+
+

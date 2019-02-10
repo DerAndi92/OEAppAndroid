@@ -28,8 +28,8 @@ private ArrayList<Task> taskList;
         Button loginButton = findViewById(R.id.logInBTN);
 
         //Get putExtra-Data from DownloadJSON
-        Intent intentFromDownload = getIntent();
-        taskList = intentFromDownload.getParcelableArrayListExtra("Task List");
+       // Intent intentFromDownload = getIntent();
+       // taskList = intentFromDownload.getParcelableArrayListExtra("Task List");
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,7 +37,7 @@ private ArrayList<Task> taskList;
                 //TODO: Passwort validieren, Eingaben aus Feldern holen .getText...
                 if(password!=null && name!=null && lastname!=null && !spinner.getSelectedItem().toString().equals("Studiengang wählen")){
                     Intent intent = new Intent(LogInActivity.this, GroupActivity.class);
-                    intent.putParcelableArrayListExtra("Task List", taskList);
+                   // intent.putParcelableArrayListExtra("Task List", taskList);
                     startActivity(intent);
                 }
                 else {

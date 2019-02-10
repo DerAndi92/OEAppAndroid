@@ -44,16 +44,12 @@ public class GroupActivity extends AppCompatActivity {
 
         Button joinButton = findViewById(R.id.joinBTN);
 
-        Intent intentFromLogIn = getIntent();
-        taskList = intentFromLogIn.getParcelableArrayListExtra("Task List");
-
         //TODO: Button kann nur geklickt werden, wenn bereits Gruppe ausgewählt wurde. Ansonsten: TOAST "Bitte wähle deine Gruppe".
         joinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(GroupActivity.this, MainActivity.class);
                 //Get putExtra-Data from LogIn
-                intent.putParcelableArrayListExtra("Task List", taskList);
                 startActivity(intent);
             }
         });

@@ -1,18 +1,12 @@
 package de.caroliwo.hawoe_rallye;
 
 import android.app.Activity;
-import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,13 +35,23 @@ public class TimesAdapter extends ArrayAdapter {
         TextView locationTV = rowView.findViewById(R.id.locationTV);
         TextView timeTV = rowView.findViewById(R.id.timeTV);
 
+        //Icon
         String iconname = taskList.get(position).getIcon();
         int id = context.getResources().getIdentifier(iconname, "drawable", context.getPackageName());
         laborIconIV.setImageResource(id);
 
+        //Name, Destination
         laborNameTV.setText(taskList.get(position).getName());
         locationTV.setText(taskList.get(position).getDestination());
-        timeTV.setText(taskList.get(position).getTime());
+
+        //Time
+        String time_from = taskList.get(position).getTime().getTime_from();
+        String time_to = taskList.get(position).getTime().getTime_to();
+        if(time_from!=null || time_to!=null){
+            timeTV.setText(time_from + "-" + time_to + " Uhr");
+        } else {
+            timeTV.setText("");
+        }
 
         return rowView;
     }
