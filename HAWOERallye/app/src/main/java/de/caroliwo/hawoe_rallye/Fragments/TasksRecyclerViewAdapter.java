@@ -1,4 +1,4 @@
-package de.caroliwo.hawoe_rallye;
+package de.caroliwo.hawoe_rallye.Fragments;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -14,6 +14,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
+
+import de.caroliwo.hawoe_rallye.R;
+import de.caroliwo.hawoe_rallye.TaskItem;
 
 public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecyclerViewAdapter.TasksViewHolder> {
 

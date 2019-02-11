@@ -1,4 +1,4 @@
-package de.caroliwo.hawoe_rallye;
+package de.caroliwo.hawoe_rallye.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +12,11 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.caroliwo.hawoe_rallye.DownloadJSONRetrofit;
+import de.caroliwo.hawoe_rallye.R;
+import de.caroliwo.hawoe_rallye.Retrofit;
+import de.caroliwo.hawoe_rallye.Task;
+import de.caroliwo.hawoe_rallye.TaskAPI;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

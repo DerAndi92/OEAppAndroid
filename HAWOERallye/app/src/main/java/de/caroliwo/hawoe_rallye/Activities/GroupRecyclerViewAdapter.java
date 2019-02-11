@@ -1,4 +1,4 @@
-package de.caroliwo.hawoe_rallye;
+package de.caroliwo.hawoe_rallye.Activities;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -14,6 +14,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
+
+import de.caroliwo.hawoe_rallye.GroupItem;
+import de.caroliwo.hawoe_rallye.R;
 
 public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecyclerViewAdapter.GroupViewHolder> {
 

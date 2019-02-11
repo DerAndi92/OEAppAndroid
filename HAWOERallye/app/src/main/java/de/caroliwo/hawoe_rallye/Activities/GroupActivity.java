@@ -1,4 +1,4 @@
-package de.caroliwo.hawoe_rallye;
+package de.caroliwo.hawoe_rallye.Activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +10,10 @@ import android.view.View;
 import android.widget.Button;
 
 import java.util.ArrayList;
+
+import de.caroliwo.hawoe_rallye.GroupItem;
+import de.caroliwo.hawoe_rallye.R;
+import de.caroliwo.hawoe_rallye.Task;
 
 public class GroupActivity extends AppCompatActivity {
     private ArrayList<Task> taskList;

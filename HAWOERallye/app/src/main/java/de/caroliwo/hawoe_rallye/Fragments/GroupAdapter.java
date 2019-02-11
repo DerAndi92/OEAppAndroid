@@ -1,4 +1,4 @@
-package de.caroliwo.hawoe_rallye;
+package de.caroliwo.hawoe_rallye.Fragments;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -8,6 +8,9 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
+
+import de.caroliwo.hawoe_rallye.R;
+import de.caroliwo.hawoe_rallye.User;
 
 public class GroupAdapter extends ArrayAdapter {
 

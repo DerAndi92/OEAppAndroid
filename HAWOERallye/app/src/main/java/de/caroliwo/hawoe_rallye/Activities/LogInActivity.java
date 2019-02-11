@@ -1,17 +1,18 @@
-package de.caroliwo.hawoe_rallye;
+package de.caroliwo.hawoe_rallye.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+
+import de.caroliwo.hawoe_rallye.R;
+import de.caroliwo.hawoe_rallye.Task;
 
 public class LogInActivity extends AppCompatActivity {
 private ArrayList<Task> taskList;

@@ -1,4 +1,4 @@
-package de.caroliwo.hawoe_rallye;
+package de.caroliwo.hawoe_rallye.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,22 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.github.barteksc.pdfviewer.PDFView;
+import de.caroliwo.hawoe_rallye.R;
 
-public class RoomplansFragment extends Fragment {
-
-    PDFView pdfView;
+public class ImpressumFragment extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        View rootView = inflater.inflate(R.layout.fragment_roomplans, container,false);
-        pdfView = rootView.findViewById(R.id.pdfView);
-        pdfView.fromAsset("Raumplaene.pdf").load();
-
-
-        return rootView;
-
+        return inflater.inflate(R.layout.fragment_impressum, container,false);
     }
 }

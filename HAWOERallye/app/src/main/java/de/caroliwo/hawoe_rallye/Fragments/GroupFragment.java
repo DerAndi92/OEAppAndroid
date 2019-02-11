@@ -1,4 +1,4 @@
-package de.caroliwo.hawoe_rallye;
+package de.caroliwo.hawoe_rallye.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,6 +11,9 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Date;
+
+import de.caroliwo.hawoe_rallye.R;
+import de.caroliwo.hawoe_rallye.User;
 
 public class GroupFragment extends Fragment {
 
