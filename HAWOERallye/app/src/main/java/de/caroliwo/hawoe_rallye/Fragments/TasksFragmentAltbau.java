@@ -1,4 +1,4 @@
-package de.caroliwo.hawoe_rallye.Fragments;
+package de.caroliwo.hawoe_rallye.fragments;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;

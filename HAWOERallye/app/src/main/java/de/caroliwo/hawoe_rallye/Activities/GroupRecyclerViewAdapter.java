@@ -1,7 +1,8 @@
-package de.caroliwo.hawoe_rallye.Activities;
+package de.caroliwo.hawoe_rallye.activities;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -42,10 +44,18 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
             @Override
             public void onClick(View v) {
                 ImageView groupIcon = (ImageView) groupDialog.findViewById(R.id.group_dialog_IV);
-                TextView groupName = (TextView) groupDialog.findViewById(R.id.group_dialog_TV);
+                final TextView groupName = (TextView) groupDialog.findViewById(R.id.group_dialog_TV);
                 Button joinButton = (Button) groupDialog.findViewById(R.id.group_dialog_BTN);
                 groupIcon.setColorFilter(Color.parseColor(groupList.get(viewHolder.getAdapterPosition()).getColor()));
                 groupName.setText(groupList.get(viewHolder.getAdapterPosition()).getName());
+                joinButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(context, MainActivity.class);
+                        Toast.makeText(context, groupName.getText(), Toast.LENGTH_SHORT).show();
+                        context.startActivity(intent);
+                    }
+                });
                 groupDialog.show();
 
             }

@@ -1,6 +1,5 @@
-package de.caroliwo.hawoe_rallye.Activities;
+package de.caroliwo.hawoe_rallye.activities;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ProgressBar;

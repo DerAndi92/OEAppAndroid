@@ -1,4 +1,4 @@
-package de.caroliwo.hawoe_rallye.Activities;
+package de.caroliwo.hawoe_rallye.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.caroliwo.hawoe_rallye.R;
 import de.caroliwo.hawoe_rallye.Task;
@@ -27,6 +29,7 @@ private ArrayList<Task> taskList;
         final Spinner spinner = findViewById(R.id.MTMS_spinner);
         final EditText password = findViewById(R.id.passwordET);
         Button loginButton = findViewById(R.id.logInBTN);
+        final Map<String, String> userData = new HashMap<>();
 
         //Get putExtra-Data from DownloadJSON
        // Intent intentFromDownload = getIntent();
@@ -35,16 +38,32 @@ private ArrayList<Task> taskList;
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: Passwort validieren, Eingaben aus Feldern holen .getText...
-                if(password!=null && name!=null && lastname!=null && !spinner.getSelectedItem().toString().equals("Studiengang wählen")){
-                    Intent intent = new Intent(LogInActivity.this, GroupActivity.class);
-                   // intent.putParcelableArrayListExtra("Task List", taskList);
-                    startActivity(intent);
+                userData.put("name", name.getText().toString());
+                userData.put("lastname", lastname.getText().toString());
+                userData.put("major", spinner.getSelectedItem().toString());
+                userData.put("password", password.getText().toString());
+                if(userData.get("password").length() > 0 && userData.get("name").length() > 0 && userData.get("lastname").length() > 0 && !userData.get("major").equals("Studiengang wählen")){
+                    if (isNewUser(userData)) {
+                        Intent intent = new Intent(LogInActivity.this, GroupActivity.class);
+                        // intent.putParcelableArrayListExtra("Task List", taskList);
+                        startActivity(intent);
+                    } else {
+                        validateUser(userData);
+                    }
                 }
                 else {
                     Toast.makeText(LogInActivity.this, "Fülle bitte alle Felder aus.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+    private boolean isNewUser(Map<String, String> userData) {
+        // TODO: Testen ob es sich um einen neuen User handelt
+        return true;
+    }
+
+    private void validateUser(Map<String, String> userData) {
+        //TODO: Passwort validieren
     }
 }

@@ -1,4 +1,4 @@
-package de.caroliwo.hawoe_rallye.Fragments;
+package de.caroliwo.hawoe_rallye.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

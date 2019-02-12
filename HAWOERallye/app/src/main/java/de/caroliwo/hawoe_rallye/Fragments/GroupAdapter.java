@@ -1,4 +1,4 @@
-package de.caroliwo.hawoe_rallye.Fragments;
+package de.caroliwo.hawoe_rallye.fragments;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
