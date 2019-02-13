@@ -38,11 +38,15 @@ private ArrayList<Task> taskList;
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // userData-Objekt mit Inputs füllen
                 userData.put("name", name.getText().toString());
                 userData.put("lastname", lastname.getText().toString());
                 userData.put("major", spinner.getSelectedItem().toString());
                 userData.put("password", password.getText().toString());
+
+                // Checken ob jedes Feld ausgefüllt ist
                 if(userData.get("password").length() > 0 && userData.get("name").length() > 0 && userData.get("lastname").length() > 0 && !userData.get("major").equals("Studiengang wählen")){
+
                     if (isNewUser(userData)) {
                         Intent intent = new Intent(LogInActivity.this, GroupActivity.class);
                         // intent.putParcelableArrayListExtra("Task List", taskList);

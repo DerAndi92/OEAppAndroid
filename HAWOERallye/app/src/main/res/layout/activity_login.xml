@@ -65,7 +65,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rallyeText" />
+        app:layout_constraintTop_toBottomOf="@+id/rallyeText"
+        android:autofillHints=".AUTOFILL_HINT_NAME"/>
 
 
     <EditText
@@ -82,7 +83,8 @@
         android:textColor="@color/colorText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameET" />
+        app:layout_constraintTop_toBottomOf="@+id/nameET"
+        android:autofillHints=".AUTOFILL_HINT_NAME" />
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
@@ -120,7 +122,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout"
+        android:autofillHints=".AUTOFILL_HINT_PASSWORD" />
 
     <Button
         android:id="@+id/logInBTN"

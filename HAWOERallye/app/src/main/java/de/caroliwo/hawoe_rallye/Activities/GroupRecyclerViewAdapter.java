@@ -37,20 +37,26 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
         View view = LayoutInflater.from(context).inflate(R.layout.item_group, viewGroup, false);
         final GroupViewHolder viewHolder = new GroupViewHolder(view);
 
+        // Gruppen-Dialog erstellen
         groupDialog = new Dialog(context);
         groupDialog.setContentView(R.layout.dialog_group);
 
+        // Click-Listener für Group-Item
         viewHolder.groupItemCL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Gruppenname, -Farbe und Join-Button erstellen
                 ImageView groupIcon = (ImageView) groupDialog.findViewById(R.id.group_dialog_IV);
                 final TextView groupName = (TextView) groupDialog.findViewById(R.id.group_dialog_TV);
                 Button joinButton = (Button) groupDialog.findViewById(R.id.group_dialog_BTN);
                 groupIcon.setColorFilter(Color.parseColor(groupList.get(viewHolder.getAdapterPosition()).getColor()));
                 groupName.setText(groupList.get(viewHolder.getAdapterPosition()).getName());
+
+                // Click-Listener für Join-Button
                 joinButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        // Mit Intent über Kontext-Klasse (GroupActivity) weiter zur MainActivity schicken
                         Intent intent = new Intent(context, MainActivity.class);
                         Toast.makeText(context, groupName.getText(), Toast.LENGTH_SHORT).show();
                         context.startActivity(intent);
@@ -66,6 +72,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
 
     @Override
     public void onBindViewHolder(@NonNull GroupViewHolder groupViewHolder, int i) {
+        // Gruppenname und -Farbe für jeden Viewholder setzen
         groupViewHolder.imageView.setColorFilter(Color.parseColor(groupList.get(i).getColor()));
         groupViewHolder.textView.setText(groupList.get(i).getName());
     }

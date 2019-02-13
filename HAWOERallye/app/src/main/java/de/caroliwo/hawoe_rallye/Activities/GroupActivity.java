@@ -38,6 +38,7 @@ public class GroupActivity extends AppCompatActivity {
         for (int i = 0; i < 10; i++) { //TODO: 10 is Placeholder for .length from number of Groups in JSON
             groupList.add(new GroupItem(getString(R.string.single_group) + " " + testNames[i], testColors[i]));
         }
+
 //        if (debug) Log.i("GroupActivity-Log","5");
         GroupRecyclerViewAdapter adapter = new GroupRecyclerViewAdapter(this, groupList);
 //        if (debug) Log.i("GroupActivity-Log","6");
@@ -46,7 +47,8 @@ public class GroupActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 //        (if (debug) Log.i("GroupActivity-Log","8");
 
-        Button joinButton = findViewById(R.id.joinBTN);
+        // Entfernt weil redundant (siehe unten)
+        //Button joinButton = findViewById(R.id.joinBTN);
 
         // NOTTODO: Button kann nur geklickt werden, wenn bereits Gruppe ausgewählt wurde. Ansonsten: TOAST "Bitte wähle deine Gruppe".
         // ---->Gewählt wird über die jeweiligen Buttons in den Gruppen-Dialogen
