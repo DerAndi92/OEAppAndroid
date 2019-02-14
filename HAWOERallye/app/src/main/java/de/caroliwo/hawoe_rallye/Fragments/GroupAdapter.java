@@ -1,4 +1,4 @@
-package de.caroliwo.hawoe_rallye.fragments;
+package de.caroliwo.hawoe_rallye.Fragments;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -10,18 +10,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.caroliwo.hawoe_rallye.R;
-import de.caroliwo.hawoe_rallye.User;
+import de.caroliwo.hawoe_rallye.Student;
 
 public class GroupAdapter extends ArrayAdapter {
 
-    private List<User> userList;
+    private List<Student> studentList;
     private final Activity context;
 
+
     //Konstruktor
-    public GroupAdapter(Activity context, ArrayList<User> userList) {
-        super(context, R.layout.group_fragment_listview_layout, userList);
+    public GroupAdapter(Activity context, ArrayList<Student> studentList) {
+        super(context, R.layout.group_fragment_listview_layout, studentList);
         this.context=context;
-        this.userList=userList;
+        this.studentList=studentList;
     }
 
     public View getView(int position, View view, ViewGroup parent){
@@ -32,10 +33,9 @@ public class GroupAdapter extends ArrayAdapter {
         TextView lastname = rowView.findViewById(R.id.lastnameTV);
         TextView subject = rowView.findViewById(R.id.subjectTV);
 
-
-        name.setText(userList.get(position).getName());
-        lastname.setText(userList.get(position).getLastname());
-        subject.setText(userList.get(position).getSubject());
+        name.setText(studentList.get(position).getFirst_name());
+        lastname.setText(studentList.get(position).getLast_name());
+        subject.setText(studentList.get(position).getCourse());
 
         return rowView;
     }

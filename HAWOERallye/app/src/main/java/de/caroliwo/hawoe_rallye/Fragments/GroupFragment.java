@@ -1,24 +1,37 @@
-package de.caroliwo.hawoe_rallye.fragments;
+package de.caroliwo.hawoe_rallye.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.List;
 
+import de.caroliwo.hawoe_rallye.DownloadJSONRetrofit;
+import de.caroliwo.hawoe_rallye.Group;
+import de.caroliwo.hawoe_rallye.GroupAPI;
 import de.caroliwo.hawoe_rallye.R;
-import de.caroliwo.hawoe_rallye.User;
+import de.caroliwo.hawoe_rallye.Retrofit;
+import de.caroliwo.hawoe_rallye.Student;
+import de.caroliwo.hawoe_rallye.Fragments.GroupAdapter;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class GroupFragment extends Fragment {
 
-    GroupAdapter groupAdapter;
-    ArrayList<User> userList;
+    private GroupAdapter groupAdapter;
+    private DownloadJSONRetrofit downloadJSONRetrofit;
+    private ArrayList<Student> studentList;
+    private List<Student> students;
+    private ListView studentsLV;
+    private int groupID = 1; //TODO: ID aus internder Datenbank holen
 
     @Nullable
     @Override
@@ -26,21 +39,45 @@ public class GroupFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_group, container,false);
 
+        studentsLV = rootView.findViewById(R.id.membersLV);
 
-        ListView membersLV = rootView.findViewById(R.id.membersLV);
+        //Retrofit
+        Retrofit retrofitClass = new Retrofit();
+        downloadJSONRetrofit = retrofitClass.createlogInterceptor();
 
-        //ListView mit Usern füllen
-        userList = new ArrayList<User>();//Platzhalter
-        userList.add(new User ("Kathajrina", "Schmidt", "MT", new Date()));
-        userList.add(new User ("Egon", "Schmand", "MS", new Date()));
-        //TODO: userList mit Usern füllen--> JSON download der aktuellen User-Tabelle für eigene Gruppen-ID
-
-        //Adapter setzen
-        groupAdapter = new GroupAdapter(getActivity(),userList);
-        membersLV.setAdapter(groupAdapter);
-
+        getGroup();
 
         return rootView;
 
+    }
+
+    private void getGroup() {
+        Call<GroupAPI> call = downloadJSONRetrofit.getGroup(groupID);
+
+        //execute on background-thread
+        call.enqueue(new Callback<GroupAPI>() {
+            @Override
+            public void onResponse(Call<GroupAPI> call, Response<GroupAPI> response) {
+                //wenn HTTP-Request nicht erfolgreich:
+                if (!response.isSuccessful()) {
+                    Log.i("TEST ErrorResponse: ", String.valueOf(response.code()));
+                    return;
+                }
+
+                //wenn HTTP-Request erfolgreich:
+                GroupAPI groupAPI = response.body();
+                students = groupAPI.getGroup().getStudentList();
+                studentList= new ArrayList<>(students); //List in ArrayList umwandeln
+                //Adapter setzen
+                groupAdapter = new GroupAdapter(getActivity(), studentList);
+                studentsLV.setAdapter(groupAdapter);
+            }
+
+            @Override
+            public void onFailure(Call<GroupAPI> call, Throwable t) {
+                // something went completely south (like no internet connection)
+                Log.i("TEST Error", t.getMessage() + "Error");
+            }
+        });
     }
 }

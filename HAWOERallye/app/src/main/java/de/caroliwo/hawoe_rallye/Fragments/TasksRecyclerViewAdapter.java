@@ -1,4 +1,4 @@
-package de.caroliwo.hawoe_rallye.fragments;
+package de.caroliwo.hawoe_rallye.Fragments;
 
 import android.app.Dialog;
 import android.content.Context;

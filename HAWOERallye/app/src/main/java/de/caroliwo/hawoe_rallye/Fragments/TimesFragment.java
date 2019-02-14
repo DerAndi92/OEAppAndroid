@@ -1,4 +1,4 @@
-package de.caroliwo.hawoe_rallye.fragments;
+package de.caroliwo.hawoe_rallye.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,6 +17,7 @@ import de.caroliwo.hawoe_rallye.R;
 import de.caroliwo.hawoe_rallye.Retrofit;
 import de.caroliwo.hawoe_rallye.Task;
 import de.caroliwo.hawoe_rallye.TaskAPI;
+import de.caroliwo.hawoe_rallye.Fragments.TimesAdapter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

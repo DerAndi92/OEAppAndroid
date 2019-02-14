@@ -1,4 +1,4 @@
-package de.caroliwo.hawoe_rallye.fragments;
+package de.caroliwo.hawoe_rallye.Fragments;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -50,7 +50,7 @@ public class TimesAdapter extends ArrayAdapter {
         //Time
         String time_from = taskList.get(position).getTime().getTime_from();
         String time_to = taskList.get(position).getTime().getTime_to();
-        if(time_from!=null || time_to!=null){
+        if(time_from!=null && time_to!=null){
             timeTV.setText(time_from + "-" + time_to + " Uhr");
         } else {
             timeTV.setText("");

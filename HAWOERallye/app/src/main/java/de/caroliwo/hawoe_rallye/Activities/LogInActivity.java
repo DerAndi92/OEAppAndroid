@@ -1,4 +1,4 @@
-package de.caroliwo.hawoe_rallye.activities;
+package de.caroliwo.hawoe_rallye.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;

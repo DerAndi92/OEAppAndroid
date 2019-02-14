@@ -1,19 +1,16 @@
-package de.caroliwo.hawoe_rallye.activities;
+package de.caroliwo.hawoe_rallye.Activities;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 
 import java.util.ArrayList;
 
 import de.caroliwo.hawoe_rallye.GroupItem;
 import de.caroliwo.hawoe_rallye.R;
 import de.caroliwo.hawoe_rallye.Task;
+import de.caroliwo.hawoe_rallye.Activities.GroupRecyclerViewAdapter;
 
 public class GroupActivity extends AppCompatActivity {
     private ArrayList<Task> taskList;
@@ -47,19 +44,35 @@ public class GroupActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 //        (if (debug) Log.i("GroupActivity-Log","8");
 
-        // Entfernt weil redundant (siehe unten)
-        //Button joinButton = findViewById(R.id.joinBTN);
+        /* TODO Download GroupInformationen per GET
+        *  private void getGroups() {
+        Call<GroupAPI> call = downloadJSONRetrofit.getGroups();
 
-        // NOTTODO: Button kann nur geklickt werden, wenn bereits Gruppe ausgewählt wurde. Ansonsten: TOAST "Bitte wähle deine Gruppe".
-        // ---->Gewählt wird über die jeweiligen Buttons in den Gruppen-Dialogen
-
-        /*joinButton.setOnClickListener(new View.OnClickListener() {
+        //execute on background-thread
+        call.enqueue(new Callback<GroupAPI>() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(GroupActivity.this, MainActivity.class);
-                //Get putExtra-Data from LogIn
-                startActivity(intent);
+            public void onResponse(Call<GroupAPI> call, Response<GroupAPI> response) {
+                //wenn HTTP-Request nicht erfolgreich:
+                if (!response.isSuccessful()) {
+                    Log.i("TEST ErrorResponse: ", String.valueOf(response.code()));
+                    return;
+                }
+
+                //wenn HTTP-Request erfolgreich:
+                GroupAPI groupAPI = response.body();
+                groups = groupAPI.getGroupList();
+                groupList= new ArrayList<>(groups); //List in ArrayList umwandeln
+                //Adapter setzen
+                groupAdapter = new GroupAdapter(getActivity(), groupList);
+                groupsLV.setAdapter(groupAdapter);
             }
-        });*/
+
+            @Override
+            public void onFailure(Call<GroupAPI> call, Throwable t) {
+                // something went completely south (like no internet connection)
+                Log.i("TEST Error", t.getMessage() + "Error");
+            }
+        });
+    }*/
     }
 }

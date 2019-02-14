@@ -1,4 +1,4 @@
-package de.caroliwo.hawoe_rallye.activities;
+package de.caroliwo.hawoe_rallye.Activities;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -12,12 +12,12 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import de.caroliwo.hawoe_rallye.fragments.GroupFragment;
-import de.caroliwo.hawoe_rallye.fragments.ImpressumFragment;
-import de.caroliwo.hawoe_rallye.fragments.IntroductionFragment;
-import de.caroliwo.hawoe_rallye.fragments.RoomplansFragment;
-import de.caroliwo.hawoe_rallye.fragments.TasksFragment;
-import de.caroliwo.hawoe_rallye.fragments.TimesFragment;
+import de.caroliwo.hawoe_rallye.Fragments.GroupFragment;
+import de.caroliwo.hawoe_rallye.Fragments.ImpressumFragment;
+import de.caroliwo.hawoe_rallye.Fragments.IntroductionFragment;
+import de.caroliwo.hawoe_rallye.Fragments.RoomplansFragment;
+import de.caroliwo.hawoe_rallye.Fragments.TasksFragment;
+import de.caroliwo.hawoe_rallye.Fragments.TimesFragment;
 import de.caroliwo.hawoe_rallye.R;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {

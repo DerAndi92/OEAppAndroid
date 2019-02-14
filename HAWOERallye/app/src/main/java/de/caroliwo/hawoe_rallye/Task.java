@@ -1,11 +1,14 @@
 package de.caroliwo.hawoe_rallye;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.sql.Time;
 
 
 public class Task {
 
-    private int id;
+    @SerializedName("id")
+    private int taskId;
     private String name;
     private String icon;
     private String destination;
@@ -16,7 +19,7 @@ public class Task {
 
     //GETTER-Methoden
     public int getId() {
-        return id;
+        return taskId;
     }
 
     public String getName() {

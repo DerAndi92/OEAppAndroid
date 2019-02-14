@@ -1,4 +1,4 @@
-package de.caroliwo.hawoe_rallye.activities;
+package de.caroliwo.hawoe_rallye.Activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
