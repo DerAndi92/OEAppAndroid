@@ -49,6 +49,7 @@ public class TimesFragment extends Fragment {
         return rootView;
     }
 
+    //TODO: löschen bis auf Adapterimplementation, wenn interne Datenbank funktioniert
     private void getTimes() {
         Call<TaskAPI> call = downloadJSONRetrofit.getTasks(groupID);
 

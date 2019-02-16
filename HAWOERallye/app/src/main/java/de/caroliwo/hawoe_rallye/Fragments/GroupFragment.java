@@ -31,7 +31,7 @@ public class GroupFragment extends Fragment {
     private ArrayList<Student> studentList;
     private List<Student> students;
     private ListView studentsLV;
-    private int groupID = 1; //TODO: ID aus internder Datenbank holen
+    private int groupID = 1; //TODO: löschen, wenn interne Datenbank funktioniert
 
     @Nullable
     @Override
@@ -51,6 +51,7 @@ public class GroupFragment extends Fragment {
 
     }
 
+    //TODO: löschen bis auf Adapterimplementation, wenn interne Datenbank funktioniert
     private void getGroup() {
         Call<GroupAPI> call = downloadJSONRetrofit.getGroup(groupID);
 

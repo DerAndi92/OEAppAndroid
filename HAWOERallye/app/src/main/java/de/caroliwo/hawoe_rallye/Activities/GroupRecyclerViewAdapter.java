@@ -52,8 +52,10 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
                 ImageView groupIcon = (ImageView) groupDialog.findViewById(R.id.group_dialog_IV);
                 final TextView groupName = (TextView) groupDialog.findViewById(R.id.group_dialog_TV);
                 Button joinButton = (Button) groupDialog.findViewById(R.id.group_dialog_BTN);
-                groupIcon.setColorFilter(Color.parseColor(groupsList.get(viewHolder.getAdapterPosition()).getColor()));
+                groupIcon.setColorFilter(Color.parseColor("#" + groupsList.get(viewHolder.getAdapterPosition()).getColor()));
                 groupName.setText(groupsList.get(viewHolder.getAdapterPosition()).getName());
+
+                Log.i("Test", "in GroupRecyclerView");
 
                 // Click-Listener für Join-Button
                 joinButton.setOnClickListener(new View.OnClickListener() {
@@ -63,6 +65,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
                         Intent intent = new Intent(context, MainActivity.class);
                         Toast.makeText(context, groupName.getText(), Toast.LENGTH_SHORT).show();
                         context.startActivity(intent);
+                        Log.i("Test", "intent GroupRecyclerView zu Main");
                     }
                 });
                 groupDialog.show();

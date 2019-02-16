@@ -5,6 +5,7 @@ import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface DownloadJSONRetrofit {
@@ -20,7 +21,7 @@ public interface DownloadJSONRetrofit {
 
     //Gruppe mit Studierenden laden
     @GET ("group/{groupID}")
-    Call<GroupAPI> getGroup (int groupID);
+    Call<GroupAPI> getGroup (@Path("groupID") int groupID);
 
     //Gruppe bearbeiten
     //@PUT ("group/")

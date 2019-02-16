@@ -14,11 +14,17 @@ import java.util.List;
 
 import de.caroliwo.hawoe_rallye.ConfigurationAPI;
 import de.caroliwo.hawoe_rallye.DownloadJSONRetrofit;
+import de.caroliwo.hawoe_rallye.Fragments.GroupAdapter;
+import de.caroliwo.hawoe_rallye.Fragments.TimesAdapter;
 import de.caroliwo.hawoe_rallye.Group;
+import de.caroliwo.hawoe_rallye.GroupAPI;
 import de.caroliwo.hawoe_rallye.GroupsAPI;
 import de.caroliwo.hawoe_rallye.R;
 import de.caroliwo.hawoe_rallye.Retrofit;
 import de.caroliwo.hawoe_rallye.Configuration;
+import de.caroliwo.hawoe_rallye.Student;
+import de.caroliwo.hawoe_rallye.Task;
+import de.caroliwo.hawoe_rallye.TaskAPI;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,6 +40,7 @@ public class LoadingActivity extends AppCompatActivity {
 
     //TODO: Beim Starten der App feststellen, ob bereits Nutzer angelegt, wenn nicht: normaler Ablauf; wenn Nutzer bereits eingeloggt: mit zweiter LoadingActivity starten (die nach der Gruppenwahl)
     //Idee dazu: Checken, ob interne Datenbank schon GroupID enthält....
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,17 +49,32 @@ public class LoadingActivity extends AppCompatActivity {
         //Progressbar
         progressBar = findViewById(R.id.progressBar);
 
-        //Intent erstellen
+        //für Intent
         applicationContext = getApplicationContext();
-        intent = new Intent(applicationContext, LogInActivity.class);
 
         //Retrofit
         Retrofit retrofitClass = new Retrofit();
         downloadJSONRetrofit = retrofitClass.createlogInterceptor();
 
-        //Methode, um HTTP-Request durchzuführen
+        //Methoden, um HTTP-Request durchzuführen
+        // TODO: interne Datenbank
+        int groupID = 1; //1 mit Wert aus interner Datenbank ersetzen
+       /* if (groupID in interner Datenbank gesetzt) {
+            intent = new Intent(applicationContext, MainActivity.class);
+            getTasks(); //für Zeiten und Aufgaben
+            getGroup()//Eigene Gruppe laden
+
+        } else {
+             intent = new Intent(applicationContext, LogInActivity.class);
+            getConfig();
+            getGroups();
+        } */
+
+        //Kann gelöscht werden, wenn interne Datenbank steht
+        intent = new Intent(applicationContext, LogInActivity.class);
         getConfig();
         getGroups();
+
 
     }
 
@@ -107,7 +129,6 @@ public class LoadingActivity extends AppCompatActivity {
                GroupsAPI groupsAPI = response.body();
                groups = groupsAPI.getGroupList();
                groupsList = new ArrayList<>(groups);
-               //TODO: groups per Parcelable an LogIn und dann an GroupActivity weiterleiten
                //groupsList im Intent übergeben
                intent.putParcelableArrayListExtra("Groups", groupsList);
                //LogIn Activity starten
@@ -122,6 +143,71 @@ public class LoadingActivity extends AppCompatActivity {
                Log.i("TEST Error", t.getMessage() + "Error");
            }
        });
+    }
+
+    //Tasks der eigenen Gruppe laden
+    int groupID=1; //TODO: diese Zeile löschen, wenn interne Datenbank fertig und groupID in Methode übergeben
+    private void getTasks() {
+        Call<TaskAPI> call = downloadJSONRetrofit.getTasks(groupID);
+
+        //execute on background-thread
+        call.enqueue(new Callback<TaskAPI>() {
+            @Override
+            public void onResponse(Call<TaskAPI> call, Response<TaskAPI> response) {
+                //wenn HTTP-Request nicht erfolgreich:
+                if (!response.isSuccessful()) {
+                    Log.i("TEST ErrorResponse: ", String.valueOf(response.code()));
+                    return;
+                }
+
+                //wenn HTTP-Request erfolgreich:
+                TaskAPI taskAPI = response.body();
+                List<Task>tasks = taskAPI.getTaskList();
+                ArrayList<Task> taskList= new ArrayList<>(tasks); //List in ArrayList umwandeln
+                intent.putParcelableArrayListExtra("Tasks", taskList);
+                progressBar.setProgress(progressBar.getProgress()+50);
+                Log.i("TEST", "taskList");
+                progressCheck();
+            }
+
+            @Override
+            public void onFailure(Call<TaskAPI> call, Throwable t) {
+                // something went completely south (like no internet connection)
+                Log.i("TEST Error", t.getMessage() + "Error");
+            }
+        });
+    }
+
+    //Eigene Gruppe laden
+    private void getGroup() { //TODO: wenn interne Datenbank fertig: groupID in Methode übergeben
+        Call<GroupAPI> call = downloadJSONRetrofit.getGroup(groupID);
+
+        //execute on background-thread
+        call.enqueue(new Callback<GroupAPI>() {
+            @Override
+            public void onResponse(Call<GroupAPI> call, Response<GroupAPI> response) {
+                //wenn HTTP-Request nicht erfolgreich:
+                if (!response.isSuccessful()) {
+                    Log.i("TEST ErrorResponse: ", String.valueOf(response.code()));
+                    return;
+                }
+
+                //wenn HTTP-Request erfolgreich:
+                GroupAPI groupAPI = response.body();
+                List<Student>students = groupAPI.getGroup().getStudentList();
+                ArrayList<Student>studentList= new ArrayList<>(students); //List in ArrayList umwandeln
+                intent.putParcelableArrayListExtra("Students", studentList);
+                progressBar.setProgress(progressBar.getProgress()+50);
+                Log.i("TEST", "studentList");
+                progressCheck();
+            }
+
+            @Override
+            public void onFailure(Call<GroupAPI> call, Throwable t) {
+                // something went completely south (like no internet connection)
+                Log.i("TEST Error", t.getMessage() + "Error");
+            }
+        });
     }
 
     public void progressCheck (){

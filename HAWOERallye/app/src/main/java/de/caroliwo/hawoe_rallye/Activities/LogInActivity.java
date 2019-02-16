@@ -42,7 +42,7 @@ private Context applicationContext;
         Intent intentFromLoading = getIntent();
         configuration = intentFromLoading.getParcelableExtra("Configuration");
         groupsList = intentFromLoading.getParcelableArrayListExtra("Groups");
-        Log.i("TEST", "onClick: " + groupsList.get(1).getColor() + "Login 1a");
+        Log.i("TEST", "onClick: " + groupsList.get(1).getColor() + " Login 1a");
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,7 +53,7 @@ private Context applicationContext;
                 userData.put("major", spinner.getSelectedItem().toString());
                 userData.put("password", password.getText().toString());
 
-                Log.i("TEST", "onClick Login 1");
+                Log.i("TEST", "onClick Login 1b");
                 // Checken ob jedes Feld ausgefüllt ist
                 if(userData.get("password").length() > 0 && userData.get("name").length() > 0 && userData.get("lastname").length() > 0 && !userData.get("major").equals("Studiengang wählen")){
                 //TODO: Keine Zahlen im Namen + Nachnamen erlaubt

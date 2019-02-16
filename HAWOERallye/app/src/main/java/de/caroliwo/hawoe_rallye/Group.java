@@ -15,6 +15,7 @@ public class Group implements Parcelable {
     private String color;
     private int max_members;
     private int members;
+    @SerializedName("students")
     private List<Student> studentList;
 
     protected Group(Parcel in) {
