@@ -27,13 +27,13 @@ public interface DownloadJSONRetrofit {
 
     //---------------Students----------------
     //Studierenden hinzufügen
-    @POST ("student")
+    //@POST ("student")
 
     //Studierenden bearbeiten
     //@PUT ("student/{studentID}")
 
     //Studierenden löschen
-    @DELETE ("student/{studentID}")
+    //@DELETE ("student/{studentID}")
 
     //---------------Tasks----------------
     //Alle Aufgaben einer Gruppe laden

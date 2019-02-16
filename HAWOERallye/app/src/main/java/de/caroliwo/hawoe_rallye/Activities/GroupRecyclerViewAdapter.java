@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,21 +16,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.List;
+import java.util.ArrayList;
 
-import de.caroliwo.hawoe_rallye.GroupItem;
+import de.caroliwo.hawoe_rallye.Group;
 import de.caroliwo.hawoe_rallye.R;
-import de.caroliwo.hawoe_rallye.Activities.MainActivity;
 
 public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecyclerViewAdapter.GroupViewHolder> {
 
     private Context context;
-    private List<GroupItem> groupList;
+    private ArrayList<Group> groupsList;
     private Dialog groupDialog;
 
-    public GroupRecyclerViewAdapter(Context context, List<GroupItem> groupList) {
+    public GroupRecyclerViewAdapter(Context context, ArrayList<Group> groupsList) {
         this.context = context;
-        this.groupList = groupList;
+        this.groupsList = groupsList;
     }
 
     @NonNull
@@ -37,6 +37,8 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
     public GroupViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_group, viewGroup, false);
         final GroupViewHolder viewHolder = new GroupViewHolder(view);
+
+        Log.i("Test", "start GroupRecyclerView");
 
         // Gruppen-Dialog erstellen
         groupDialog = new Dialog(context);
@@ -50,8 +52,8 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
                 ImageView groupIcon = (ImageView) groupDialog.findViewById(R.id.group_dialog_IV);
                 final TextView groupName = (TextView) groupDialog.findViewById(R.id.group_dialog_TV);
                 Button joinButton = (Button) groupDialog.findViewById(R.id.group_dialog_BTN);
-                groupIcon.setColorFilter(Color.parseColor(groupList.get(viewHolder.getAdapterPosition()).getColor()));
-                groupName.setText(groupList.get(viewHolder.getAdapterPosition()).getName());
+                groupIcon.setColorFilter(Color.parseColor(groupsList.get(viewHolder.getAdapterPosition()).getColor()));
+                groupName.setText(groupsList.get(viewHolder.getAdapterPosition()).getName());
 
                 // Click-Listener für Join-Button
                 joinButton.setOnClickListener(new View.OnClickListener() {
@@ -74,13 +76,13 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
     @Override
     public void onBindViewHolder(@NonNull GroupViewHolder groupViewHolder, int i) {
         // Gruppenname und -Farbe für jeden Viewholder setzen
-        groupViewHolder.imageView.setColorFilter(Color.parseColor(groupList.get(i).getColor()));
-        groupViewHolder.textView.setText(groupList.get(i).getName());
+        groupViewHolder.imageView.setColorFilter(Color.parseColor("#" + groupsList.get(i).getColor()));
+        groupViewHolder.textView.setText(groupsList.get(i).getName());
     }
 
     @Override
     public int getItemCount() {
-        return groupList.size();
+        return groupsList.size();
     }
 
     public static class GroupViewHolder extends RecyclerView.ViewHolder {
