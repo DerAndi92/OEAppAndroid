@@ -1,5 +1,6 @@
 package de.caroliwo.hawoe_rallye.Activities;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,8 +15,12 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.regex.Pattern;
 
 import de.caroliwo.hawoe_rallye.Configuration;
+import de.caroliwo.hawoe_rallye.Data.ConfigurationEntity;
+import de.caroliwo.hawoe_rallye.Data.DataViewModel;
 import de.caroliwo.hawoe_rallye.Group;
 import de.caroliwo.hawoe_rallye.R;
 import de.caroliwo.hawoe_rallye.Task;
@@ -25,6 +30,7 @@ private ArrayList<Task> taskList;
 private Configuration configuration;
 private ArrayList<Group> groupsList;
 private Context applicationContext;
+private DataViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,15 +44,21 @@ private Context applicationContext;
         Button loginButton = findViewById(R.id.logInBTN);
         final Map<String, String> userData = new HashMap<>();
 
-        //Get Configuration from LoadingActivity
+        // ViewModel für Daten aus Datenbank (über Repository)
+        viewModel = ViewModelProviders.of(this).get(DataViewModel.class);
+
+        // Testkonfiguration in Datenbank einfügen
+        viewModel.insertConfig(new ConfigurationEntity("wassport", "12.03.2019"));
+
+        //Get Groups from LoadingActivity
         Intent intentFromLoading = getIntent();
-        configuration = intentFromLoading.getParcelableExtra("Configuration");
         groupsList = intentFromLoading.getParcelableArrayListExtra("Groups");
         Log.i("TEST", "onClick: " + groupsList.get(1).getColor() + " Login 1a");
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 // userData-Objekt mit Inputs füllen
                 userData.put("name", name.getText().toString());
                 userData.put("lastname", lastname.getText().toString());
@@ -54,18 +66,24 @@ private Context applicationContext;
                 userData.put("password", password.getText().toString());
 
                 Log.i("TEST", "onClick Login 1b");
+
                 // Checken ob jedes Feld ausgefüllt ist
                 if(userData.get("password").length() > 0 && userData.get("name").length() > 0 && userData.get("lastname").length() > 0 && !userData.get("major").equals("Studiengang wählen")){
-                //TODO: Keine Zahlen im Namen + Nachnamen erlaubt
-                    Log.i("TEST", "onClick: Login 2");
-                    if (isNewUser(userData)) {
-                        Intent intent = new Intent(LogInActivity.this, GroupActivity.class);
-                        intent.putParcelableArrayListExtra("Groups", groupsList);
-                        Log.i("TEST", "onClick: " + groupsList.get(1).getName() + "Login 3");
-                        startActivity(intent);
-                    } else {
-                        validateUser(userData);
-                        Log.i("TEST", "onClick: Login 4");
+
+                    // Auf Zahlen im Namen checken
+                    if (stringContainsNumber(userData.get("name")) | stringContainsNumber(userData.get("lastname"))) {
+                        Toast.makeText(LogInActivity.this, "Keine Zahlen in Namen erlaubt", Toast.LENGTH_SHORT).show();
+                    }else {
+
+                        Log.i("TEST", "onClick: Login 2");
+                        if (passwordCorrect(userData.get("password"))) {
+                            Intent intent = new Intent(LogInActivity.this, GroupActivity.class);
+                            intent.putParcelableArrayListExtra("Groups", groupsList);
+                            Log.i("TEST", "onClick: " + groupsList.get(1).getName() + "Login 3");
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(LogInActivity.this, "Passwort: " + viewModel.getConfig().getPassword(), Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
                 else {
@@ -75,17 +93,17 @@ private Context applicationContext;
         });
     }
 
-    private boolean isNewUser(Map<String, String> userData) {
-        // TODO: Testen ob es sich um einen neuen User handelt
-        return true;
+    private boolean passwordCorrect(String password) {
+        if (password.equals(viewModel.getConfig().getPassword() != null)) {
+            return password.equals(viewModel.getConfig().getPassword());
+        } else {
+            return false;
+        }
     }
 
-    private void validateUser(Map<String, String> userData) {
-        //TODO: Passwort abfragen und mit Eingabe vergleichen, wenn falsch, dann Toast PW falsch
-        //final String password = configuration.getPassword(); //Passwort aus GET-Request
 
-       /* if (password.equals()) {
-            Toast.makeText(LogInActivity.this, "Falsches Passwort.", Toast.LENGTH_SHORT).show();
-        } */
+    public boolean stringContainsNumber( String s )
+    {
+        return Pattern.compile( "[0-9]" ).matcher( s ).find();
     }
 }

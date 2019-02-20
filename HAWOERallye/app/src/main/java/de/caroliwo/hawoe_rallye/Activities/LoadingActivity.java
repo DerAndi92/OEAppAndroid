@@ -2,8 +2,6 @@ package de.caroliwo.hawoe_rallye.Activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,10 +10,14 @@ import android.widget.ProgressBar;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.arch.lifecycle.ViewModelProviders;
+import android.widget.Toast;
+
 import de.caroliwo.hawoe_rallye.ConfigurationAPI;
+import de.caroliwo.hawoe_rallye.Data.ConfigurationEntity;
+import de.caroliwo.hawoe_rallye.Data.DataViewModel;
+import de.caroliwo.hawoe_rallye.Data.StudentEntity;
 import de.caroliwo.hawoe_rallye.DownloadJSONRetrofit;
-import de.caroliwo.hawoe_rallye.Fragments.GroupAdapter;
-import de.caroliwo.hawoe_rallye.Fragments.TimesAdapter;
 import de.caroliwo.hawoe_rallye.Group;
 import de.caroliwo.hawoe_rallye.GroupAPI;
 import de.caroliwo.hawoe_rallye.GroupsAPI;
@@ -36,47 +38,61 @@ public class LoadingActivity extends AppCompatActivity {
     private List<Group> groups;
     private ArrayList<Group> groupsList;
     private Context applicationContext;
+    private DataViewModel viewModel;
     Intent intent;
-
-    //TODO: Beim Starten der App feststellen, ob bereits Nutzer angelegt, wenn nicht: normaler Ablauf; wenn Nutzer bereits eingeloggt: mit zweiter LoadingActivity starten (die nach der Gruppenwahl)
-    //Idee dazu: Checken, ob interne Datenbank schon GroupID enthält....
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Log.i("LoadingActivity", "1");
         setContentView(R.layout.activity_loading);
+        //Log.i("LoadingActivity", "2");
 
         //Progressbar
         progressBar = findViewById(R.id.progressBar);
+        //Log.i("LoadingActivity", "3");
 
         //für Intent
         applicationContext = getApplicationContext();
+        //Log.i("LoadingActivity", "4");
+
+        // ViewModel für Daten aus Datenbank (über Repository)
+        viewModel = ViewModelProviders.of(this).get(DataViewModel.class);
+        //Log.i("LoadingActivity", "5");
 
         //Retrofit
         Retrofit retrofitClass = new Retrofit();
+        //Log.i("LoadingActivity", "6");
         downloadJSONRetrofit = retrofitClass.createlogInterceptor();
+        //Log.i("LoadingActivity", "7");
 
-        //Methoden, um HTTP-Request durchzuführen
-        // TODO: interne Datenbank
-        int groupID = 1; //1 mit Wert aus interner Datenbank ersetzen
-       /* if (groupID in interner Datenbank gesetzt) {
+        // Zum testen: Alle Einträge löschen bzw Student in Datenbank einfügen (App zweimal starten)
+        viewModel.deleteAllStudents();
+        //viewModel.insertStudent(new StudentEntity("Karl", "Mustermann", "Medientechnik", 1));
+
+        // Student-Entität zuweisen
+        StudentEntity student = viewModel.getStudent();
+
+        // Checken ob ein Student gespeichert ist
+        if (student != null) {
+            // Bei existierendem Eintrag: Intent zur Main-Activity
             intent = new Intent(applicationContext, MainActivity.class);
-            getTasks(); //für Zeiten und Aufgaben
-            getGroup()//Eigene Gruppe laden
+            // Gruppen-ID zuweisen & Aufgaben/Gruppe laden
+            int groupID = student.getGroupId();
+            getTasks(groupID); //für Zeiten und Aufgaben
+            getGroup(groupID); //Eigene Gruppe laden
 
         } else {
-             intent = new Intent(applicationContext, LogInActivity.class);
+            // Bei neuem User: Intent zur Login-Activity
+            intent = new Intent(applicationContext, LogInActivity.class);
             getConfig();
             getGroups();
-        } */
-
-        //Kann gelöscht werden, wenn interne Datenbank steht
-        intent = new Intent(applicationContext, LogInActivity.class);
-        getConfig();
-        getGroups();
+        }
 
 
     }
+
+    //Methoden, um HTTP-Request durchzuführen
 
     //Konfigurationen laden
     public void getConfig () {
@@ -95,9 +111,13 @@ public class LoadingActivity extends AppCompatActivity {
                 //wenn HTTP-Request erfolgreich:
                 ConfigurationAPI configurationAPI = response.body();
                 configuration = configurationAPI.getConfig();
+
                 //configuration im Intent übergeben
                 intent.putExtra("Configuration", configuration);
-                //TODO: configuration.getPassword und configuration.getMaxTime in interne Datenbank speichern
+
+                // Passwort und maxTime über viewModel in interner Datenbank speichern
+                viewModel.insertConfig(new ConfigurationEntity("bla"/*configuration.getPassword()*/, configuration.getMaxTime()));
+
                 progressBar.setProgress(progressBar.getProgress()+50);
                 Log.i("TEST", "configuration");
                 progressCheck ();
@@ -119,6 +139,7 @@ public class LoadingActivity extends AppCompatActivity {
        call.enqueue(new Callback<GroupsAPI>() {
            @Override
            public void onResponse(Call<GroupsAPI> call, Response<GroupsAPI> response) {
+
                //wenn HTTP-Request nicht erfolgreich:
                if (!response.isSuccessful()) {
                    Log.i("TEST ErrorResponse: ", String.valueOf(response.code()));
@@ -129,9 +150,10 @@ public class LoadingActivity extends AppCompatActivity {
                GroupsAPI groupsAPI = response.body();
                groups = groupsAPI.getGroupList();
                groupsList = new ArrayList<>(groups);
+
                //groupsList im Intent übergeben
                intent.putParcelableArrayListExtra("Groups", groupsList);
-               //LogIn Activity starten
+
                progressBar.setProgress(progressBar.getProgress()+50);
                Log.i("TEST", "groupsList");
                progressCheck();
@@ -146,14 +168,14 @@ public class LoadingActivity extends AppCompatActivity {
     }
 
     //Tasks der eigenen Gruppe laden
-    int groupID=1; //TODO: diese Zeile löschen, wenn interne Datenbank fertig und groupID in Methode übergeben
-    private void getTasks() {
+    private void getTasks(int groupID) {
         Call<TaskAPI> call = downloadJSONRetrofit.getTasks(groupID);
 
         //execute on background-thread
         call.enqueue(new Callback<TaskAPI>() {
             @Override
             public void onResponse(Call<TaskAPI> call, Response<TaskAPI> response) {
+
                 //wenn HTTP-Request nicht erfolgreich:
                 if (!response.isSuccessful()) {
                     Log.i("TEST ErrorResponse: ", String.valueOf(response.code()));
@@ -162,8 +184,8 @@ public class LoadingActivity extends AppCompatActivity {
 
                 //wenn HTTP-Request erfolgreich:
                 TaskAPI taskAPI = response.body();
-                List<Task>tasks = taskAPI.getTaskList();
-                ArrayList<Task> taskList= new ArrayList<>(tasks); //List in ArrayList umwandeln
+                List<Task> tasks = taskAPI.getTaskList();
+                ArrayList<Task> taskList = new ArrayList<>(tasks); //List in ArrayList umwandeln
                 intent.putParcelableArrayListExtra("Tasks", taskList);
                 progressBar.setProgress(progressBar.getProgress()+50);
                 Log.i("TEST", "taskList");
@@ -179,13 +201,14 @@ public class LoadingActivity extends AppCompatActivity {
     }
 
     //Eigene Gruppe laden
-    private void getGroup() { //TODO: wenn interne Datenbank fertig: groupID in Methode übergeben
+    private void getGroup(int groupID) {
         Call<GroupAPI> call = downloadJSONRetrofit.getGroup(groupID);
 
         //execute on background-thread
         call.enqueue(new Callback<GroupAPI>() {
             @Override
             public void onResponse(Call<GroupAPI> call, Response<GroupAPI> response) {
+
                 //wenn HTTP-Request nicht erfolgreich:
                 if (!response.isSuccessful()) {
                     Log.i("TEST ErrorResponse: ", String.valueOf(response.code()));
