@@ -1,5 +1,7 @@
 package de.caroliwo.hawoe_rallye.Fragments;
 
+import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,6 +15,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.caroliwo.hawoe_rallye.Data.DataViewModel;
 import de.caroliwo.hawoe_rallye.DownloadJSONRetrofit;
 import de.caroliwo.hawoe_rallye.Group;
 import de.caroliwo.hawoe_rallye.GroupAPI;
@@ -27,11 +30,11 @@ import retrofit2.Response;
 public class GroupFragment extends Fragment {
 
     private GroupAdapter groupAdapter;
-    private DownloadJSONRetrofit downloadJSONRetrofit;
     private ArrayList<Student> studentList;
-    private List<Student> students;
     private ListView studentsLV;
-    private int groupID = 1; //TODO: löschen, wenn interne Datenbank funktioniert
+
+    public GroupFragment() {
+    }
 
     @Nullable
     @Override
@@ -41,44 +44,15 @@ public class GroupFragment extends Fragment {
 
         studentsLV = rootView.findViewById(R.id.membersLV);
 
-        //Retrofit
-        Retrofit retrofitClass = new Retrofit();
-        downloadJSONRetrofit = retrofitClass.createlogInterceptor();
+        //Bundle
+        Bundle bundle = new Bundle();
+        studentList = bundle.getParcelableArrayList("Tasks");
 
-        getGroup();
+        //Adapter setzen
+        groupAdapter = new GroupAdapter(getActivity(), studentList);
+        studentsLV.setAdapter(groupAdapter);
 
         return rootView;
 
-    }
-
-    //TODO: löschen bis auf Adapterimplementation, wenn interne Datenbank funktioniert
-    private void getGroup() {
-        Call<GroupAPI> call = downloadJSONRetrofit.getGroup(groupID);
-
-        //execute on background-thread
-        call.enqueue(new Callback<GroupAPI>() {
-            @Override
-            public void onResponse(Call<GroupAPI> call, Response<GroupAPI> response) {
-                //wenn HTTP-Request nicht erfolgreich:
-                if (!response.isSuccessful()) {
-                    Log.i("TEST ErrorResponse: ", String.valueOf(response.code()));
-                    return;
-                }
-
-                //wenn HTTP-Request erfolgreich:
-                GroupAPI groupAPI = response.body();
-                students = groupAPI.getGroup().getStudentList();
-                studentList= new ArrayList<>(students); //List in ArrayList umwandeln
-                //Adapter setzen
-                groupAdapter = new GroupAdapter(getActivity(), studentList);
-                studentsLV.setAdapter(groupAdapter);
-            }
-
-            @Override
-            public void onFailure(Call<GroupAPI> call, Throwable t) {
-                // something went completely south (like no internet connection)
-                Log.i("TEST Error", t.getMessage() + "Error");
-            }
-        });
     }
 }

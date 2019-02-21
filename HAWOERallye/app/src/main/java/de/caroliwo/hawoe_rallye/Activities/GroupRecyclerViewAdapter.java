@@ -26,6 +26,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
     private Context context;
     private ArrayList<Group> groupsList;
     private Dialog groupDialog;
+    private int groupID;
 
     public GroupRecyclerViewAdapter(Context context, ArrayList<Group> groupsList) {
         this.context = context;
@@ -49,7 +50,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
             @Override
             public void onClick(View v) {
                 // Gruppenname, -Farbe und Join-Button erstellen
-                ImageView groupIcon = (ImageView) groupDialog.findViewById(R.id.group_dialog_IV);
+                final ImageView groupIcon = (ImageView) groupDialog.findViewById(R.id.group_dialog_IV);
                 final TextView groupName = (TextView) groupDialog.findViewById(R.id.group_dialog_TV);
                 Button joinButton = (Button) groupDialog.findViewById(R.id.group_dialog_BTN);
                 groupIcon.setColorFilter(Color.parseColor("#" + groupsList.get(viewHolder.getAdapterPosition()).getColor()));
@@ -61,11 +62,14 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
                 joinButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // Mit Intent über Kontext-Klasse (GroupActivity) weiter zur MainActivity schicken
-                        Intent intent = new Intent(context, MainActivity.class);
+                        // Mit Intent über Kontext-Klasse (GroupActivity) weiter zur LoadingActivity schicken
+                        Intent intent = new Intent(context, LoadingActivity.class);
+                        //TODO: angeklickte GroupID in Datenbank
+                        groupID = groupsList.get(viewHolder.getAdapterPosition()).getGroupId();
+                        Log.i("test GroupRecViewAda", String.valueOf(groupID));
                         Toast.makeText(context, groupName.getText(), Toast.LENGTH_SHORT).show();
                         context.startActivity(intent);
-                        Log.i("Test", "intent GroupRecyclerView zu Main");
+                        Log.i("Test", "intent GroupRecyclerView zu Loading");
                     }
                 });
                 groupDialog.show();
@@ -86,6 +90,10 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
     @Override
     public int getItemCount() {
         return groupsList.size();
+    }
+
+    public int getGroupID () {
+        return groupID;
     }
 
     public static class GroupViewHolder extends RecyclerView.ViewHolder {

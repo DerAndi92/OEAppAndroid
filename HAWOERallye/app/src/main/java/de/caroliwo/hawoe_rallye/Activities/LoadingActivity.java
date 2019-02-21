@@ -67,7 +67,7 @@ public class LoadingActivity extends AppCompatActivity {
         //Log.i("LoadingActivity", "7");
 
         // Zum testen: Alle Einträge löschen bzw Student in Datenbank einfügen (App zweimal starten)
-        viewModel.deleteAllStudents();
+        //viewModel.deleteAllStudents();
         //viewModel.insertStudent(new StudentEntity("Karl", "Mustermann", "Medientechnik", 1));
 
         // Student-Entität zuweisen
@@ -79,12 +79,15 @@ public class LoadingActivity extends AppCompatActivity {
             intent = new Intent(applicationContext, MainActivity.class);
             // Gruppen-ID zuweisen & Aufgaben/Gruppe laden
             int groupID = student.getGroupId();
+            Log.i("LoadingActivity test", "student vorhanden " + groupID); //TODO Fix Error --> groupID hier immer 0; warum auch immer
             getTasks(groupID); //für Zeiten und Aufgaben
             getGroup(groupID); //Eigene Gruppe laden
+            Log.i("LoadingActivity-test","1");
 
         } else {
             // Bei neuem User: Intent zur Login-Activity
             intent = new Intent(applicationContext, LogInActivity.class);
+            Log.i("LoadingActivity-test","2");
             getConfig();
             getGroups();
         }
@@ -119,7 +122,7 @@ public class LoadingActivity extends AppCompatActivity {
                 viewModel.insertConfig(new ConfigurationEntity("bla"/*configuration.getPassword()*/, configuration.getMaxTime()));
 
                 progressBar.setProgress(progressBar.getProgress()+50);
-                Log.i("TEST", "configuration");
+                Log.i("LoadingActivity-test","3");
                 progressCheck ();
             }
 
@@ -155,7 +158,7 @@ public class LoadingActivity extends AppCompatActivity {
                intent.putParcelableArrayListExtra("Groups", groupsList);
 
                progressBar.setProgress(progressBar.getProgress()+50);
-               Log.i("TEST", "groupsList");
+               Log.i("LoadingActivity-test","4");
                progressCheck();
            }
 
@@ -178,7 +181,7 @@ public class LoadingActivity extends AppCompatActivity {
 
                 //wenn HTTP-Request nicht erfolgreich:
                 if (!response.isSuccessful()) {
-                    Log.i("TEST ErrorResponse: ", String.valueOf(response.code()));
+                    Log.i("TEST Error get Tasks ", String.valueOf(response.code()));
                     return;
                 }
 
@@ -188,7 +191,7 @@ public class LoadingActivity extends AppCompatActivity {
                 ArrayList<Task> taskList = new ArrayList<>(tasks); //List in ArrayList umwandeln
                 intent.putParcelableArrayListExtra("Tasks", taskList);
                 progressBar.setProgress(progressBar.getProgress()+50);
-                Log.i("TEST", "taskList");
+                Log.i("LoadingActivity-test","5");
                 progressCheck();
             }
 
@@ -211,7 +214,7 @@ public class LoadingActivity extends AppCompatActivity {
 
                 //wenn HTTP-Request nicht erfolgreich:
                 if (!response.isSuccessful()) {
-                    Log.i("TEST ErrorResponse: ", String.valueOf(response.code()));
+                    Log.i("TEST Error: getGroup ", String.valueOf(response.code()));
                     return;
                 }
 
@@ -221,7 +224,7 @@ public class LoadingActivity extends AppCompatActivity {
                 ArrayList<Student>studentList= new ArrayList<>(students); //List in ArrayList umwandeln
                 intent.putParcelableArrayListExtra("Students", studentList);
                 progressBar.setProgress(progressBar.getProgress()+50);
-                Log.i("TEST", "studentList");
+                Log.i("LoadingActivity-test","6");
                 progressCheck();
             }
 

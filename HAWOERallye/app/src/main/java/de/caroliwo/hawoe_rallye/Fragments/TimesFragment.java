@@ -26,9 +26,6 @@ public class TimesFragment extends Fragment {
 
     TimesAdapter timesAdapter;
     ArrayList<Task> taskList;
-    List<Task> tasks;
-    DownloadJSONRetrofit downloadJSONRetrofit;
-    int groupID = 1; //TODO: aus interner Datenbank laden
     ListView timesLV;
 
     @Nullable
@@ -39,43 +36,14 @@ public class TimesFragment extends Fragment {
         //ListView erstellen
         timesLV = rootView.findViewById(R.id.timesLV);
 
-        //Retrofit
-        Retrofit retrofitClass = new Retrofit();
-        downloadJSONRetrofit = retrofitClass.createlogInterceptor();
+        //Bundle
+        Bundle bundle = new Bundle();
+        taskList= bundle.getParcelableArrayList("Tasks");
 
-        //Methode, um HTTP-Request durchzuführen
-        getTimes();
+        //Adapter setzen
+        timesAdapter = new TimesAdapter(getActivity(), taskList);
+        timesLV.setAdapter(timesAdapter);
 
         return rootView;
-    }
-
-    //TODO: löschen bis auf Adapterimplementation, wenn interne Datenbank funktioniert
-    private void getTimes() {
-        Call<TaskAPI> call = downloadJSONRetrofit.getTasks(groupID);
-
-        //execute on background-thread
-        call.enqueue(new Callback<TaskAPI>() {
-            @Override
-            public void onResponse(Call<TaskAPI> call, Response<TaskAPI> response) {
-                //wenn HTTP-Request nicht erfolgreich:
-                if (!response.isSuccessful()) {
-                    Log.i("TEST ErrorResponse: ", String.valueOf(response.code()));
-                    return;
-                }
-
-                //wenn HTTP-Request erfolgreich:
-                TaskAPI taskAPI = response.body();
-                tasks = taskAPI.getTaskList();
-                taskList= new ArrayList<>(tasks); //List in ArrayList umwandeln
-                timesAdapter = new TimesAdapter(getActivity(), taskList); //timesAdapter mit Listeninhalten füllen
-                timesLV.setAdapter(timesAdapter);
-            }
-
-            @Override
-            public void onFailure(Call<TaskAPI> call, Throwable t) {
-                // something went completely south (like no internet connection)
-                Log.i("TEST Error", t.getMessage() + "Error");
-            }
-        });
     }
 }

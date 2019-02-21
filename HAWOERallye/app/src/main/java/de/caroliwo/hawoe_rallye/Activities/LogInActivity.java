@@ -15,7 +15,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.regex.Pattern;
 
 import de.caroliwo.hawoe_rallye.Configuration;
@@ -23,6 +22,7 @@ import de.caroliwo.hawoe_rallye.Data.ConfigurationEntity;
 import de.caroliwo.hawoe_rallye.Data.DataViewModel;
 import de.caroliwo.hawoe_rallye.Group;
 import de.caroliwo.hawoe_rallye.R;
+import de.caroliwo.hawoe_rallye.Student;
 import de.caroliwo.hawoe_rallye.Task;
 
 public class LogInActivity extends AppCompatActivity {
@@ -44,13 +44,12 @@ private DataViewModel viewModel;
         Button loginButton = findViewById(R.id.logInBTN);
         final Map<String, String> userData = new HashMap<>();
 
+        //TODO: Zurück-Button auf Smartphone darf hier nicht funktionieren bzw. nicht zurück zur LoadingActivity führen
+
         // ViewModel für Daten aus Datenbank (über Repository)
         viewModel = ViewModelProviders.of(this).get(DataViewModel.class);
 
-        // Testkonfiguration in Datenbank einfügen
-        viewModel.insertConfig(new ConfigurationEntity("wassport", "12.03.2019"));
-
-        //Get Groups from LoadingActivity
+        //Groups von LoadingActivity holen
         Intent intentFromLoading = getIntent();
         groupsList = intentFromLoading.getParcelableArrayListExtra("Groups");
         Log.i("TEST", "onClick: " + groupsList.get(1).getColor() + " Login 1a");
@@ -59,13 +58,17 @@ private DataViewModel viewModel;
             @Override
             public void onClick(View view) {
 
+                Log.i("TEST", "onClick Login 1aaaa");
                 // userData-Objekt mit Inputs füllen
                 userData.put("name", name.getText().toString());
                 userData.put("lastname", lastname.getText().toString());
                 userData.put("major", spinner.getSelectedItem().toString());
                 userData.put("password", password.getText().toString());
-
                 Log.i("TEST", "onClick Login 1b");
+
+                Student student = new Student(0, 0, userData.get("name"), userData.get("lastname"), userData.get("major"), 1);
+
+                Log.i("TEST", "onClick Login 1c");
 
                 // Checken ob jedes Feld ausgefüllt ist
                 if(userData.get("password").length() > 0 && userData.get("name").length() > 0 && userData.get("lastname").length() > 0 && !userData.get("major").equals("Studiengang wählen")){
@@ -74,15 +77,16 @@ private DataViewModel viewModel;
                     if (stringContainsNumber(userData.get("name")) | stringContainsNumber(userData.get("lastname"))) {
                         Toast.makeText(LogInActivity.this, "Keine Zahlen in Namen erlaubt", Toast.LENGTH_SHORT).show();
                     }else {
-
+                        //Checken ob Passwort korrekt
                         Log.i("TEST", "onClick: Login 2");
                         if (passwordCorrect(userData.get("password"))) {
                             Intent intent = new Intent(LogInActivity.this, GroupActivity.class);
                             intent.putParcelableArrayListExtra("Groups", groupsList);
+                            intent.putExtra("StudentData", student);
                             Log.i("TEST", "onClick: " + groupsList.get(1).getName() + "Login 3");
                             startActivity(intent);
                         } else {
-                            Toast.makeText(LogInActivity.this, "Passwort: " + viewModel.getConfig().getPassword(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LogInActivity.this, "Passwort: " + viewModel.getConfig().getPassword(), Toast.LENGTH_SHORT).show(); //TODO: später "Falsches Passwort."
                         }
                     }
                 }
@@ -94,7 +98,7 @@ private DataViewModel viewModel;
     }
 
     private boolean passwordCorrect(String password) {
-        if (password.equals(viewModel.getConfig().getPassword() != null)) {
+        if (password.equals(viewModel.getConfig().getPassword() /*!= null*/)) { //TODO: sobald !=null da steht, geht der LogIn bei mir nicht
             return password.equals(viewModel.getConfig().getPassword());
         } else {
             return false;

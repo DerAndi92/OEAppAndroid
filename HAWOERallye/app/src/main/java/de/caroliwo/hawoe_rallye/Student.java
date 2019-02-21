@@ -16,6 +16,17 @@ public class Student implements Parcelable {
     private String course;
     private int manually;
 
+    //Konstruktor
+    public Student(int groupId, int studentId ,String first_name, String last_name, String course, int manually) {
+        this.groupId = groupId;
+        this.studentId = studentId;
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.course = course;
+        this.manually = manually;
+    }
+
+    //Parcelable
     protected Student(Parcel in) {
         groupId = in.readInt();
         studentId = in.readInt();
@@ -52,8 +63,9 @@ public class Student implements Parcelable {
         dest.writeInt( (manually));
     }
 
+
     //GETTER + SETTER
-    public int getGroupId() {
+    public Integer getGroupId() {
         return groupId;
     }
 
@@ -93,7 +105,7 @@ public class Student implements Parcelable {
         this.course = course;
     }
 
-    public int isManually() {
+    public Integer isManually() {
         return manually;
     }
 
