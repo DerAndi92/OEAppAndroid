@@ -65,7 +65,7 @@ public class Student implements Parcelable {
 
 
     //GETTER + SETTER
-    public Integer getGroupId() {
+    public int getGroupId() {
         return groupId;
     }
 
@@ -105,7 +105,7 @@ public class Student implements Parcelable {
         this.course = course;
     }
 
-    public Integer isManually() {
+    public int isManually() {
         return manually;
     }
 

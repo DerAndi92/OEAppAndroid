@@ -33,12 +33,15 @@ public class TimesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_times, container, false);
 
+        Log.i("Test TimesFragment", "1" );
+
         //ListView erstellen
         timesLV = rootView.findViewById(R.id.timesLV);
 
         //Bundle
-        Bundle bundle = new Bundle();
+        Bundle bundle = getArguments();
         taskList= bundle.getParcelableArrayList("Tasks");
+       // Log.i("Test TimesFragment", "2 Bundle" + taskList.get(1).getName() );
 
         //Adapter setzen
         timesAdapter = new TimesAdapter(getActivity(), taskList);

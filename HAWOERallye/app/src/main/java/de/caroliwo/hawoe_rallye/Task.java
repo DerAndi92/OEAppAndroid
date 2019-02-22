@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -21,41 +22,6 @@ public class Task implements Parcelable {
     private List<Field> fieldList;
     private int order;
 
-    protected Task(Parcel in) {
-        taskId = in.readInt();
-        name = in.readString();
-        icon = in.readString();
-        destination = in.readString();
-        completed = in.readByte() != 0;
-        order = in.readInt();
-    }
-
-    public static final Creator<Task> CREATOR = new Creator<Task>() {
-        @Override
-        public Task createFromParcel(Parcel in) {
-            return new Task(in);
-        }
-
-        @Override
-        public Task[] newArray(int size) {
-            return new Task[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(taskId);
-        dest.writeString(name);
-        dest.writeString(icon);
-        dest.writeString(destination);
-        dest.writeByte((byte) (completed ? 1 : 0));
-        dest.writeInt(order);
-    }
 
     //GETTER-Methoden
     public int getId() {
@@ -91,20 +57,6 @@ public class Task implements Parcelable {
     }
 
 
-    public class Times {
-
-        private String time_from;
-        private String time_to;
-
-        public String getTime_from() {
-            return time_from;
-        }
-
-        public String getTime_to() {
-            return time_to;
-        }
-    }
-
     public class Field {
         private int id;
         private String type;
@@ -112,6 +64,50 @@ public class Task implements Parcelable {
         private int order;
     }
 
+    //Parcelable
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.taskId);
+        dest.writeString(this.name);
+        dest.writeString(this.icon);
+        dest.writeString(this.destination);
+        dest.writeParcelable(this.times, flags);
+        dest.writeByte(this.completed ? (byte) 1 : (byte) 0);
+        dest.writeList(this.fieldList);
+        dest.writeInt(this.order);
+    }
+
+    public Task() {
+    }
+
+    protected Task(Parcel in) {
+        this.taskId = in.readInt();
+        this.name = in.readString();
+        this.icon = in.readString();
+        this.destination = in.readString();
+        this.times = in.readParcelable(Times.class.getClassLoader());
+        this.completed = in.readByte() != 0;
+        this.fieldList = new ArrayList<Field>();
+        in.readList(this.fieldList, Field.class.getClassLoader());
+        this.order = in.readInt();
+    }
+
+    public static final Parcelable.Creator<Task> CREATOR = new Parcelable.Creator<Task>() {
+        @Override
+        public Task createFromParcel(Parcel source) {
+            return new Task(source);
+        }
+
+        @Override
+        public Task[] newArray(int size) {
+            return new Task[size];
+        }
+    };
 }
 
 

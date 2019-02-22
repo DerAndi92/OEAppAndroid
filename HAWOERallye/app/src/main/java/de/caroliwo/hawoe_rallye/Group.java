@@ -18,40 +18,6 @@ public class Group implements Parcelable {
     @SerializedName("students")
     private List<Student> studentList;
 
-    protected Group(Parcel in) {
-        groupId = in.readInt();
-        name = in.readString();
-        color = in.readString();
-        max_members = in.readInt();
-        members = in.readInt();
-    }
-
-    public static final Creator<Group> CREATOR = new Creator<Group>() {
-        @Override
-        public Group createFromParcel(Parcel in) {
-            return new Group(in);
-        }
-
-        @Override
-        public Group[] newArray(int size) {
-            return new Group[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(groupId);
-        dest.writeString(name);
-        dest.writeString(color);
-        dest.writeInt(max_members);
-        dest.writeInt(members);
-    }
-
 
     //GETTER + SETTER
     public int getGroupId() {
@@ -101,4 +67,43 @@ public class Group implements Parcelable {
     public void setStudentList(List<Student> studentList) {
         this.studentList = studentList;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.groupId);
+        dest.writeString(this.name);
+        dest.writeString(this.color);
+        dest.writeInt(this.max_members);
+        dest.writeInt(this.members);
+        dest.writeTypedList(this.studentList);
+    }
+
+    public Group() {
+    }
+
+    protected Group(Parcel in) {
+        this.groupId = in.readInt();
+        this.name = in.readString();
+        this.color = in.readString();
+        this.max_members = in.readInt();
+        this.members = in.readInt();
+        this.studentList = in.createTypedArrayList(Student.CREATOR);
+    }
+
+    public static final Creator<Group> CREATOR = new Creator<Group>() {
+        @Override
+        public Group createFromParcel(Parcel source) {
+            return new Group(source);
+        }
+
+        @Override
+        public Group[] newArray(int size) {
+            return new Group[size];
+        }
+    };
 }

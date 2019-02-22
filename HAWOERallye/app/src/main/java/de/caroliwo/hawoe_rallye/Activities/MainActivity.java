@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+        Log.i("Test MainActivity", "1" );
 
         //Toolbar setzen
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -59,16 +61,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //Startseite
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new IntroductionFragment()).commit();
+        Log.i("Test MainActivity", "2" );
 
         //Intent (holen von Infos von LoadingActivity)
         Intent intent = getIntent();
         studentList = intent.getParcelableArrayListExtra("Students");
         taskList= intent.getParcelableArrayListExtra("Tasks");
+        Log.i("Test MainActivity", "3 intent" + taskList.get(1).getName() );
 
         //Bundle (senden der Infos an Fragments)
         bundle = new Bundle();
         bundle.putParcelableArrayList("Students", studentList);
         bundle.putParcelableArrayList("Tasks", taskList);
+        Log.i("Test MainActivity", "4 bundle" + taskList.get(1).getName() );
     }
 
     //Reaktion bei Touch auf Zurück-Button
@@ -100,7 +105,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new TasksFragment()).commit();
                 break;
             case R.id.group:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new GroupFragment()).commit();
+                GroupFragment groupFragment = new GroupFragment();
+                groupFragment.setArguments(bundle);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, groupFragment).commit();
                 break;
             case R.id.credits:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ImpressumFragment()).commit();

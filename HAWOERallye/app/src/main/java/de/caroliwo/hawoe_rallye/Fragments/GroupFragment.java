@@ -45,8 +45,8 @@ public class GroupFragment extends Fragment {
         studentsLV = rootView.findViewById(R.id.membersLV);
 
         //Bundle
-        Bundle bundle = new Bundle();
-        studentList = bundle.getParcelableArrayList("Tasks");
+        Bundle bundle = getArguments();
+        studentList = bundle.getParcelableArrayList("Students");
 
         //Adapter setzen
         groupAdapter = new GroupAdapter(getActivity(), studentList);

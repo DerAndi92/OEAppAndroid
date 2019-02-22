@@ -10,23 +10,16 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-import de.caroliwo.hawoe_rallye.Data.ConfigurationEntity;
 import de.caroliwo.hawoe_rallye.Data.DataViewModel;
-import de.caroliwo.hawoe_rallye.Data.StudentEntity;
-import de.caroliwo.hawoe_rallye.DownloadJSONRetrofit;
 import de.caroliwo.hawoe_rallye.Group;
 import de.caroliwo.hawoe_rallye.R;
 import de.caroliwo.hawoe_rallye.Student;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class GroupActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private boolean debug = false;
     private ArrayList<Group> groupsList;
     private Student student;
-    private DataViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,22 +35,18 @@ public class GroupActivity extends AppCompatActivity {
 
         //Daten von LoadingActivity übergeben
         Intent intentFromLogIn = getIntent();
-        groupsList = intentFromLogIn.getParcelableArrayListExtra("Groups"); //TODO ERROR
+        groupsList = intentFromLogIn.getParcelableArrayListExtra("Groups");
         student = intentFromLogIn.getParcelableExtra("StudentData");
 
         //RecyclerView mit Gruppen füllen
 //        if (debug) Log.i("GroupActivity-Log","5");
-        GroupRecyclerViewAdapter adapter = new GroupRecyclerViewAdapter(this, groupsList);
+        GroupRecyclerViewAdapter adapter = new GroupRecyclerViewAdapter(this, groupsList, student);
 //        if (debug) Log.i("GroupActivity-Log","6");
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         Log.i("GroupActivity-Log test","7");
         recyclerView.setAdapter(adapter);
         Log.i("GroupActivity-Log test","8");
 
-        // ViewModel für Daten aus Datenbank (über Repository)
-       viewModel = ViewModelProviders.of(this).get(DataViewModel.class);
-        viewModel.insertStudent(new StudentEntity(student.getFirst_name(), student.getLast_name(), student.getCourse(), adapter.getGroupID()));
-        Log.i("GroupActivity-Log test","9");
         //sendStudent();
     }
     //TODO: POST Student zu Gruppe hinzufügen

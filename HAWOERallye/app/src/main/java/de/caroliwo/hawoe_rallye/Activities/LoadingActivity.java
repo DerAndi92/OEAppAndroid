@@ -67,19 +67,19 @@ public class LoadingActivity extends AppCompatActivity {
         //Log.i("LoadingActivity", "7");
 
         // Zum testen: Alle Einträge löschen bzw Student in Datenbank einfügen (App zweimal starten)
-        //viewModel.deleteAllStudents();
+        viewModel.deleteAllStudents();
         //viewModel.insertStudent(new StudentEntity("Karl", "Mustermann", "Medientechnik", 1));
 
         // Student-Entität zuweisen
         StudentEntity student = viewModel.getStudent();
-
         // Checken ob ein Student gespeichert ist
         if (student != null) {
+            Log.i("LoadingActivity test", "student vorhanden ");
             // Bei existierendem Eintrag: Intent zur Main-Activity
             intent = new Intent(applicationContext, MainActivity.class);
             // Gruppen-ID zuweisen & Aufgaben/Gruppe laden
             int groupID = student.getGroupId();
-            Log.i("LoadingActivity test", "student vorhanden " + groupID); //TODO Fix Error --> groupID hier immer 0; warum auch immer
+
             getTasks(groupID); //für Zeiten und Aufgaben
             getGroup(groupID); //Eigene Gruppe laden
             Log.i("LoadingActivity-test","1");
@@ -239,7 +239,7 @@ public class LoadingActivity extends AppCompatActivity {
     public void progressCheck (){
         if (progressBar.getProgress() == 100) {
             applicationContext.startActivity(intent);
-            Log.i("Test", "startActivity");
+            Log.i("Test", "start from LoadingActivity");
         }
     }
 }

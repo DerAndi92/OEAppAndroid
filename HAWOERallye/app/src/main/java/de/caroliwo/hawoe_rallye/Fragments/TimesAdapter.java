@@ -1,6 +1,7 @@
 package de.caroliwo.hawoe_rallye.Fragments;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,24 +38,28 @@ public class TimesAdapter extends ArrayAdapter {
         TextView laborNameTV = rowView.findViewById(R.id.laborNameTV);
         TextView locationTV = rowView.findViewById(R.id.locationTV);
         TextView timeTV = rowView.findViewById(R.id.timeTV);
+        Log.i("Test TimesAdapter", "1 ");
 
         //Icon
         String iconname = taskList.get(position).getIcon();
         int id = context.getResources().getIdentifier(iconname, "drawable", context.getPackageName());
         laborIconIV.setImageResource(id);
+        Log.i("Test TimesAdapter", "2" );
 
         //Name, Destination
         laborNameTV.setText(taskList.get(position).getName());
         locationTV.setText(taskList.get(position).getDestination());
+        Log.i("Test TimesAdapter", "3" + taskList.get(position).getName());
 
         //Time
-        String time_from = taskList.get(position).getTime().getTime_from();
-        String time_to = taskList.get(position).getTime().getTime_to();
+        String time_from = (String) taskList.get(position).getTime().getTime_from();
+        String time_to = (String) taskList.get(position).getTime().getTime_to();
         if(time_from!=null && time_to!=null){
             timeTV.setText(time_from + "-" + time_to + " Uhr");
         } else {
             timeTV.setText("");
         }
+        Log.i("Test TimesAdapter", "4" );
 
         return rowView;
     }
