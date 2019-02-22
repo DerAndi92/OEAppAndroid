@@ -25,7 +25,8 @@ public interface DownloadJSONRetrofit {
     Call<GroupAPI> getGroup (@Path("groupID") int groupID);
 
     //Gruppe bearbeiten
-    //@PUT ("group/")
+    @PUT ("group/{groupID}")
+    Call<Group> changeGroup(@Path("groupID") int groupID, @Body Group group);
 
     //---------------Students----------------
     //Studierenden hinzufügen
@@ -33,10 +34,12 @@ public interface DownloadJSONRetrofit {
     Call<Student> sendStudent(@Body Student student);
 
     //Studierenden bearbeiten
-    //@PUT ("student/{studentID}")
+    @PUT ("student/{studentID}")
+    Call<Student> changeStudent(@Path("studentID") int studentID, @Body Student student);
 
     //Studierenden löschen
-    //@DELETE ("student/{studentID}")
+    @DELETE ("student/{studentID}")
+    Call<Void> deleteStudent(@Path("studentID") int studentID);
 
     //---------------Tasks----------------
     //Alle Aufgaben einer Gruppe laden
@@ -47,7 +50,8 @@ public interface DownloadJSONRetrofit {
     @GET("task/byGroup")
     Call<TaskAPI> getTask (@Query("group") int groupID);
 
-    //Input zu einem Feld hinzufügen
-
+    //Lösung einer Aufgabe abschicken
+    @POST ("task/field")
+    Call<Task> sendAnswer(@Body Task task);
 
 }

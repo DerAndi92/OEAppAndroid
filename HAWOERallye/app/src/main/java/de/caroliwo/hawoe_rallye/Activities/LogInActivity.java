@@ -66,7 +66,7 @@ private DataViewModel viewModel;
                 userData.put("password", password.getText().toString());
                 Log.i("TEST", "onClick Login 1b");
 
-                Student student = new Student(0, 0, userData.get("name"), userData.get("lastname"), userData.get("major"), 1);
+                Student student = new Student(null, null, userData.get("name"), userData.get("lastname"), userData.get("major"), 1);
 
                 Log.i("TEST", "onClick Login 1c");
 
