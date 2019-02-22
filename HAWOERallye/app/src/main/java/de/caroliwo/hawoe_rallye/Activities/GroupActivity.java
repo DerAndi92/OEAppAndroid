@@ -11,9 +11,13 @@ import android.util.Log;
 import java.util.ArrayList;
 
 import de.caroliwo.hawoe_rallye.Data.DataViewModel;
+import de.caroliwo.hawoe_rallye.DownloadJSONRetrofit;
 import de.caroliwo.hawoe_rallye.Group;
 import de.caroliwo.hawoe_rallye.R;
 import de.caroliwo.hawoe_rallye.Student;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class GroupActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
@@ -47,30 +51,5 @@ public class GroupActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         Log.i("GroupActivity-Log test","8");
 
-        //sendStudent();
     }
-    //TODO: POST Student zu Gruppe hinzufügen
-   /* private void sendStudent(){
-        student.setGroupId(groupID);
-        Call<Student> call = DownloadJSONRetrofit.sendStudent(student);
-
-        call.enqueue(new Callback<Student>() {
-            @Override
-            public void onResponse(Call<Student> call, Response<Student> response) {
-
-                if (!response.isSuccessful()) {
-                    Log.i("ErrorResponse: ", String.valueOf(response.code()));
-                    return;
-                }
-
-                Student studResponse = response.body();
-            }
-
-            @Override
-            public void onFailure(Call<Student> call, Throwable t) {
-                // something went completely south (like no internet connection)
-                Log.i("Error", t.getMessage() + "Error");
-            }
-        });
-    }*/
 }

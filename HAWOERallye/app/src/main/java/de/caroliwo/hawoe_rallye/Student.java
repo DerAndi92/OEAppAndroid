@@ -8,16 +8,16 @@ import com.google.gson.annotations.SerializedName;
 public class Student implements Parcelable {
 
     @SerializedName("group")
-    private int groupId;
+    private Integer groupId;
     @SerializedName("id")
-    private int studentId;
+    private Integer studentId;
     private String first_name;
     private String last_name;
     private String course;
     private int manually;
 
     //Konstruktor
-    public Student(int groupId, int studentId ,String first_name, String last_name, String course, int manually) {
+    public Student(Integer groupId, Integer studentId ,String first_name, String last_name, String course, int manually) {
         this.groupId = groupId;
         this.studentId = studentId;
         this.first_name = first_name;
@@ -25,44 +25,6 @@ public class Student implements Parcelable {
         this.course = course;
         this.manually = manually;
     }
-
-    //Parcelable
-    protected Student(Parcel in) {
-        groupId = in.readInt();
-        studentId = in.readInt();
-        first_name = in.readString();
-        last_name = in.readString();
-        course = in.readString();
-        manually = in.readInt();
-    }
-
-    public static final Creator<Student> CREATOR = new Creator<Student>() {
-        @Override
-        public Student createFromParcel(Parcel in) {
-            return new Student(in);
-        }
-
-        @Override
-        public Student[] newArray(int size) {
-            return new Student[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(groupId);
-        dest.writeInt(studentId);
-        dest.writeString(first_name);
-        dest.writeString(last_name);
-        dest.writeString(course);
-        dest.writeInt( (manually));
-    }
-
 
     //GETTER + SETTER
     public int getGroupId() {
@@ -112,4 +74,42 @@ public class Student implements Parcelable {
     public void setManually(int manually) {
         this.manually = manually;
     }
+
+
+     //Parcelable
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(this.groupId);
+        dest.writeValue(this.studentId);
+        dest.writeString(this.first_name);
+        dest.writeString(this.last_name);
+        dest.writeString(this.course);
+        dest.writeInt(this.manually);
+    }
+
+    protected Student(Parcel in) {
+        this.groupId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.studentId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.first_name = in.readString();
+        this.last_name = in.readString();
+        this.course = in.readString();
+        this.manually = in.readInt();
+    }
+
+    public static final Parcelable.Creator<Student> CREATOR = new Parcelable.Creator<Student>() {
+        @Override
+        public Student createFromParcel(Parcel source) {
+            return new Student(source);
+        }
+
+        @Override
+        public Student[] newArray(int size) {
+            return new Student[size];
+        }
+    };
 }

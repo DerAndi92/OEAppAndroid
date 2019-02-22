@@ -62,7 +62,7 @@ private DataViewModel viewModel;
                 // userData-Objekt mit Inputs füllen
                 userData.put("name", name.getText().toString());
                 userData.put("lastname", lastname.getText().toString());
-                userData.put("major", spinner.getSelectedItem().toString());
+                userData.put("major", spinner.getSelectedItem().toString()); //TODO: Media Systems auf MS und Medientechnik auf MT mappen und nur Kürzel im String speichern
                 userData.put("password", password.getText().toString());
                 Log.i("TEST", "onClick Login 1b");
 

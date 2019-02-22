@@ -21,9 +21,14 @@ import java.util.ArrayList;
 
 import de.caroliwo.hawoe_rallye.Data.DataViewModel;
 import de.caroliwo.hawoe_rallye.Data.StudentEntity;
+import de.caroliwo.hawoe_rallye.DownloadJSONRetrofit;
 import de.caroliwo.hawoe_rallye.Group;
 import de.caroliwo.hawoe_rallye.R;
+import de.caroliwo.hawoe_rallye.Retrofit;
 import de.caroliwo.hawoe_rallye.Student;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecyclerViewAdapter.GroupViewHolder> {
 
@@ -33,6 +38,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
     private Dialog groupDialog;
     private int groupID;
     private DataViewModel viewModel;
+    private DownloadJSONRetrofit downloadJSONRetrofit;
 
     public GroupRecyclerViewAdapter(Context context, ArrayList<Group> groupsList, Student student) {
         this.context = context;
@@ -45,6 +51,11 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
     public GroupViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_group, viewGroup, false);
         final GroupViewHolder viewHolder = new GroupViewHolder(view);
+
+        //Retrofit
+        Retrofit retrofitClass = new Retrofit();
+        //Log.i("LoadingActivity", "6");
+        downloadJSONRetrofit = retrofitClass.createlogInterceptor();
 
         // Gruppen-Dialog erstellen
         groupDialog = new Dialog(context);
@@ -69,9 +80,13 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
                         // Mit Intent über Kontext-Klasse (GroupActivity) weiter zur LoadingActivity schicken
                         Intent intent = new Intent(context, LoadingActivity.class);
                         groupID = groupsList.get(viewHolder.getAdapterPosition()).getGroupId();
+                        student.setGroupId(groupID);
 
                         viewModel = ViewModelProviders.of((GroupActivity)context).get(DataViewModel.class);
                         viewModel.insertStudent(new StudentEntity(student.getFirst_name(), student.getLast_name(), student.getCourse(), groupID));
+
+                        //POST-Request
+                        sendStudent();
 
                         Toast.makeText(context, groupName.getText(), Toast.LENGTH_SHORT).show();
                         context.startActivity(intent);
@@ -82,6 +97,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
             }
         });
         return viewHolder;
+
     }
 
     @Override
@@ -109,5 +125,30 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
             textView = itemView.findViewById(R.id.group_item_TV);
         }
     }
+
+    //POST Student zu Gruppe hinzufügen
+    private void sendStudent(){
+        Call<Student> call = downloadJSONRetrofit.sendStudent(student);
+
+        call.enqueue(new Callback<Student>() {
+            @Override
+            public void onResponse(Call<Student> call, Response<Student> response) {
+
+                if (!response.isSuccessful()) {
+                    Log.i("ErrorResponse: ", String.valueOf(response.code()));
+                    return;
+                }
+
+                Student studResponse = response.body();
+            }
+
+            @Override
+            public void onFailure(Call<Student> call, Throwable t) {
+                // something went completely south (like no internet connection)
+                Log.i("Error", t.getMessage() + "Error");
+            }
+        });
+    }
+
 }
 

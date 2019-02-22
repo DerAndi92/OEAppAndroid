@@ -13,17 +13,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 import de.caroliwo.hawoe_rallye.R;
+import de.caroliwo.hawoe_rallye.Task;
 
 public class TasksFragment extends Fragment {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    ArrayList<Task> taskList;
     private TasksFragmentViewPagerAdapter adapter;
     private TasksFragmentAltbau fragmentAltbau;
     private TasksFragmentNeubau fragmentNeubau;
     private boolean debug = false;
 
+
+    //TODO: Kommentare
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -32,13 +38,18 @@ public class TasksFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_tasks, container,false);
         if (debug) Log.i("TasksFragment-Log","2");
 
+        //TODO: Daten aus Bundle für Seitenaufbau verwenden
+        //Bundle
+        Bundle bundle = getArguments();
+        taskList= bundle.getParcelableArrayList("Tasks");
+
         tabLayout = (TabLayout) rootView.findViewById(R.id.tasks_tablayout);
         addTablayoutShadow(tabLayout);
         if (debug) Log.i("TasksFragment-Log","3");
 
         viewPager = (ViewPager) rootView.findViewById(R.id.tasks_viewpager);
         if (debug) Log.i("TasksFragment-Log","4");
-
+        //TODO: keine Aufteilung in ALtbau und Neubau. Einfach alle Aufgaben auf eine Seite
         adapter = new TasksFragmentViewPagerAdapter(getChildFragmentManager());
         if (debug) Log.i("TasksFragment-Log","5");
         if (debug) Log.i("TasksFragment-Log","adapter: " + adapter);
@@ -61,7 +72,7 @@ public class TasksFragment extends Fragment {
         tabLayout.setupWithViewPager(viewPager);
         if (debug) Log.i("TasksFragment-Log","8");
 
-
+        //TODO: Retrofit laden der einzelnen Aufgabe nach Anklicken + Aufbau der Seite --> keine RecyclerView sondern neues Fragment aus Daten generieren
 
         return rootView;
     }
