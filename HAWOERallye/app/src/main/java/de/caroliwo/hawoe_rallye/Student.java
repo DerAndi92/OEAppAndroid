@@ -26,6 +26,14 @@ public class Student implements Parcelable {
         this.manually = manually;
     }
 
+    //2 Konsturktor
+    public Student (Integer groupID,String first_name, String last_name, String course){
+        this.groupId = groupId;
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.course = course;
+    }
+
     //GETTER + SETTER
     public int getGroupId() {
         return groupId;

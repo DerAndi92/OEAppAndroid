@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/gradient"
+    android:padding="10dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/student_dialog_IV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_group_icon_big"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="TODO" />
+
+        <EditText
+            android:id="@+id/nameET"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:autofillHints=".AUTOFILL_HINT_NAME"
+            android:background="#11000000"
+            android:drawableStart="@drawable/ic_android_user"
+            android:ems="10"
+            android:fontFamily="@font/open_sans"
+            android:hint="@string/nameFieldPlaceholder"
+            android:inputType="textPersonName"
+            android:textColor="@color/colorText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/student_dialog_IV" />
+
+        <EditText
+            android:id="@+id/lastnameET"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:autofillHints=".AUTOFILL_HINT_NAME"
+            android:background="#11000000"
+            android:drawableStart="@drawable/ic_android_user"
+            android:ems="10"
+            android:fontFamily="@font/open_sans"
+            android:hint="@string/lastnameFieldPlaceholder"
+            android:inputType="textPersonName"
+            android:textColor="@color/colorText"
+            app:layout_constraintBottom_toTopOf="@+id/relativeLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nameET" />
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout"
+            android:layout_width="250dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="#11000000"
+            android:textColor="@color/colorGroupWhite"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lastnameET">
+
+                <Spinner
+                    android:id="@+id/MTMS_spinner"
+                    style="@style/Widget.AppCompat.Light.Spinner.DropDown.ActionBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="0dp"
+                    android:entries="@array/subject_array"
+                    android:textColor="@color/colorGroupWhite"
+                    tools:layout_editor_absoluteX="81dp"
+                    tools:layout_editor_absoluteY="38dp" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/changeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/buttonshape"
+            android:fontFamily="@font/open_sans"
+            android:text="@string/change"
+            android:textAlignment="center"
+            android:textColor="@color/colorText"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
+</android.support.constraint.ConstraintLayout>
+

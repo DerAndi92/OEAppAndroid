@@ -61,6 +61,11 @@
 
     <!--group_fragment-->
     <string name="headline_group">DEINE GRUPPE</string>
+    <string name="change">ÄNDERN</string>
+    <string-array name="subject_array2">
+        <item>Medientechnik</item>
+        <item>Media Systems</item>
+    </string-array>
 
     <!--fragment_impressum-->
     <string name="headline_impressum">IMPRESSUM</string>

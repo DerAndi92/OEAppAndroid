@@ -73,8 +73,10 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
                 groupIcon.setColorFilter(Color.parseColor("#" + groupsList.get(viewHolder.getAdapterPosition()).getColor()));
                 groupName.setText(groupsList.get(viewHolder.getAdapterPosition()).getName());
 
+                //TODO: wenn Gruppe bereits voll, dann Button disablen und Toast mit: "Gruppe bereits voll"
                 // Click-Listener für Join-Button
                 joinButton.setOnClickListener(new View.OnClickListener() {
+
                     @Override
                     public void onClick(View v) {
                         // Mit Intent über Kontext-Klasse (GroupActivity) weiter zur LoadingActivity schicken

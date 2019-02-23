@@ -44,7 +44,7 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
             public void onClick(View v) {
                 if (debug) Toast.makeText(context, "Test Click"+String.valueOf(viewHolder.getAdapterPosition()),Toast.LENGTH_SHORT).show();
                 TextView taskTitle = (TextView) taskDialog.findViewById(R.id.task_dialog_TV);
-                ImageView taskIcon = (ImageView) taskDialog.findViewById(R.id.task_dialog_IV);
+                ImageView taskIcon = (ImageView) taskDialog.findViewById(R.id.student_dialog_IV);
                 taskTitle.setText(taskList.get(viewHolder.getAdapterPosition()).getName());
                 taskDialog.show();
                 if (debug) Log.i("TasksRVAdapter-Log","taskDialog.isShowing(): " + taskDialog.isShowing());
