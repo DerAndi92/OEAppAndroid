@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -44,8 +45,6 @@ private DataViewModel viewModel;
         Button loginButton = findViewById(R.id.logInBTN);
         final Map<String, String> userData = new HashMap<>();
 
-        //TODO: Zurück-Button auf Smartphone darf hier nicht funktionieren bzw. nicht zurück zur LoadingActivity führen
-
         // ViewModel für Daten aus Datenbank (über Repository)
         viewModel = ViewModelProviders.of(this).get(DataViewModel.class);
 
@@ -62,7 +61,9 @@ private DataViewModel viewModel;
                 // userData-Objekt mit Inputs füllen
                 userData.put("name", name.getText().toString());
                 userData.put("lastname", lastname.getText().toString());
-                userData.put("major", spinner.getSelectedItem().toString()); //TODO: Media Systems auf MS und Medientechnik auf MT mappen und nur Kürzel im String speichern
+                String majorTemp = spinner.getSelectedItem().toString();
+                majorTemp = majorTemp.equals("Medientechnik") ? "MT" : (majorTemp.equals("Media Systems") ? "MS" : majorTemp);
+                userData.put("major", majorTemp);
                 userData.put("password", password.getText().toString());
                 Log.i("TEST", "onClick Login 1b");
 
@@ -86,7 +87,7 @@ private DataViewModel viewModel;
                             Log.i("TEST", "onClick: " + groupsList.get(1).getName() + "Login 3");
                             startActivity(intent);
                         } else {
-                            Toast.makeText(LogInActivity.this, "Passwort: " + viewModel.getConfig().getPassword(), Toast.LENGTH_SHORT).show(); //TODO: später "Falsches Passwort."
+                            Toast.makeText(LogInActivity.this, "Falsches Passwort", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
@@ -98,7 +99,7 @@ private DataViewModel viewModel;
     }
 
     private boolean passwordCorrect(String password) {
-        if (password.equals(viewModel.getConfig().getPassword() /*!= null*/)) { //TODO: sobald !=null da steht, geht der LogIn bei mir nicht
+        if (!TextUtils.isEmpty(password)) {
             return password.equals(viewModel.getConfig().getPassword());
         } else {
             return false;

@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Activities.LoadingActivity">
+        <activity android:name=".Activities.LoadingActivity"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -26,8 +27,11 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".Activities.GroupActivity" />
-        <activity android:name=".Activities.LogInActivity"></activity>
+        <activity android:name=".Activities.LogInActivity"
+            android:noHistory="true" />
+        <activity android:name=".Activities.GroupActivity"
+            android:noHistory="true"/>
+
     </application>
 
 </manifest>

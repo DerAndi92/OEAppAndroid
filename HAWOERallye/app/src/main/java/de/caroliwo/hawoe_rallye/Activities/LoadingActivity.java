@@ -44,37 +44,37 @@ public class LoadingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Log.i("LoadingActivity", "1");
+        Log.i("LoadingActivity", "1");
         setContentView(R.layout.activity_loading);
-        //Log.i("LoadingActivity", "2");
+        Log.i("LoadingActivity", "2");
 
         //Progressbar
         progressBar = findViewById(R.id.progressBar);
-        //Log.i("LoadingActivity", "3");
+        Log.i("LoadingActivity", "3");
 
         //für Intent
         applicationContext = getApplicationContext();
-        //Log.i("LoadingActivity", "4");
+        Log.i("LoadingActivity", "4");
 
         // ViewModel für Daten aus Datenbank (über Repository)
         viewModel = ViewModelProviders.of(this).get(DataViewModel.class);
-        //Log.i("LoadingActivity", "5");
+        Log.i("LoadingActivity", "5");
 
         //Retrofit
         Retrofit retrofitClass = new Retrofit();
-        //Log.i("LoadingActivity", "6");
+        Log.i("LoadingActivity", "6");
         downloadJSONRetrofit = retrofitClass.createlogInterceptor();
-        //Log.i("LoadingActivity", "7");
+        Log.i("LoadingActivity", "7");
 
         // Zum testen: Alle Einträge löschen bzw Student in Datenbank einfügen (App zweimal starten)
-        viewModel.deleteAllStudents();
+        //viewModel.deleteAllStudents();
         //viewModel.insertStudent(new StudentEntity("Karl", "Mustermann", "Medientechnik", 1));
 
         // Student-Entität zuweisen
         StudentEntity student = viewModel.getStudent();
         // Checken ob ein Student gespeichert ist
         if (student != null) {
-            Log.i("LoadingActivity test", "student vorhanden ");
+            Log.i("LoadingActivity", "student vorhanden ");
             // Bei existierendem Eintrag: Intent zur Main-Activity
             intent = new Intent(applicationContext, MainActivity.class);
             // Gruppen-ID zuweisen & Aufgaben/Gruppe laden
@@ -82,12 +82,12 @@ public class LoadingActivity extends AppCompatActivity {
 
             getTasks(groupID); //für Zeiten und Aufgaben
             getGroup(groupID); //Eigene Gruppe laden
-            Log.i("LoadingActivity-test","1");
+            Log.i("LoadingActivity","1");
 
         } else {
             // Bei neuem User: Intent zur Login-Activity
             intent = new Intent(applicationContext, LogInActivity.class);
-            Log.i("LoadingActivity-test","2");
+            Log.i("LoadingActivity","2");
             getConfig();
             getGroups();
         }
@@ -120,9 +120,10 @@ public class LoadingActivity extends AppCompatActivity {
 
                 // Passwort und maxTime über viewModel in interner Datenbank speichern
                 viewModel.insertConfig(new ConfigurationEntity("bla"/*configuration.getPassword()*/, configuration.getMaxTime()));
+                Log.i("LoadingActivity", "configuration.getPassword(): " + configuration.getPassword());
 
                 progressBar.setProgress(progressBar.getProgress()+50);
-                Log.i("LoadingActivity-test","3");
+                Log.i("LoadingActivity","Configuration loaded");
                 progressCheck ();
             }
 
@@ -158,7 +159,7 @@ public class LoadingActivity extends AppCompatActivity {
                intent.putParcelableArrayListExtra("Groups", groupsList);
 
                progressBar.setProgress(progressBar.getProgress()+50);
-               Log.i("LoadingActivity-test","4");
+               Log.i("LoadingActivity","Groups loaded");
                progressCheck();
            }
 
@@ -191,7 +192,7 @@ public class LoadingActivity extends AppCompatActivity {
                 ArrayList<Task> taskList = new ArrayList<>(tasks); //List in ArrayList umwandeln
                 intent.putParcelableArrayListExtra("Tasks", taskList);
                 progressBar.setProgress(progressBar.getProgress()+50);
-                Log.i("LoadingActivity-test","5");
+                Log.i("LoadingActivity","Tasks loaded");
                 progressCheck();
             }
 
@@ -224,7 +225,7 @@ public class LoadingActivity extends AppCompatActivity {
                 ArrayList<Student>studentList= new ArrayList<>(students); //List in ArrayList umwandeln
                 intent.putParcelableArrayListExtra("Students", studentList);
                 progressBar.setProgress(progressBar.getProgress()+50);
-                Log.i("LoadingActivity-test","6");
+                Log.i("LoadingActivity","Group " + groupAPI.getGroup().getName() + " Loaded");
                 progressCheck();
             }
 
