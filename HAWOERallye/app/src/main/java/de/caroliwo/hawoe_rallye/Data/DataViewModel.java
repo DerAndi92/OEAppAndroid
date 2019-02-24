@@ -26,23 +26,14 @@ public class DataViewModel extends AndroidViewModel {
         repository = new DataRepository(application);
         //Log.i("DataViewModel", "2");
 
-        //  Datensätze aus Repository holen
-        try {
-            //Log.i("DataViewModel", "3");
-            configEntity = repository.getConfig();
-            //Log.i("DataViewModel", "4");
-            studEntity = repository.getStudent();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
-    public ConfigurationEntity getConfig() { return configEntity; }
+    public ConfigurationEntity getConfig() throws ExecutionException, InterruptedException {
+        return repository.getConfig();
+    }
 
-    public StudentEntity getStudent() {
-        return studEntity;
+    public StudentEntity getStudent() throws ExecutionException, InterruptedException {
+        return repository.getStudent();
     }
 
     public void insertConfig(ConfigurationEntity entity) {

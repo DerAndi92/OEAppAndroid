@@ -37,12 +37,12 @@ public class GroupAdapter extends ArrayAdapter {
     //Konstruktor
     public GroupAdapter(Activity context, ArrayList<Student> studentList) {
         super(context, R.layout.group_fragment_listview_layout, studentList);
-        this.context=context;
-        this.studentList=studentList;
+        this.context = context;
+        this.studentList = studentList;
     }
 
     public View getView(final int position, View view, ViewGroup parent){
-        LayoutInflater inflater=context.getLayoutInflater();
+        LayoutInflater inflater = context.getLayoutInflater();
         View rowView = inflater.inflate(R.layout.group_fragment_listview_layout, null, true);
 
         TextView name = rowView.findViewById(R.id.nameTV);
@@ -74,6 +74,7 @@ public class GroupAdapter extends ArrayAdapter {
         changeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 //Dialog für Änderungen
                 dialog = new Dialog(context);
                 dialog.setContentView(R.layout.dialog_student);

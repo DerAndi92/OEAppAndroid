@@ -11,7 +11,7 @@ public abstract class Database extends RoomDatabase {
 
     public abstract ConfigurationDAO configDao();
 
-    abstract StudentDAO studDao();
+    public abstract StudentDAO studDao();
 
     static synchronized Database getInstance(Context context) {
         if (instance == null) {

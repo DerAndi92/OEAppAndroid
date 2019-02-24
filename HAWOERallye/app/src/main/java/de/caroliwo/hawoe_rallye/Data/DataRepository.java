@@ -29,16 +29,6 @@ public class DataRepository {
         studDao = database.studDao();
         //Log.i("DataRepository", "3");
 
-        // Datensätze zuweisen
-        try {
-            configEntity = getConfig();
-            studentEntity = getStudent();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        //Log.i("DataRepository", "4");
 
     }
 
