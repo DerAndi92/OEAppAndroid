@@ -63,39 +63,50 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
 
         // Click-Listener für Group-Item
         viewHolder.groupItemCL.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                // Gruppenname, -Farbe und Join-Button erstellen
-                final ImageView groupIcon = (ImageView) groupDialog.findViewById(R.id.group_dialog_IV);
-                final TextView groupName = (TextView) groupDialog.findViewById(R.id.group_dialog_TV);
-                Button joinButton = (Button) groupDialog.findViewById(R.id.group_dialog_BTN);
 
-                groupIcon.setColorFilter(Color.parseColor("#" + groupsList.get(viewHolder.getAdapterPosition()).getColor()));
-                groupName.setText(groupsList.get(viewHolder.getAdapterPosition()).getName());
+                // lokale Variable für geklickte Gruppe
+                final Group thisGroup = groupsList.get(viewHolder.getAdapterPosition());
 
-                //TODO: wenn Gruppe bereits voll, dann Button disablen und Toast mit: "Gruppe bereits voll"
-                // Click-Listener für Join-Button
-                joinButton.setOnClickListener(new View.OnClickListener() {
+                // Checken ob in Gruppe noch Platz ist
+                if (thisGroup.getMembers() < thisGroup.getMax_members()) {
 
-                    @Override
-                    public void onClick(View v) {
-                        // Mit Intent über Kontext-Klasse (GroupActivity) weiter zur LoadingActivity schicken
-                        Intent intent = new Intent(context, LoadingActivity.class);
-                        groupID = groupsList.get(viewHolder.getAdapterPosition()).getGroupId();
-                        student.setGroupId(groupID);
+                    // Gruppenname, -Farbe und Join-Button erstellen
+                    final ImageView groupIcon = (ImageView) groupDialog.findViewById(R.id.group_dialog_IV);
+                    final TextView groupName = (TextView) groupDialog.findViewById(R.id.group_dialog_TV);
+                    Button joinButton = (Button) groupDialog.findViewById(R.id.group_dialog_BTN);
+                    groupIcon.setColorFilter(Color.parseColor("#" + thisGroup.getColor()));
+                    groupName.setText(thisGroup.getName());
 
-                        viewModel = ViewModelProviders.of((GroupActivity)context).get(DataViewModel.class);
-                        viewModel.insertStudent(new StudentEntity(student.getFirst_name(), student.getLast_name(), student.getCourse(), groupID));
+                    // Click-Listener für Join-Button
+                    joinButton.setOnClickListener(new View.OnClickListener() {
 
-                        //POST-Request
-                        sendStudent();
+                        @Override
+                        public void onClick(View v) {
 
-                        Toast.makeText(context, groupName.getText(), Toast.LENGTH_SHORT).show();
-                        context.startActivity(intent);
-                    }
-                });
-                groupDialog.show();
+                            // Mit Intent über Kontext-Klasse (GroupActivity) weiter zur LoadingActivity schicken
+                            Intent intent = new Intent(context, LoadingActivity.class);
+                            groupID = thisGroup.getGroupId();
+                            student.setGroupId(groupID);
 
+                            // Student mit Gruppen-ID in Datenbank speichern
+                            viewModel = ViewModelProviders.of((GroupActivity) context).get(DataViewModel.class);
+                            viewModel.insertStudent(new StudentEntity(student.getFirst_name(), student.getLast_name(), student.getCourse(), groupID));
+
+                            //POST-Request
+                            sendStudent();
+
+                            Toast.makeText(context, groupName.getText(), Toast.LENGTH_SHORT).show();
+                            groupDialog.dismiss();
+                            context.startActivity(intent);
+                        }
+                    });
+                    groupDialog.show();
+                } else {
+                    Toast.makeText( context, "Gruppe ist voll", Toast.LENGTH_SHORT ).show();
+                }
             }
         });
         return viewHolder;

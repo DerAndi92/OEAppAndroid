@@ -67,7 +67,7 @@ public class LoadingActivity extends AppCompatActivity {
         Log.i("LoadingActivity", "7");
 
         // Zum testen: Alle Einträge löschen bzw Student in Datenbank einfügen (App zweimal starten)
-        //viewModel.deleteAllStudents();
+        viewModel.deleteAllStudents();
         //viewModel.insertStudent(new StudentEntity("Karl", "Mustermann", "Medientechnik", 1));
 
         // Student-Entität zuweisen

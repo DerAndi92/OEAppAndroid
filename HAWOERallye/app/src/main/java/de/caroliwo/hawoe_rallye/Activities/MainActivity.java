@@ -67,13 +67,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Intent intent = getIntent();
         studentList = intent.getParcelableArrayListExtra("Students");
         taskList= intent.getParcelableArrayListExtra("Tasks");
-        Log.i("Test MainActivity", "3 intent" + taskList.get(1).getName() );
+        Log.i("Test MainActivity", "3 intent " + taskList.get(1).getName() );
 
         //Bundle (senden der Infos an Fragments)
         bundle = new Bundle();
         bundle.putParcelableArrayList("Students", studentList);
         bundle.putParcelableArrayList("Tasks", taskList);
-        Log.i("Test MainActivity", "4 bundle" + taskList.get(1).getName() );
+        Log.i("Test MainActivity", "4 bundle " + taskList.get(1).getName() );
     }
 
     //Reaktion bei Touch auf Zurück-Button
