@@ -1,5 +1,6 @@
 package de.caroliwo.hawoe_rallye.Data;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -19,10 +20,10 @@ public interface StudentDAO {
     void delete(StudentEntity studEntity);
 
     @Query("SELECT * FROM student_table WHERE id IN (SELECT MAX(id) FROM student_table)")
-    StudentEntity getStudent();
+    LiveData<StudentEntity> getStudent();
 
     @Query("SELECT COUNT(*) FROM student_table")
-    int countEntries();
+    LiveData<Integer> countEntries();
 
     @Query("DELETE FROM student_table")
     void deleteAllEntries();

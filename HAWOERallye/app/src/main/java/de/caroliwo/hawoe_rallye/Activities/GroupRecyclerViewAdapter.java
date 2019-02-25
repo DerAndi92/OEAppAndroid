@@ -90,6 +90,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
                             Intent intent = new Intent(context, LoadingActivity.class);
                             groupID = thisGroup.getGroupId();
                             student.setGroupId(groupID);
+                            intent.putExtra("student", student);
 
                             // Student mit Gruppen-ID in Datenbank speichern
                             viewModel = ViewModelProviders.of((GroupActivity) context).get(DataViewModel.class);

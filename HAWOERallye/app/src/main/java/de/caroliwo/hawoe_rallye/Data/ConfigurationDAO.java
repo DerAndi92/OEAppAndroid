@@ -1,5 +1,6 @@
 package de.caroliwo.hawoe_rallye.Data;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -19,10 +20,10 @@ public interface ConfigurationDAO {
     void delete(ConfigurationEntity configEntity);
 
     @Query("SELECT * FROM config_table WHERE id IN (SELECT MAX(id) FROM config_table)")
-    ConfigurationEntity getConfig();
+    LiveData<ConfigurationEntity> getConfig();
 
     @Query("SELECT COUNT(*) FROM config_table")
-    int countEntries();
+    LiveData<Integer> countEntries();
 
     @Query("DELETE FROM config_table")
     void deleteAllEntries();

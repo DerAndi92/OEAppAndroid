@@ -106,7 +106,6 @@ public class GroupAdapter extends ArrayAdapter {
 
                        //Fragment aktualisieren
                        Student student = new Student(groupID, studentID, name, lastname, course, manually );
-
                        remove(studentList.get(position)); //Daten aus aktueller Liste löschen
                         insert(student, position);
                         notifyDataSetChanged(); //Fragment aktualisieren

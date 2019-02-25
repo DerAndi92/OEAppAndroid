@@ -1,6 +1,7 @@
 package de.caroliwo.hawoe_rallye.Data;
 
 import android.app.Application;
+import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -13,8 +14,8 @@ public class DataRepository {
     private StudentDAO studDao;
 
     // Variablen für Datensätze aus Datenbank
-    private ConfigurationEntity configEntity;
-    private StudentEntity studentEntity;
+    private LiveData<ConfigurationEntity> configEntity;
+    private LiveData<StudentEntity> studentEntity;
 
     // Konstruktor
     public DataRepository(Application application) {
@@ -29,13 +30,24 @@ public class DataRepository {
         studDao = database.studDao();
         //Log.i("DataRepository", "3");
 
+        // LiveData-Entitäten zuweisen
+        configEntity = configDao.getConfig();
+        studentEntity = studDao.getStudent();
 
+
+    }
+
+    // Methoden welche LiveData liefern
+
+    public LiveData<ConfigurationEntity> getConfig() {
+        return configEntity;
+    }
+
+    public LiveData<StudentEntity> getStudent() {
+        return studentEntity;
     }
 
     // Methoden welche AsyncTasks aufrufen
-    public ConfigurationEntity getConfig() throws ExecutionException, InterruptedException {
-        return new GetConfigAsyncTask(configDao).execute().get();
-    }
 
     public void insertConfig(ConfigurationEntity entity) {
         new InsertConfigAsyncTask(configDao).execute(entity);
@@ -49,9 +61,6 @@ public class DataRepository {
         new DeleteAllConfigsAsyncTask(configDao).execute();
     }
 
-    public StudentEntity getStudent() throws ExecutionException, InterruptedException {
-        return new GetStudentAsyncTask(studDao).execute().get();
-    }
 
     public void insertStudent(StudentEntity entity) {
         new InsertStudentAsyncTask(studDao).execute(entity);
@@ -97,7 +106,7 @@ public class DataRepository {
         }
     }
 
-    private static class GetConfigAsyncTask extends AsyncTask<Void, Void, ConfigurationEntity> {
+/*    private static class GetConfigAsyncTask extends AsyncTask<Void, Void, ConfigurationEntity> {
 
         private ConfigurationDAO configDao;
 
@@ -112,7 +121,7 @@ public class DataRepository {
             }
             return null;
         }
-    }
+    }*/
 
     private static class DeleteAllConfigsAsyncTask extends AsyncTask<Void, Void, Void> {
 
@@ -159,7 +168,7 @@ public class DataRepository {
         }
     }
 
-    private static class GetStudentAsyncTask extends AsyncTask<Void, Void, StudentEntity> {
+ /*   private static class GetStudentAsyncTask extends AsyncTask<Void, Void, StudentEntity> {
 
         private StudentDAO studDao;
 
@@ -174,7 +183,7 @@ public class DataRepository {
             }
             return null;
         }
-    }
+    }*/
 
     private static class DeleteAllStudentsAsyncTask extends AsyncTask<Void, Void, Void> {
 

@@ -1,9 +1,11 @@
 package de.caroliwo.hawoe_rallye.Activities;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
 import de.caroliwo.hawoe_rallye.Configuration;
@@ -26,15 +29,15 @@ import de.caroliwo.hawoe_rallye.R;
 import de.caroliwo.hawoe_rallye.Student;
 import de.caroliwo.hawoe_rallye.Task;
 
-public class LogInActivity extends AppCompatActivity {
+public class LogInActivity  extends AppCompatActivity  {
 private ArrayList<Task> taskList;
 private Configuration configuration;
 private ArrayList<Group> groupsList;
 private Context applicationContext;
-private DataViewModel viewModel;
+private ConfigurationEntity configEntity;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -46,7 +49,16 @@ private DataViewModel viewModel;
         final Map<String, String> userData = new HashMap<>();
 
         // ViewModel für Daten aus Datenbank (über Repository)
-        viewModel = ViewModelProviders.of(this).get(DataViewModel.class);
+        DataViewModel viewModel = ViewModelProviders.of(this).get(DataViewModel.class);
+        configEntity = viewModel.getConfig().getValue();
+        Log.i("LogInActivity", "viewModel.getConfig().getValue(): " + configEntity);
+        viewModel.getConfig().observe(this, new Observer<ConfigurationEntity>() {
+            @Override
+            public void onChanged(@Nullable ConfigurationEntity configurationEntity) {
+                configEntity = configurationEntity;
+                Log.i("LogInActivity", "configEntity assigned by Observer: " + configEntity);
+            }
+        });
 
         //Groups von LoadingActivity holen
         Intent intentFromLoading = getIntent();
@@ -55,7 +67,7 @@ private DataViewModel viewModel;
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)  {
 
                 Log.i("TEST", "onClick Login 1aaaa");
                 // userData-Objekt mit Inputs füllen
@@ -100,7 +112,7 @@ private DataViewModel viewModel;
 
     private boolean passwordCorrect(String password) {
         if (!TextUtils.isEmpty(password)) {
-            return password.equals(viewModel.getConfig().getPassword());
+            return password.equals(configEntity.getPassword());
         } else {
             return false;
         }

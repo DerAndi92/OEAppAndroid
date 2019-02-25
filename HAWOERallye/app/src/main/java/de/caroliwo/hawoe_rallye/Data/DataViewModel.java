@@ -2,6 +2,7 @@ package de.caroliwo.hawoe_rallye.Data;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
+import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -12,9 +13,9 @@ public class DataViewModel extends AndroidViewModel {
     // Referenz auf Repository für Datenzugriff
     private DataRepository repository;
 
-    // Variablen für Datensätze aus Repository
-    private ConfigurationEntity configEntity;
-    private StudentEntity studEntity;
+    // Variablen für LiveData-Datensätze aus Repository
+    private LiveData<ConfigurationEntity> configEntity;
+    private LiveData<StudentEntity> studEntity;
 
     public DataViewModel(@NonNull Application application) {
 
@@ -26,14 +27,18 @@ public class DataViewModel extends AndroidViewModel {
         repository = new DataRepository(application);
         //Log.i("DataViewModel", "2");
 
+        // LiveData-Datensätze zuweisen
+        configEntity = repository.getConfig();
+        studEntity = repository.getStudent();
+
     }
 
-    public ConfigurationEntity getConfig() throws ExecutionException, InterruptedException {
-        return repository.getConfig();
+    public LiveData<ConfigurationEntity> getConfig() {
+        return configEntity;
     }
 
-    public StudentEntity getStudent() throws ExecutionException, InterruptedException {
-        return repository.getStudent();
+    public LiveData<StudentEntity> getStudent() {
+        return studEntity;
     }
 
     public void insertConfig(ConfigurationEntity entity) {

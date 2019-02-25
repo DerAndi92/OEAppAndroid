@@ -1,7 +1,9 @@
 package de.caroliwo.hawoe_rallye.Activities;
 
+import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,6 +41,7 @@ public class LoadingActivity extends AppCompatActivity {
     private ArrayList<Group> groupsList;
     private Context applicationContext;
     private DataViewModel viewModel;
+    private Student student;
     Intent intent;
 
     @Override
@@ -48,17 +51,22 @@ public class LoadingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_loading);
         Log.i("LoadingActivity", "2");
 
+        // ViewModel für Datenbank (über Repository)
+        viewModel = ViewModelProviders.of(this).get(DataViewModel.class);
+
+        // student aus Intent holen
+        Intent intentFromLogin = getIntent();
+        student = intentFromLogin.getParcelableExtra("student");
+        Log.i("LoadingActivity", "3");
+
         //Progressbar
         progressBar = findViewById(R.id.progressBar);
-        Log.i("LoadingActivity", "3");
+        Log.i("LoadingActivity", "4");
 
         //für Intent
         applicationContext = getApplicationContext();
-        Log.i("LoadingActivity", "4");
-
-        // ViewModel für Daten aus Datenbank (über Repository)
-        viewModel = ViewModelProviders.of(this).get(DataViewModel.class);
         Log.i("LoadingActivity", "5");
+
 
         //Retrofit
         Retrofit retrofitClass = new Retrofit();
@@ -67,12 +75,10 @@ public class LoadingActivity extends AppCompatActivity {
         Log.i("LoadingActivity", "7");
 
         // Zum testen: Alle Einträge löschen bzw Student in Datenbank einfügen (App zweimal starten)
-        viewModel.deleteAllStudents();
+        //viewModel.deleteAllStudents();
         //viewModel.insertStudent(new StudentEntity("Karl", "Mustermann", "Medientechnik", 1));
 
-        // Student-Entität zuweisen
-        StudentEntity student = viewModel.getStudent();
-        // Checken ob ein Student gespeichert ist
+        // Checken ob ein Student übergeben wurde
         if (student != null) {
             Log.i("LoadingActivity", "student vorhanden ");
             // Bei existierendem Eintrag: Intent zur Main-Activity
@@ -82,12 +88,12 @@ public class LoadingActivity extends AppCompatActivity {
 
             getTasks(groupID); //für Zeiten und Aufgaben
             getGroup(groupID); //Eigene Gruppe laden
-            Log.i("LoadingActivity","1");
+            Log.i("LoadingActivity","8");
 
         } else {
             // Bei neuem User: Intent zur Login-Activity
             intent = new Intent(applicationContext, LogInActivity.class);
-            Log.i("LoadingActivity","2");
+            Log.i("LoadingActivity","9");
             getConfig();
             getGroups();
         }
@@ -119,6 +125,7 @@ public class LoadingActivity extends AppCompatActivity {
                 intent.putExtra("Configuration", configuration);
 
                 // Passwort und maxTime über viewModel in interner Datenbank speichern
+                viewModel.deleteAllConfigs();
                 viewModel.insertConfig(new ConfigurationEntity("bla"/*configuration.getPassword()*/, configuration.getMaxTime()));
                 Log.i("LoadingActivity", "configuration.getPassword(): " + configuration.getPassword());
 
