@@ -41,7 +41,7 @@ public class LoadingActivity extends AppCompatActivity {
     private ArrayList<Group> groupsList;
     private Context applicationContext;
     private DataViewModel viewModel;
-    private Student student;
+    private StudentEntity student;
     Intent intent;
 
     @Override
@@ -53,11 +53,7 @@ public class LoadingActivity extends AppCompatActivity {
 
         // ViewModel für Datenbank (über Repository)
         viewModel = ViewModelProviders.of(this).get(DataViewModel.class);
-
-        // student aus Intent holen
-        Intent intentFromLogin = getIntent();
-        student = intentFromLogin.getParcelableExtra("student");
-        Log.i("LoadingActivity", "3");
+        student = viewModel.getStudent();
 
         //Progressbar
         progressBar = findViewById(R.id.progressBar);

@@ -50,9 +50,8 @@ private ConfigurationEntity configEntity;
 
         // ViewModel für Daten aus Datenbank (über Repository)
         DataViewModel viewModel = ViewModelProviders.of(this).get(DataViewModel.class);
-        configEntity = viewModel.getConfig().getValue();
         Log.i("LogInActivity", "viewModel.getConfig().getValue(): " + configEntity);
-        viewModel.getConfig().observe(this, new Observer<ConfigurationEntity>() {
+        viewModel.getConfigLiveData().observe(this, new Observer<ConfigurationEntity>() {
             @Override
             public void onChanged(@Nullable ConfigurationEntity configurationEntity) {
                 configEntity = configurationEntity;

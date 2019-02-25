@@ -20,7 +20,10 @@ public interface ConfigurationDAO {
     void delete(ConfigurationEntity configEntity);
 
     @Query("SELECT * FROM config_table WHERE id IN (SELECT MAX(id) FROM config_table)")
-    LiveData<ConfigurationEntity> getConfig();
+    ConfigurationEntity getConfig();
+
+    @Query("SELECT * FROM config_table WHERE id IN (SELECT MAX(id) FROM config_table)")
+    LiveData<ConfigurationEntity> getConfigLiveData();
 
     @Query("SELECT COUNT(*) FROM config_table")
     LiveData<Integer> countEntries();

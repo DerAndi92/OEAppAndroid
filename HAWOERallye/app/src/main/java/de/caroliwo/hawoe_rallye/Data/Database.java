@@ -15,7 +15,10 @@ public abstract class Database extends RoomDatabase {
 
     static synchronized Database getInstance(Context context) {
         if (instance == null) {
-            instance = Room.databaseBuilder(context.getApplicationContext(), Database.class, "sqlite_database").fallbackToDestructiveMigration().build();
+            instance = Room.databaseBuilder(context.getApplicationContext(), Database.class, "sqlite_database")
+                    .fallbackToDestructiveMigration()
+                    .allowMainThreadQueries()
+                    .build();
         }
         return instance;
     }

@@ -20,7 +20,10 @@ public interface StudentDAO {
     void delete(StudentEntity studEntity);
 
     @Query("SELECT * FROM student_table WHERE id IN (SELECT MAX(id) FROM student_table)")
-    LiveData<StudentEntity> getStudent();
+    StudentEntity getStudent();
+
+    @Query("SELECT * FROM student_table WHERE id IN (SELECT MAX(id) FROM student_table)")
+    LiveData<StudentEntity> getStudentLiveData();
 
     @Query("SELECT COUNT(*) FROM student_table")
     LiveData<Integer> countEntries();

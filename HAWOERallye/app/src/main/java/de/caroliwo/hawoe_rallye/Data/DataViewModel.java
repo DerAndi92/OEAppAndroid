@@ -28,18 +28,31 @@ public class DataViewModel extends AndroidViewModel {
         //Log.i("DataViewModel", "2");
 
         // LiveData-Datensätze zuweisen
-        configEntity = repository.getConfig();
-        studEntity = repository.getStudent();
+        configEntity = repository.getConfigLiveData();
+        studEntity = repository.getStudentLiveData();
 
     }
 
-    public LiveData<ConfigurationEntity> getConfig() {
+    // Methoden für LiveData-Stream
+    public LiveData<ConfigurationEntity> getConfigLiveData() {
         return configEntity;
     }
 
-    public LiveData<StudentEntity> getStudent() {
-        return studEntity;
+    public LiveData<StudentEntity> getStudentLiveData() { return studEntity; }
+
+    // Methoden für direkte Datenabfrage auf dem Main-Thread
+
+    public StudentEntity getStudent() {
+
+        return repository.getStudent();
     }
+
+    public ConfigurationEntity getConfig() {
+
+        return repository.getConfig();
+    }
+
+    // Andere Datenbankoperationen
 
     public void insertConfig(ConfigurationEntity entity) {
         repository.insertConfig(entity);

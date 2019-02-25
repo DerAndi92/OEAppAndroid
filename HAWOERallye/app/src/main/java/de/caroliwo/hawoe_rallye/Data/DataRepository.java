@@ -31,20 +31,32 @@ public class DataRepository {
         //Log.i("DataRepository", "3");
 
         // LiveData-Entitäten zuweisen
-        configEntity = configDao.getConfig();
-        studentEntity = studDao.getStudent();
+        configEntity = configDao.getConfigLiveData();
+        studentEntity = studDao.getStudentLiveData();
 
 
     }
 
     // Methoden welche LiveData liefern
 
-    public LiveData<ConfigurationEntity> getConfig() {
+    public LiveData<ConfigurationEntity> getConfigLiveData() {
         return configEntity;
     }
 
-    public LiveData<StudentEntity> getStudent() {
+    public LiveData<StudentEntity> getStudentLiveData() {
         return studentEntity;
+    }
+
+    // Methoden für direkte Datenabfrage auf dem Main-Thread
+
+    public StudentEntity getStudent() {
+
+        return studDao.getStudent();
+    }
+
+    public ConfigurationEntity getConfig() {
+
+        return configDao.getConfig();
     }
 
     // Methoden welche AsyncTasks aufrufen
