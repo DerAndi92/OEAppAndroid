@@ -20,7 +20,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:src="@drawable/ic_check_box_icon_big"
+            app:srcCompat="@drawable/ic_check_box_icon_big"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -44,6 +44,16 @@
             android:id="@+id/task_dialog_TV2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Destination"
+            android:textColor="@color/colorText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/task_dialog_TV" />
+
+        <TextView
+            android:id="@+id/task_dialog_TV3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
@@ -52,7 +62,7 @@
             android:textColor="@color/colorText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/task_dialog_TV" />
+            app:layout_constraintTop_toBottomOf="@+id/task_dialog_TV2" />
 
         <EditText
             android:id="@+id/task_dialog_ET"
@@ -70,7 +80,7 @@
             android:textColorHint="@color/colorText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/task_dialog_TV2" />
+            app:layout_constraintTop_toBottomOf="@+id/task_dialog_TV3" />
 
         <Button
             android:id="@+id/button"
@@ -90,5 +100,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/task_dialog_ET" />
-    </android.support.constraint.ConstraintLayout>
+
+
+</android.support.constraint.ConstraintLayout>
 

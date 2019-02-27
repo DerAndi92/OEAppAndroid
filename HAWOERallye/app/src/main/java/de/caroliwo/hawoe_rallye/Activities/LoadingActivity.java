@@ -195,7 +195,7 @@ public class LoadingActivity extends AppCompatActivity {
                 ArrayList<Task> taskList = new ArrayList<>(tasks); //List in ArrayList umwandeln
                 intent.putParcelableArrayListExtra("Tasks", taskList);
                 progressBar.setProgress(progressBar.getProgress()+50);
-                Log.i("LoadingActivity","Tasks loaded");
+                Log.i("LoadingActivity","Tasks loaded: " + taskList);
                 progressCheck();
             }
 

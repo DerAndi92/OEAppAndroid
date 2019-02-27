@@ -55,7 +55,7 @@
     <string name="buidling_new">NEUBAU</string>
     <string name="building_old">ALTBAU</string>
     <string name="single_task">AUFGABE</string>
-    <string name="example_task_text">Dies ist ein Beispiel-Aufgabentext. Bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bal.</string>
+    <string name="example_task_text">Dies ist ein Beispiel-Aufgabentext.</string>
     <string name="answer">ANTWORT</string>
     <string name="submit">ABGEBEN</string>
 

@@ -22,7 +22,6 @@ import de.caroliwo.hawoe_rallye.Fragments.IntroductionFragment;
 import de.caroliwo.hawoe_rallye.Fragments.RoomplansFragment;
 import de.caroliwo.hawoe_rallye.Fragments.TasksFragment;
 import de.caroliwo.hawoe_rallye.Fragments.TimesFragment;
-import de.caroliwo.hawoe_rallye.Group;
 import de.caroliwo.hawoe_rallye.R;
 import de.caroliwo.hawoe_rallye.Student;
 import de.caroliwo.hawoe_rallye.Task;
