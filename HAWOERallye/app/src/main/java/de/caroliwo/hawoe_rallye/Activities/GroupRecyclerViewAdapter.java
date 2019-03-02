@@ -26,6 +26,7 @@ import de.caroliwo.hawoe_rallye.Group;
 import de.caroliwo.hawoe_rallye.R;
 import de.caroliwo.hawoe_rallye.Retrofit;
 import de.caroliwo.hawoe_rallye.Student;
+import de.caroliwo.hawoe_rallye.StudentAPI;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -141,7 +142,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
     }
 
     //POST Student zu Gruppe hinzufügen
-    private void sendStudent(){
+   private void sendStudent(){
         Call<Student> call = downloadJSONRetrofit.sendStudent(student);
 
         call.enqueue(new Callback<Student>() {
@@ -149,17 +150,16 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
             public void onResponse(Call<Student> call, Response<Student> response) {
 
                 if (!response.isSuccessful()) {
-                    Log.i("ErrorResponse: ", String.valueOf(response.code()));
+                    Log.i("ErrorRes:GroRecViewAdap", String.valueOf(response.code()));
                     return;
                 }
-
-                Student studResponse = response.body();
+                    Student studResponse = response.body();
             }
 
             @Override
             public void onFailure(Call<Student> call, Throwable t) {
                 // something went completely south (like no internet connection)
-                Log.i("Error", t.getMessage() + "Error");
+                Log.i("Error GroupRecViewAdap", t.getMessage());
             }
         });
     }

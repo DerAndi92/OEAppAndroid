@@ -2,6 +2,7 @@ package de.caroliwo.hawoe_rallye.Fragments;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.arch.lifecycle.ViewModelProviders;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.caroliwo.hawoe_rallye.Activities.MainActivity;
+import de.caroliwo.hawoe_rallye.Data.DataViewModel;
+import de.caroliwo.hawoe_rallye.Data.StudentEntity;
 import de.caroliwo.hawoe_rallye.DownloadJSONRetrofit;
 import de.caroliwo.hawoe_rallye.R;
 import de.caroliwo.hawoe_rallye.Retrofit;
@@ -33,6 +37,7 @@ public class GroupAdapter extends ArrayAdapter {
     private EditText lastnameDialog;
     private Spinner spinnerDialog;
     private Dialog dialog;
+    private DataViewModel viewModel;
 
     //Konstruktor
     public GroupAdapter(Activity context, ArrayList<Student> studentList) {
@@ -41,7 +46,7 @@ public class GroupAdapter extends ArrayAdapter {
         this.studentList = studentList;
     }
 
-    public View getView(final int position, View view, ViewGroup parent){
+    public View getView(final int position, final View view, ViewGroup parent){
         LayoutInflater inflater = context.getLayoutInflater();
         View rowView = inflater.inflate(R.layout.group_fragment_listview_layout, null, true);
 
@@ -63,6 +68,7 @@ public class GroupAdapter extends ArrayAdapter {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO: Delete soll nur funktionieren, wenn Studierende/r manually hinzugefügt wurde aka manually = 1?
                 studentID = studentList.get(position).getStudentId();
                 deleteStudent(); //Daten in API löschen
                 remove(studentList.get(position)); //Daten aus aktueller Liste löschen
@@ -100,9 +106,9 @@ public class GroupAdapter extends ArrayAdapter {
                        String course = spinnerDialog.getSelectedItem().toString();
                        studentID = studentList.get(position).getStudentId();
                        Integer groupID = studentList.get(position).getGroupId();
-                       int manually = studentList.get(position).isManually();
+                       Integer manually = studentList.get(position).getManually();
 
-                       changeStudent(studentID,groupID, name, lastname, course);
+                       changeStudent(studentID, name, lastname, course);
 
                        //Fragment aktualisieren
                        Student student = new Student(groupID, studentID, name, lastname, course, manually );
@@ -110,7 +116,17 @@ public class GroupAdapter extends ArrayAdapter {
                         insert(student, position);
                         notifyDataSetChanged(); //Fragment aktualisieren
                         dialog.hide();
-                        //TODO: wenn eigene Daten geändert, dann interne Datenbank aktualisieren
+
+                        //Bei Änderungen am eigenen Account: Student in interner DB aktualisieren
+                        viewModel = ViewModelProviders.of((MainActivity) context).get(DataViewModel.class);
+                        StudentEntity studentEntity = viewModel.getStudent();
+                        if(studentEntity.getId() == studentID) {
+                            studentEntity.setCourse(course);
+                            studentEntity.setFirst_name(name);
+                            studentEntity.setLast_name(lastname);
+                            viewModel.updateStudent(studentEntity);
+                       }
+
                     }
                 });
                 dialog.show();
@@ -137,9 +153,8 @@ public class GroupAdapter extends ArrayAdapter {
         });
     }
 
-    private void changeStudent(Integer studentID, Integer groupID, String name, String lastname, String course) {
-        //TODO: Auf Antwort von Andi warten, welche ID jetzt benötigt wird
-        Student student = new Student(groupID, name, lastname, course);
+    private void changeStudent(Integer studentID, String name, String lastname, String course) {
+        Student student = new Student(null, studentID, name, lastname, course, null);
 
         Call<Student> call = downloadJSONRetrofit.changeStudent(studentID, student);
 
@@ -147,13 +162,12 @@ public class GroupAdapter extends ArrayAdapter {
             @Override
             public void onResponse(Call<Student> call, Response<Student> response) {
 
-                if (!response.isSuccessful()) {  //TODO: Response ist hier immer !successful --> Fehler finden
+                if (!response.isSuccessful()) {  //TODO: Response ist hier immer !successful --> Fehler: Benennung Api studentId, hier: id
                     Log.i("TEST ErrorResponse: ", String.valueOf(response.code()));
                     return;
                 }
 
                 Student studResponse = response.body();
-
             }
 
             @Override

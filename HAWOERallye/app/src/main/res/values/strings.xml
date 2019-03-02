@@ -4,6 +4,10 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <string name="navName">Dein Name</string>
+    <string name="navGruppe">Deine Gruppe</string>
+    <string name="navAusloggen">Ausloggen</string>
+
     <!--Loading Screen-->
     <string name="oeRallyeAppLoad">Lädt...</string>
 
@@ -62,6 +66,7 @@
     <!--group_fragment-->
     <string name="headline_group">DEINE GRUPPE</string>
     <string name="change">ÄNDERN</string>
+    <string name="addStudent">PERSON HINZUFÜGEN</string>
     <string-array name="subject_array2">
         <item>Medientechnik</item>
         <item>Media Systems</item>

@@ -4,6 +4,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -31,10 +32,13 @@ public interface DownloadJSONRetrofit {
     //---------------Students----------------
     //Studierenden hinzufügen
     @POST ("student")
+    Call<Object> sendObject(@Body Student student);
+
+    @POST ("student")
     Call<Student> sendStudent(@Body Student student);
 
     //Studierenden bearbeiten
-    @PUT ("student/{studentID}")
+    @PATCH("student/{studentID}")
     Call<Student> changeStudent(@Path("studentID") int studentID, @Body Student student);
 
     //Studierenden löschen

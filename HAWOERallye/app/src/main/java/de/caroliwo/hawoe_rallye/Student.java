@@ -14,10 +14,10 @@ public class Student implements Parcelable {
     private String first_name;
     private String last_name;
     private String course;
-    private int manually;
+    private Integer manually;
 
     //Konstruktor
-    public Student(Integer groupId, Integer studentId ,String first_name, String last_name, String course, int manually) {
+    public Student(Integer groupId, Integer studentId ,String first_name, String last_name, String course, Integer manually) {
         this.groupId = groupId;
         this.studentId = studentId;
         this.first_name = first_name;
@@ -26,28 +26,20 @@ public class Student implements Parcelable {
         this.manually = manually;
     }
 
-    //2 Konsturktor
-    public Student (Integer groupID,String first_name, String last_name, String course){
-        this.groupId = groupId;
-        this.first_name = first_name;
-        this.last_name = last_name;
-        this.course = course;
-    }
-
     //GETTER + SETTER
-    public int getGroupId() {
+    public Integer getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(int groupId) {
+    public void setGroupId(Integer groupId) {
         this.groupId = groupId;
     }
 
-    public int getStudentId() {
+    public Integer getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(int studentId) {
+    public void setStudentId(Integer studentId) {
         this.studentId = studentId;
     }
 
@@ -75,16 +67,15 @@ public class Student implements Parcelable {
         this.course = course;
     }
 
-    public int isManually() {
+    public Integer getManually() {
         return manually;
     }
 
-    public void setManually(int manually) {
+    public void setManually(Integer manually) {
         this.manually = manually;
     }
 
-
-     //Parcelable
+    //Parcelable
     @Override
     public int describeContents() {
         return 0;
@@ -97,7 +88,7 @@ public class Student implements Parcelable {
         dest.writeString(this.first_name);
         dest.writeString(this.last_name);
         dest.writeString(this.course);
-        dest.writeInt(this.manually);
+        dest.writeValue(this.manually);
     }
 
     protected Student(Parcel in) {
@@ -106,7 +97,7 @@ public class Student implements Parcelable {
         this.first_name = in.readString();
         this.last_name = in.readString();
         this.course = in.readString();
-        this.manually = in.readInt();
+        this.manually = (Integer) in.readValue(Integer.class.getClassLoader());
     }
 
     public static final Parcelable.Creator<Student> CREATOR = new Parcelable.Creator<Student>() {
