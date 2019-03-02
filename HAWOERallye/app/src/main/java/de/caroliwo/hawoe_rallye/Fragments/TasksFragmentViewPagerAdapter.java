@@ -15,6 +15,8 @@ public class TasksFragmentViewPagerAdapter extends FragmentPagerAdapter {
     private final List<String> titleList = new ArrayList<>();
     private boolean debug = false;
 
+    //TODO: Kommentar, wozu der Adapter gebraucht wird
+
     public TasksFragmentViewPagerAdapter(FragmentManager fm) {
 
         super(fm);

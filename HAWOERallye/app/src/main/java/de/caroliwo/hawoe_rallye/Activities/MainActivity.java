@@ -1,5 +1,7 @@
 package de.caroliwo.hawoe_rallye.Activities;
 
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -13,9 +15,16 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
+import de.caroliwo.hawoe_rallye.Data.DataViewModel;
+import de.caroliwo.hawoe_rallye.Data.StudentEntity;
 import de.caroliwo.hawoe_rallye.Fragments.GroupFragment;
 import de.caroliwo.hawoe_rallye.Fragments.ImpressumFragment;
 import de.caroliwo.hawoe_rallye.Fragments.IntroductionFragment;
@@ -28,7 +37,6 @@ import de.caroliwo.hawoe_rallye.Task;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
-    private Fragment timesFragment;
     private ArrayList<Student> studentList;
     private ArrayList<Task> taskList;
     Bundle bundle;
@@ -57,6 +65,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_icon);
+
+        //nav_header mit Infos füllen //TODO: fertig machen, damit es one Bug funktioniert
+      /*  TextView navName = findViewById(R.id.navName);
+        TextView navTeam = findViewById(R.id.navTeam);
+        Button logOutButton = findViewById(R.id.logOutButton);
+
+        DataViewModel viewModel = ViewModelProviders.of(this).get(DataViewModel.class);
+        StudentEntity studentEntity = viewModel.getStudent();
+
+
+        navName.setText(studentEntity.getFirst_name() + " " + studentEntity.getLast_name());
+        navTeam.setText("Gruppe " + studentEntity.getGroupId()); //TODO: Farbe bzw. Gruppenname statt Id
+
+        logOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //viewModel.deleteAllStudents();
+                //TODO: Web-API delete Student
+                //TODO: App auf Log-In Screen zurücksetzen
+            }
+        }); */
 
         //Startseite
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new IntroductionFragment()).commit();

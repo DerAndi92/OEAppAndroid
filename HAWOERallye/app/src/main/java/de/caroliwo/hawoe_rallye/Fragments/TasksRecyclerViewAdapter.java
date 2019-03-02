@@ -32,18 +32,27 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
         this.taskList = data;
     }
 
+    //TODO: Kommentare
     @NonNull
     @Override
     public TasksViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_task, viewGroup, false);
         final TasksViewHolder viewHolder = new TasksViewHolder(view);
 
+        //TODO: Statt Dialog evtl lieber ein neues Fragment öffnen. Manche Aufgaben brauchen viel Platz
         taskDialog = new Dialog(context);
         taskDialog.setContentView(R.layout.dialog_tasks);
 
         viewHolder.taskItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //TODO: GET-Request Eine Aufgabe einer Gruppe laden
+                //Für Get-Request: JSON bei jeder Aufgabe anders --> JSON manuell Parsen ähnlich wie in GroupFragment POST
+                //Unterschied: Objekt muss anhand des JSON-Aufbaus erstellt werden ohne, dass es bereits vorher als Klasse angelegt wurde
+                //Stichwort: Dynamic JSON
+                //TODO: POST-Request Lösung zur einer Aufgabe abschicken
+
                 if (debug) Toast.makeText(context, "Test Click"+String.valueOf(viewHolder.getAdapterPosition()),Toast.LENGTH_SHORT).show();
                 TextView taskTitle = (TextView) taskDialog.findViewById(R.id.task_dialog_TV);
                 TextView taskDestination = taskDialog.findViewById(R.id.task_dialog_TV2);

@@ -37,7 +37,7 @@ public class GroupActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.chooseGroupRV);
 //        if (debug) Log.i("GroupActivity-Log","4");
 
-        //Daten von LoadingActivity übergeben
+        //Daten von LoadingActivity holen
         Intent intentFromLogIn = getIntent();
         groupsList = intentFromLogIn.getParcelableArrayListExtra("Groups");
         student = intentFromLogIn.getParcelableExtra("StudentData");

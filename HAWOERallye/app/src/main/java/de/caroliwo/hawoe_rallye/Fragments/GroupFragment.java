@@ -135,7 +135,7 @@ public class GroupFragment extends Fragment {
                      Toast.makeText(getContext(),"Gruppe ist voll",Toast.LENGTH_SHORT).show();
                     return;
                 }
-
+                //JSON manuell in Objekt umwandeln
                 Gson gson = new Gson();
                 StudentAPI stud = gson.fromJson(gson.toJson(response.body()), StudentAPI.class);
                 student = stud.getStudent();

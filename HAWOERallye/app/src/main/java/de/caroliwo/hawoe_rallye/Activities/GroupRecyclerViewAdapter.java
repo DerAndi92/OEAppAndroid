@@ -78,7 +78,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
                     final ImageView groupIcon = (ImageView) groupDialog.findViewById(R.id.group_dialog_IV);
                     final TextView groupName = (TextView) groupDialog.findViewById(R.id.group_dialog_TV);
                     Button joinButton = (Button) groupDialog.findViewById(R.id.group_dialog_BTN);
-                    groupIcon.setColorFilter(Color.parseColor("#" + thisGroup.getColor()));
+                    groupIcon.setColorFilter(Color.parseColor(thisGroup.getColor()));
                     groupName.setText(thisGroup.getName());
 
                     // Click-Listener für Join-Button
@@ -118,7 +118,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
     @Override
     public void onBindViewHolder(@NonNull GroupViewHolder groupViewHolder, int i) {
         // Gruppenname und -Farbe für jeden Viewholder setzen
-        groupViewHolder.imageView.setColorFilter(Color.parseColor("#" + groupsList.get(i).getColor()));
+        groupViewHolder.imageView.setColorFilter(Color.parseColor( groupsList.get(i).getColor()));
         groupViewHolder.textView.setText(groupsList.get(i).getName());
     }
 
