@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,11 +70,15 @@ public class GroupAdapter extends ArrayAdapter {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Delete soll nur funktionieren, wenn Studierende/r manually hinzugefügt wurde aka manually = 1?
-                studentID = studentList.get(position).getStudentId();
-                deleteStudent(); //Daten in API löschen
-                remove(studentList.get(position)); //Daten aus aktueller Liste löschen
-                notifyDataSetChanged(); //Fragment aktualisieren
+                Student student = studentList.get(position);
+                if (student.getManually() == 1) {
+                    studentID = student.getStudentId();
+                    deleteStudent(); //Daten in API löschen
+                    remove(studentList.get(position)); //Daten aus aktueller Liste löschen
+                    notifyDataSetChanged(); //Fragment aktualisieren
+                } else {
+                    Toast.makeText(context, "Nur manuell hinzugefügte Studenten können gelöscht werden", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
