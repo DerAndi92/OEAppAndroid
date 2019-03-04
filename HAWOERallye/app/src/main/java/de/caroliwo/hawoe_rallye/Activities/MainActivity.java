@@ -1,9 +1,13 @@
 package de.caroliwo.hawoe_rallye.Activities;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -31,6 +35,7 @@ import de.caroliwo.hawoe_rallye.Fragments.IntroductionFragment;
 import de.caroliwo.hawoe_rallye.Fragments.RoomplansFragment;
 import de.caroliwo.hawoe_rallye.Fragments.TasksFragment;
 import de.caroliwo.hawoe_rallye.Fragments.TimesFragment;
+import de.caroliwo.hawoe_rallye.Group;
 import de.caroliwo.hawoe_rallye.R;
 import de.caroliwo.hawoe_rallye.Student;
 import de.caroliwo.hawoe_rallye.Task;
@@ -46,6 +51,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         Log.i("Test MainActivity", "1" );
+
+        // Instanz des ViewModels holen
+        final DataViewModel viewModel = ViewModelProviders.of(this).get(DataViewModel.class);
+        viewModel.fetchGroups();
 
         //Toolbar setzen
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -69,22 +78,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //nav_header mit Infos füllen //
         View headerLayout = navigationView.getHeaderView(0);
         TextView navName = headerLayout.findViewById(R.id.navName);
-        TextView navTeam = headerLayout.findViewById(R.id.navTeam);
+        final TextView navTeam = headerLayout.findViewById(R.id.navTeam);
         Button logOutButton = headerLayout.findViewById(R.id.logOutButton);
 
-        DataViewModel viewModel = ViewModelProviders.of(this).get(DataViewModel.class);
-        StudentEntity studentEntity = viewModel.getStudent();
-
-
+        // StudentEntity von ViewModel holen & Namen zuweisen
+        final StudentEntity studentEntity = viewModel.getStudent();
         navName.setText(studentEntity.getFirst_name() + " " + studentEntity.getLast_name());
-        navTeam.setText("Gruppe " + studentEntity.getGroupId()); //TODO: Farbe bzw. Gruppenname statt Id
+
+        // Gruppenname und -Farbe holen & zuweisen
+        final int groupId = studentEntity.getGroupId();
+        viewModel.getGroupListLiveData().observe(this, new Observer<ArrayList<Group>>() {
+            @Override
+            public void onChanged(@Nullable ArrayList<Group> groups) {
+                for (Group group: groups) {
+                    if (groupId == group.getGroupId()) {
+                        navTeam.setText(group.getName());
+                        navTeam.setTextColor(Color.parseColor(group.getColor()));
+                    }
+                }
+            }
+        });
+
+        Log.i("DataRepository", "groups are not fetched");
 
         logOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //viewModel.deleteAllStudents();
-                //TODO: Web-API delete Student
-                //TODO: App auf Log-In Screen zurücksetzen
+                viewModel.deleteAllStudents();
+                viewModel.deleteStudent(studentEntity.getId());
+                Context applicationContext = getApplicationContext();
+                Intent intent = new Intent(applicationContext, LoadingActivity.class);
+                applicationContext.startActivity(intent);
             }
         });
 
@@ -95,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Intent (holen von Infos von LoadingActivity)
         Intent intent = getIntent();
         studentList = intent.getParcelableArrayListExtra("Students");
-        taskList= intent.getParcelableArrayListExtra("Tasks");
+        taskList = intent.getParcelableArrayListExtra("Tasks");
         Log.i("Test MainActivity", "3 intent " + taskList.get(1).getName() );
 
         //Bundle (senden der Infos an Fragments)

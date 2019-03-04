@@ -6,7 +6,10 @@ import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
+
+import de.caroliwo.hawoe_rallye.Group;
 
 public class DataViewModel extends AndroidViewModel {
 
@@ -16,22 +19,48 @@ public class DataViewModel extends AndroidViewModel {
     // Variablen für LiveData-Datensätze aus Repository
     private LiveData<ConfigurationEntity> configEntity;
     private LiveData<StudentEntity> studEntity;
+    private LiveData<ArrayList<Group>> groupList;
+
 
     public DataViewModel(@NonNull Application application) {
 
         // Application-Kontext an Superklasse weitergeben
         super(application);
-        //Log.i("DataViewModel", "1");
+        Log.i("DataViewModel", "1");
 
         // Repository instanziieren
         repository = new DataRepository(application);
-        //Log.i("DataViewModel", "2");
+        Log.i("DataViewModel", "2");
 
         // LiveData-Datensätze zuweisen
         configEntity = repository.getConfigLiveData();
         studEntity = repository.getStudentLiveData();
+        groupList = repository.getGroupListLiveData();
 
     }
+
+    // Methoden für API-Calls an's Web-Interface
+    public void fetchGroups() {
+        repository.fetchGroups();
+    }
+
+    public boolean groupsAreFetched() {
+        return repository.groupsAreFetched();
+    }
+
+    /*public Group getGroup(int groupID) {
+        return repository.getGroup(groupID);
+    }*/
+
+    public LiveData<ArrayList<Group>> getGroupListLiveData () {
+        return groupList;
+    }
+
+    public void deleteStudent(int studentID) {
+        repository.deleteStudent(studentID);
+    }
+
+
 
     // Methoden für LiveData-Stream
     public LiveData<ConfigurationEntity> getConfigLiveData() {
