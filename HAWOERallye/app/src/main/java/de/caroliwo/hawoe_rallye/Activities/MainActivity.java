@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
         //Für Navigationelement Auswahl
-        drawer=findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -66,10 +66,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_icon);
 
-        //nav_header mit Infos füllen //TODO: fertig machen, damit es one Bug funktioniert
-      /*  TextView navName = findViewById(R.id.navName);
-        TextView navTeam = findViewById(R.id.navTeam);
-        Button logOutButton = findViewById(R.id.logOutButton);
+        //nav_header mit Infos füllen //
+        View headerLayout = navigationView.getHeaderView(0);
+        TextView navName = headerLayout.findViewById(R.id.navName);
+        TextView navTeam = headerLayout.findViewById(R.id.navTeam);
+        Button logOutButton = headerLayout.findViewById(R.id.logOutButton);
 
         DataViewModel viewModel = ViewModelProviders.of(this).get(DataViewModel.class);
         StudentEntity studentEntity = viewModel.getStudent();
@@ -85,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //TODO: Web-API delete Student
                 //TODO: App auf Log-In Screen zurücksetzen
             }
-        }); */
+        });
 
         //Startseite
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new IntroductionFragment()).commit();
