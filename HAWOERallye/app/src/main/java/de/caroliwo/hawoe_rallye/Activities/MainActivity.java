@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         viewModel.getStudentLiveData().observe(this, new Observer<StudentEntity>() {
             @Override
             public void onChanged(@Nullable StudentEntity studentEntity) {
-                navName.setText(studentEntity.getFirst_name() + " " + studentEntity.getLast_name() + studentEntity.getStudentId());
+                if (studentEntity != null ) { navName.setText(studentEntity.getFirst_name() + " " + studentEntity.getLast_name() + studentEntity.getStudentId()); }
             }
         });
 
