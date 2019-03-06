@@ -38,6 +38,11 @@ dependencies {
     //PDF-Library
     implementation 'com.github.barteksc:android-pdf-viewer:3.1.0-beta.1'
 
+    // Dagger 2 (Dependency Injection)
+    def dagger_2_version = "2.16"
+    implementation "com.google.dagger:dagger:$dagger_2_version"
+    annotationProcessor "com.google.dagger:dagger-compiler:$dagger_2_version"
+
 
     // ROOM DATABASE
     def room_version = "1.1.1"

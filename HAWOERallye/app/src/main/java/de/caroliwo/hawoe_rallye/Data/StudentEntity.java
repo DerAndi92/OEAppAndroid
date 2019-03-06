@@ -8,13 +8,15 @@ public class StudentEntity {
 
     @PrimaryKey (autoGenerate = true)
     private int id;
+    private int studentId;
     private String first_name;
     private String last_name;
     private String course;
     private int groupId;
 
 
-    public StudentEntity(String first_name, String last_name, String course, int groupId) {
+    public StudentEntity(int studentId, String first_name, String last_name, String course, int groupId) {
+        this.studentId = studentId;
         this.first_name = first_name;
         this.last_name = last_name;
         this.course = course;
@@ -27,6 +29,14 @@ public class StudentEntity {
 
     public int getId() {
         return id;
+    }
+
+    public int getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(int studentId) {
+        this.studentId = studentId;
     }
 
     public String getFirst_name() {
@@ -59,5 +69,10 @@ public class StudentEntity {
 
     public void setGroupId(int groupId) {
         this.groupId = groupId;
+    }
+
+    @Override
+    public String toString() {
+        return "studentId: " + studentId + " --- name: " + first_name + " " + last_name + " --- course: " + course + " --- groupId: " + groupId;
     }
 }

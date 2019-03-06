@@ -42,8 +42,8 @@ import de.caroliwo.hawoe_rallye.Task;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
-    private ArrayList<Student> studentList;
-    private ArrayList<Task> taskList;
+//    private ArrayList<Student> studentList;
+//    private ArrayList<Task> taskList;
     Bundle bundle;
 
     @Override
@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Instanz des ViewModels holen
         final DataViewModel viewModel = ViewModelProviders.of(this).get(DataViewModel.class);
+        // Laden der Gruppen um Gruppenname/-Farbe zu holen <---------VORLÄUFIG
         viewModel.fetchGroups();
 
         //Toolbar setzen
@@ -75,17 +76,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_icon);
 
-        //nav_header mit Infos füllen //
+        //nav_header mit Infos füllen
         View headerLayout = navigationView.getHeaderView(0);
-        TextView navName = headerLayout.findViewById(R.id.navName);
+        final TextView navName = headerLayout.findViewById(R.id.navName);
         final TextView navTeam = headerLayout.findViewById(R.id.navTeam);
         Button logOutButton = headerLayout.findViewById(R.id.logOutButton);
 
-        // StudentEntity von ViewModel holen & Namen zuweisen
+        // Eigenen Namen (und ID zu testzwecken) in nav_header schreiben
         final StudentEntity studentEntity = viewModel.getStudent();
-        navName.setText(studentEntity.getFirst_name() + " " + studentEntity.getLast_name());
+        navName.setText(studentEntity.getFirst_name() + " " + studentEntity.getLast_name() + studentEntity.getStudentId());
 
-        // Gruppenname und -Farbe holen & zuweisen
+        // Eigenen Datenbankeintrag observieren & bei Änderungen automatisch nav_header updaten
+        viewModel.getStudentLiveData().observe(this, new Observer<StudentEntity>() {
+            @Override
+            public void onChanged(@Nullable StudentEntity studentEntity) {
+                navName.setText(studentEntity.getFirst_name() + " " + studentEntity.getLast_name() + studentEntity.getStudentId());
+            }
+        });
+
+        // Gruppenname und -Farbe holen & in nav_header zuweisen
         final int groupId = studentEntity.getGroupId();
         viewModel.getGroupListLiveData().observe(this, new Observer<ArrayList<Group>>() {
             @Override
@@ -99,13 +108,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        Log.i("DataRepository", "groups are not fetched");
-
+        // Click-Listener für LogOut-Button
         logOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // Studenten-Einträge aus interner Datenbank löschen
                 viewModel.deleteAllStudents();
-                viewModel.deleteStudent(studentEntity.getId());
+                // API-Call um Student aus Web-Interface zu löschen
+                viewModel.deleteStudent(studentEntity.getStudentId());
+                // Intent zu Loading-Activity
                 Context applicationContext = getApplicationContext();
                 Intent intent = new Intent(applicationContext, LoadingActivity.class);
                 applicationContext.startActivity(intent);
@@ -116,17 +128,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new IntroductionFragment()).commit();
         Log.i("Test MainActivity", "2" );
 
+        //----------------------------WIRD ERSETZT DURCH VIEWMODEL-DATENZUGRIFF---------------------
         //Intent (holen von Infos von LoadingActivity)
-        Intent intent = getIntent();
-        studentList = intent.getParcelableArrayListExtra("Students");
-        taskList = intent.getParcelableArrayListExtra("Tasks");
-        Log.i("Test MainActivity", "3 intent " + taskList.get(1).getName() );
+        //Intent intent = getIntent();
+        //studentList = intent.getParcelableArrayListExtra("Students");
+        //taskList = intent.getParcelableArrayListExtra("Tasks");
+        //Log.i("Test MainActivity", "3 intent " + taskList.get(1).getName() );
 
         //Bundle (senden der Infos an Fragments)
-        bundle = new Bundle();
-        bundle.putParcelableArrayList("Students", studentList);
-        bundle.putParcelableArrayList("Tasks", taskList);
-        Log.i("Test MainActivity", "4 bundle " + taskList.get(1).getName() );
+        //bundle = new Bundle();
+        //bundle.putParcelableArrayList("Students", studentList);
+        //bundle.putParcelableArrayList("Tasks", taskList);
+        //Log.i("Test MainActivity", "4 bundle " + taskList.get(1).getName() );
     }
 
     //Reaktion bei Touch auf Zurück-Button

@@ -75,6 +75,12 @@ public class Student implements Parcelable {
         this.manually = manually;
     }
 
+
+    @Override
+    public String toString() {
+        return "studentId: " + studentId + " --- name: " + first_name + " " + last_name + " --- course: " + course + " --- groupId: " + groupId;
+    }
+
     //Parcelable
     @Override
     public int describeContents() {

@@ -53,6 +53,9 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
         View view = LayoutInflater.from(context).inflate(R.layout.item_group, viewGroup, false);
         final GroupViewHolder viewHolder = new GroupViewHolder(view);
 
+        // Viewmodel-Instanz holen
+        viewModel = ViewModelProviders.of((GroupActivity) context).get(DataViewModel.class);
+
         //Retrofit
         Retrofit retrofitClass = new Retrofit();
         //Log.i("LoadingActivity", "6");
@@ -93,12 +96,11 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
                             student.setGroupId(groupID);
                             intent.putExtra("student", student);
 
-                            // Student mit Gruppen-ID in Datenbank speichern
-                            viewModel = ViewModelProviders.of((GroupActivity) context).get(DataViewModel.class);
-                            viewModel.insertStudent(new StudentEntity(student.getFirst_name(), student.getLast_name(), student.getCourse(), groupID));
-
                             //POST-Request
                             sendStudent();
+
+                            // Student mit vorläufiger Student-ID in Datenbank speichern, Student-ID wird nachgetragen wenn Liste aller Gruppenmitglieder vorliegt
+                            viewModel.insertStudent(new StudentEntity(-1, student.getFirst_name(), student.getLast_name(), student.getCourse(), student.getGroupId()));
 
                             Toast.makeText(context, groupName.getText(), Toast.LENGTH_SHORT).show();
                             groupDialog.dismiss();
@@ -113,6 +115,11 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
         });
         return viewHolder;
 
+    }
+
+    public void setGroups(ArrayList<Group> groups) {
+        this.groupsList = groups;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -154,6 +161,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
                     return;
                 }
                     Student studResponse = response.body();
+
             }
 
             @Override

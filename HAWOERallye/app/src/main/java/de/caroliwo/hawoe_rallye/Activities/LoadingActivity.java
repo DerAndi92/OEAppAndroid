@@ -41,8 +41,7 @@ public class LoadingActivity extends AppCompatActivity {
     private ArrayList<Group> groupsList;
     private Context applicationContext;
     private DataViewModel viewModel;
-    private StudentEntity student;
-    Intent intent;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,193 +50,110 @@ public class LoadingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_loading);
         Log.i("LoadingActivity", "2");
 
-        // ViewModel für Datenbank (über Repository)
+        // ViewModel für Daten
         viewModel = ViewModelProviders.of(this).get(DataViewModel.class);
-        student = viewModel.getStudent();
+        // Student aus Datenbank laden
+        StudentEntity studentEntity = viewModel.getStudent();
 
-        //Progressbar
+        // Progressbar zuweisen
         progressBar = findViewById(R.id.progressBar);
         Log.i("LoadingActivity", "4");
 
-        //für Intent
+        // Kontext für Intent
         applicationContext = getApplicationContext();
         Log.i("LoadingActivity", "5");
 
 
-        //Retrofit
+        // Retrofit für API-Calls
         Retrofit retrofitClass = new Retrofit();
         Log.i("LoadingActivity", "6");
         downloadJSONRetrofit = retrofitClass.createlogInterceptor();
         Log.i("LoadingActivity", "7");
 
-        // Zum testen: Alle Einträge löschen bzw Student in Datenbank einfügen (App zweimal starten)
-        //viewModel.deleteAllStudents();
-        //viewModel.insertStudent(new StudentEntity("Karl", "Mustermann", "Medientechnik", 1));
 
-        // Checken ob ein Student übergeben wurde
-        if (student != null) {
+        // Checken ob ein Student geladen wurde
+        if (studentEntity != null) {
+
             Log.i("LoadingActivity", "student vorhanden ");
+
             // Bei existierendem Eintrag: Intent zur Main-Activity
             intent = new Intent(applicationContext, MainActivity.class);
-            // Gruppen-ID zuweisen & Aufgaben/Gruppe laden
-            int groupID = student.getGroupId();
 
-            getTasks(groupID); //für Zeiten und Aufgaben
-            getGroup(groupID); //Eigene Gruppe laden
+            // Gruppen-ID holen
+            int groupID = studentEntity.getGroupId();
+
+            // Aufgaben der Gruppe aus API laden
+            //getTasks(groupID); <--------------------ALT
+            viewModel.fetchTasks(groupID); // <-------NEU
+
+            // Laden der Aufgaben per LiveData observieren
+            viewModel.getTaskListLiveData().observe(this, new Observer<ArrayList<Task>>() {
+                @Override
+                public void onChanged(@Nullable ArrayList<Task> groups) {
+
+                    // bei geladenen Aufgaben Progressbar erhöhen
+                    progressBar.setProgress(progressBar.getProgress()+50);
+                    Log.i("LoadingActivity","Tasks loaded");
+                    progressCheck();
+                }
+            });
+
+            // Gruppenmitglieder laden
+            //getGroup(groupID); <--------------------ALT
+            viewModel.fetchGroup(groupID); // <-------NEU
+
+            // Laden der Gruppenmitglieder per LiveData observieren
+            viewModel.getStudentListLiveData().observe(this, new Observer<ArrayList<Student>>() {
+                @Override
+                public void onChanged(@Nullable ArrayList<Student> students) {
+
+                    // bei geladenen Gruppenmitgliedern Progressbar erhöhen
+                    progressBar.setProgress(progressBar.getProgress()+50);
+                    Log.i("LoadingActivity","Tasks loaded");
+                    progressCheck();
+                }
+            });
             Log.i("LoadingActivity","8");
 
         } else {
             // Bei neuem User: Intent zur Login-Activity
             intent = new Intent(applicationContext, LogInActivity.class);
             Log.i("LoadingActivity","9");
-            getConfig();
-            getGroups();
+
+            // Konfiguration laden
+//            getConfig(); <------------------ALT
+            viewModel.fetchConfig(); // <-----NEU
+
+            // Laden der Konfiguration per LiveData observieren
+            viewModel.getConfigLiveData().observe(this, new Observer<ConfigurationEntity>() {
+                @Override
+                public void onChanged(@Nullable ConfigurationEntity configurationEntity) {
+
+                    // bei geladener Konfiguration Progressbar erhöhen
+                    progressBar.setProgress(progressBar.getProgress()+50);
+                    Log.i("LoadingActivity","Configuration loaded");
+                    progressCheck();
+                }
+            });
+
+            // Gruppen laden
+//            getGroups(); <------------------ALT
+            viewModel.fetchGroups(); // <-----NEU
+
+            // Laden der Gruppen observieren
+            viewModel.getGroupListLiveData().observe(this, new Observer<ArrayList<Group>>() {
+                @Override
+                public void onChanged(@Nullable ArrayList<Group> groups) {
+
+                    // bei geladenen Gruppen Progressbar erhöhen
+                    progressBar.setProgress(progressBar.getProgress()+50);
+                    Log.i("LoadingActivity","Groups loaded");
+                    progressCheck();
+                }
+            });
         }
 
 
-    }
-
-    //Methoden, um HTTP-Request durchzuführen
-
-    //Konfigurationen laden
-    public void getConfig () {
-        Call<ConfigurationAPI> call = downloadJSONRetrofit.getConfiguration();
-
-        //execute on background-thread
-        call.enqueue(new Callback<ConfigurationAPI>() {
-            @Override
-            public void onResponse(Call<ConfigurationAPI> call, Response<ConfigurationAPI> response) {
-                //wenn HTTP-Request nicht erfolgreich:
-                if (!response.isSuccessful()) {
-                    Log.i("TEST ErrorResponse: ", String.valueOf(response.code()));
-                    return;
-                }
-
-                //wenn HTTP-Request erfolgreich:
-                ConfigurationAPI configurationAPI = response.body();
-                configuration = configurationAPI.getConfig();
-
-                //configuration im Intent übergeben
-                intent.putExtra("Configuration", configuration);
-
-                // Passwort und maxTime über viewModel in interner Datenbank speichern
-                viewModel.deleteAllConfigs();
-                viewModel.insertConfig(new ConfigurationEntity("bla"/*configuration.getPassword()*/, configuration.getMaxTime()));
-                Log.i("LoadingActivity", "configuration.getPassword(): " + configuration.getPassword());
-
-                progressBar.setProgress(progressBar.getProgress()+50);
-                Log.i("LoadingActivity","Configuration loaded");
-                progressCheck ();
-            }
-
-            @Override
-            public void onFailure(Call<ConfigurationAPI> call, Throwable t) {
-                // something went completely south (like no internet connection)
-                Log.i("TEST Error", t.getMessage() + "Error");
-            }
-        });
-    }
-
-    //Erstes Laden der Gruppen
-   public void getGroups () {
-       Call<GroupsAPI> call = downloadJSONRetrofit.getGroups();
-
-       //execute on background-thread
-       call.enqueue(new Callback<GroupsAPI>() {
-           @Override
-           public void onResponse(Call<GroupsAPI> call, Response<GroupsAPI> response) {
-
-               //wenn HTTP-Request nicht erfolgreich:
-               if (!response.isSuccessful()) {
-                   Log.i("TEST ErrorResponse: ", String.valueOf(response.code()));
-                   return;
-               }
-
-               //wenn HTTP-Request erfolgreich:
-               GroupsAPI groupsAPI = response.body();
-               groups = groupsAPI.getGroupList();
-               groupsList = new ArrayList<>(groups);
-
-               //groupsList im Intent übergeben
-               intent.putParcelableArrayListExtra("Groups", groupsList);
-
-               progressBar.setProgress(progressBar.getProgress()+50);
-               Log.i("LoadingActivity","Groups loaded");
-               progressCheck();
-           }
-
-           @Override
-           public void onFailure(Call<GroupsAPI> call, Throwable t) {
-               // something went completely south (like no internet connection)
-               Log.i("TEST Error", t.getMessage() + "Error");
-           }
-       });
-    }
-
-    //Tasks der eigenen Gruppe laden
-    private void getTasks(int groupID) {
-        Call<TaskAPI> call = downloadJSONRetrofit.getTasks(groupID);
-
-        //execute on background-thread
-        call.enqueue(new Callback<TaskAPI>() {
-            @Override
-            public void onResponse(Call<TaskAPI> call, Response<TaskAPI> response) {
-
-                //wenn HTTP-Request nicht erfolgreich:
-                if (!response.isSuccessful()) {
-                    Log.i("TEST Error get Tasks ", String.valueOf(response.code()));
-                    return;
-                }
-
-                //wenn HTTP-Request erfolgreich:
-                TaskAPI taskAPI = response.body();
-                List<Task> tasks = taskAPI.getTaskList();
-                ArrayList<Task> taskList = new ArrayList<>(tasks); //List in ArrayList umwandeln
-                intent.putParcelableArrayListExtra("Tasks", taskList);
-                progressBar.setProgress(progressBar.getProgress()+50);
-                Log.i("LoadingActivity","Tasks loaded: " + taskList);
-                progressCheck();
-            }
-
-            @Override
-            public void onFailure(Call<TaskAPI> call, Throwable t) {
-                // something went completely south (like no internet connection)
-                Log.i("TEST Error", t.getMessage() + "Error");
-            }
-        });
-    }
-
-    //Eigene Gruppe laden
-    private void getGroup(int groupID) {
-        Call<GroupAPI> call = downloadJSONRetrofit.getGroup(groupID);
-
-        //execute on background-thread
-        call.enqueue(new Callback<GroupAPI>() {
-            @Override
-            public void onResponse(Call<GroupAPI> call, Response<GroupAPI> response) {
-
-                //wenn HTTP-Request nicht erfolgreich:
-                if (!response.isSuccessful()) {
-                    Log.i("TEST Error: getGroup ", String.valueOf(response.code()));
-                    return;
-                }
-
-                //wenn HTTP-Request erfolgreich:
-                GroupAPI groupAPI = response.body();
-                List<Student>students = groupAPI.getGroup().getStudentList();
-                ArrayList<Student>studentList= new ArrayList<>(students); //List in ArrayList umwandeln
-                intent.putParcelableArrayListExtra("Students", studentList);
-                progressBar.setProgress(progressBar.getProgress()+50);
-                Log.i("LoadingActivity","Group " + groupAPI.getGroup().getName() + " Loaded");
-                progressCheck();
-            }
-
-            @Override
-            public void onFailure(Call<GroupAPI> call, Throwable t) {
-                // something went completely south (like no internet connection)
-                Log.i("TEST Error", t.getMessage() + "Error");
-            }
-        });
     }
 
     public void progressCheck (){
@@ -246,6 +162,156 @@ public class LoadingActivity extends AppCompatActivity {
             Log.i("Test", "start from LoadingActivity");
         }
     }
+
+
+    //-----------------------------------------MIGRATED TO REPOSITORY-------------------------------
+
+    //Methoden, um HTTP-Request durchzuführen
+
+    //Konfigurationen laden
+//    public void getConfig () {
+//        Call<ConfigurationAPI> call = downloadJSONRetrofit.getConfiguration();
+//
+//        //execute on background-thread
+//        call.enqueue(new Callback<ConfigurationAPI>() {
+//            @Override
+//            public void onResponse(Call<ConfigurationAPI> call, Response<ConfigurationAPI> response) {
+//                //wenn HTTP-Request nicht erfolgreich:
+//                if (!response.isSuccessful()) {
+//                    Log.i("TEST ErrorResponse: ", String.valueOf(response.code()));
+//                    return;
+//                }
+//
+//                //wenn HTTP-Request erfolgreich:
+//                ConfigurationAPI configurationAPI = response.body();
+//                configuration = configurationAPI.getConfig();
+//
+//                //configuration im Intent übergeben
+//                intent.putExtra("Configuration", configuration);
+//
+//                // Passwort und maxTime über viewModel in interner Datenbank speichern
+//                viewModel.deleteAllConfigs();
+//                viewModel.insertConfig(new ConfigurationEntity("bla"configuration.getPassword(), configuration.getMaxTime()));
+//                Log.i("LoadingActivity", "configuration.getPassword(): " + configuration.getPassword());
+//
+//                progressBar.setProgress(progressBar.getProgress()+50);
+//                Log.i("LoadingActivity","Configuration loaded");
+//                progressCheck ();
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ConfigurationAPI> call, Throwable t) {
+//                // something went completely south (like no internet connection)
+//                Log.i("TEST Error", t.getMessage() + "Error");
+//            }
+//        });
+//    }
+//
+//    //Erstes Laden der Gruppen
+//   public void getGroups () {
+//       Call<GroupsAPI> call = downloadJSONRetrofit.getGroups();
+//
+//       //execute on background-thread
+//       call.enqueue(new Callback<GroupsAPI>() {
+//           @Override
+//           public void onResponse(Call<GroupsAPI> call, Response<GroupsAPI> response) {
+//
+//               //wenn HTTP-Request nicht erfolgreich:
+//               if (!response.isSuccessful()) {
+//                   Log.i("TEST ErrorResponse: ", String.valueOf(response.code()));
+//                   return;
+//               }
+//
+//               //wenn HTTP-Request erfolgreich:
+//               GroupsAPI groupsAPI = response.body();
+//               groups = groupsAPI.getGroupList();
+//               groupsList = new ArrayList<>(groups);
+//
+//               //groupsList im Intent übergeben
+//               intent.putParcelableArrayListExtra("Groups", groupsList);
+//
+//               progressBar.setProgress(progressBar.getProgress()+50);
+//               Log.i("LoadingActivity","Groups loaded");
+//               progressCheck();
+//           }
+//
+//           @Override
+//           public void onFailure(Call<GroupsAPI> call, Throwable t) {
+//               // something went completely south (like no internet connection)
+//               Log.i("TEST Error", t.getMessage() + "Error");
+//           }
+//       });
+//    }
+//
+//    //Tasks der eigenen Gruppe laden
+//    private void getTasks(int groupID) {
+//        Call<TaskAPI> call = downloadJSONRetrofit.getTasks(groupID);
+//
+//        //execute on background-thread
+//        call.enqueue(new Callback<TaskAPI>() {
+//            @Override
+//            public void onResponse(Call<TaskAPI> call, Response<TaskAPI> response) {
+//
+//                //wenn HTTP-Request nicht erfolgreich:
+//                if (!response.isSuccessful()) {
+//                    Log.i("TEST Error get Tasks ", String.valueOf(response.code()));
+//                    return;
+//                }
+//
+//                //wenn HTTP-Request erfolgreich:
+//                TaskAPI taskAPI = response.body();
+//                List<Task> tasks = taskAPI.getTaskList();
+//                ArrayList<Task> taskList = new ArrayList<>(tasks); //List in ArrayList umwandeln
+//                intent.putParcelableArrayListExtra("Tasks", taskList);
+//                progressBar.setProgress(progressBar.getProgress()+50);
+//                Log.i("LoadingActivity","Tasks loaded: " + taskList);
+//                progressCheck();
+//            }
+//
+//            @Override
+//            public void onFailure(Call<TaskAPI> call, Throwable t) {
+//                // something went completely south (like no internet connection)
+//                Log.i("TEST Error", t.getMessage() + "Error");
+//            }
+//        });
+//    }
+//
+//    //Eigene Gruppe laden
+//    private void getGroup(final int groupID) {
+//        Call<GroupAPI> call = downloadJSONRetrofit.getGroup(groupID);
+//
+//        //execute on background-thread
+//        call.enqueue(new Callback<GroupAPI>() {
+//            @Override
+//            public void onResponse(Call<GroupAPI> call, Response<GroupAPI> response) {
+//
+//                //wenn HTTP-Request nicht erfolgreich:
+//                if (!response.isSuccessful()) {
+//                    Log.i("TEST Error: getGroup ", String.valueOf(response.code()));
+//                    return;
+//                }
+//
+//                //wenn HTTP-Request erfolgreich:
+//                GroupAPI groupAPI = response.body();
+//                List<Student> students = groupAPI.getGroup().getStudentList();
+//                ArrayList<Student> studentList= new ArrayList<>(students); //List in ArrayList umwandeln
+//
+//                intent.putParcelableArrayListExtra("Students", studentList); // Liste in Intent packen
+//                progressBar.setProgress(progressBar.getProgress()+50);
+//                Log.i("LoadingActivity","Group " + groupAPI.getGroup().getName() + " Loaded");
+//                progressCheck();
+//            }
+//
+//            @Override
+//            public void onFailure(Call<GroupAPI> call, Throwable t) {
+//                // something went completely south (like no internet connection)
+//                Log.i("TEST Error", t.getMessage() + "Error");
+//            }
+//        });
+//    }
+    //----------------------------------------------------------------------------------------------
+
+
 }
 
 

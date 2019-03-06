@@ -3,6 +3,8 @@ package de.caroliwo.hawoe_rallye.Fragments;
 import android.app.Activity;
 import android.app.Dialog;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.caroliwo.hawoe_rallye.Activities.LoadingActivity;
 import de.caroliwo.hawoe_rallye.Activities.MainActivity;
 import de.caroliwo.hawoe_rallye.Data.DataViewModel;
 import de.caroliwo.hawoe_rallye.Data.StudentEntity;
@@ -52,6 +55,12 @@ public class GroupAdapter extends ArrayAdapter {
         LayoutInflater inflater = context.getLayoutInflater();
         View rowView = inflater.inflate(R.layout.group_fragment_listview_layout, null, true);
 
+        // ViewModel-Instanz holen
+        viewModel = ViewModelProviders.of((MainActivity) context).get(DataViewModel.class);
+        // Eigenen Student aus Datenbank holen
+        final StudentEntity studentEntity = viewModel.getStudent();
+
+        // Views zuweisen
         TextView name = rowView.findViewById(R.id.nameTV);
         TextView lastname = rowView.findViewById(R.id.lastnameTV);
         final TextView subject = rowView.findViewById(R.id.subjectTV);
@@ -70,10 +79,32 @@ public class GroupAdapter extends ArrayAdapter {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // geklickten Studenten holen
                 Student student = studentList.get(position);
+
+                // Checken ob Student manuell hinzugefügt wurde
                 if (student.getManually() == 1) {
+
+                    // Student-ID holen
                     studentID = student.getStudentId();
-                    deleteStudent(); //Daten in API löschen
+
+                    // Student im Web-Interface löschen
+                    //deleteStudent(); <----------------------------ALT
+                    viewModel.deleteStudent(studentID); // <--------NEU
+
+                    Log.i("GroupAdapter", "studentID: " + studentID);
+                    Log.i("GroupAdapter", "studentEntity.getStudentId(): " + studentEntity.getStudentId());
+
+                    // Checken ob man sich selbst gelöscht hat
+                    if (studentID == studentEntity.getStudentId()) {
+
+                        // Studenten-Datensatz aus Datenbank löschen
+                        viewModel.deleteAllStudents();
+
+                        // Mit Intent zur LoadingActivity
+                        Intent intent = new Intent(context, LoadingActivity.class);
+                        context.startActivity(intent);
+                    }
                     remove(studentList.get(position)); //Daten aus aktueller Liste löschen
                     notifyDataSetChanged(); //Fragment aktualisieren
                 } else {
@@ -124,9 +155,7 @@ public class GroupAdapter extends ArrayAdapter {
                         dialog.hide();
 
                         //Bei Änderungen am eigenen Account: Student in interner DB aktualisieren
-                        viewModel = ViewModelProviders.of((MainActivity) context).get(DataViewModel.class);
-                        StudentEntity studentEntity = viewModel.getStudent();
-                        if(studentEntity.getId() == studentID) {
+                        if(studentEntity.getStudentId() == studentID) {
                             studentEntity.setCourse(course);
                             studentEntity.setFirst_name(name);
                             studentEntity.setLast_name(lastname);
@@ -142,7 +171,8 @@ public class GroupAdapter extends ArrayAdapter {
         return rowView;
     }
 
-    private void deleteStudent () {
+    //-------------------------------------MIGRATED TO REPOSITORY-----------------------------------
+    /*private void deleteStudent () {
         Call<Void> call = downloadJSONRetrofit.deleteStudent(studentID);
 
         call.enqueue(new Callback<Void>() {
@@ -157,7 +187,7 @@ public class GroupAdapter extends ArrayAdapter {
                 Log.i("TEST Error", t.getMessage() + "Error");
             }
         });
-    }
+    }*/
 
     private void changeStudent(Integer studentID, String name, String lastname, String course) {
         Student student = new Student(null, studentID, name, lastname, course, null);

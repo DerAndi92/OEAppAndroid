@@ -51,18 +51,26 @@ private ConfigurationEntity configEntity;
         // ViewModel für Daten aus Datenbank (über Repository)
         DataViewModel viewModel = ViewModelProviders.of(this).get(DataViewModel.class);
         Log.i("LogInActivity", "viewModel.getConfig().getValue(): " + configEntity);
+
+        // Konfigurations aus Datenbank holen
+        configEntity = viewModel.getConfig();
+
+        // Konfigurations-LiveData observieren
         viewModel.getConfigLiveData().observe(this, new Observer<ConfigurationEntity>() {
             @Override
             public void onChanged(@Nullable ConfigurationEntity configurationEntity) {
+
+                // Bei geladener Konfiguration neu zuweisen
                 configEntity = configurationEntity;
                 Log.i("LogInActivity", "configEntity assigned by Observer: " + configEntity);
             }
         });
 
-        //Groups von LoadingActivity holen
-        Intent intentFromLoading = getIntent();
-        groupsList = intentFromLoading.getParcelableArrayListExtra("Groups");
-        Log.i("TEST", "onClick: " + groupsList.get(1).getColor() + " Login 1a");
+        // Groups holen <-------------------------ERSETZT DURCH DIREKTE DATENABFRAGE ÜBER VIEWMODEL
+//        Intent intentFromLoading = getIntent();
+//        groupsList = intentFromLoading.getParcelableArrayListExtra("Groups");
+//        Log.i("TEST", "onClick: " + groupsList.get(1).getColor() + " Login 1a");
+
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,10 +101,10 @@ private ConfigurationEntity configEntity;
                         Log.i("TEST", "onClick: Login 2");
                         if (passwordCorrect(userData.get("password"))) {
                             Intent intent = new Intent(LogInActivity.this, GroupActivity.class);
-                            intent.putParcelableArrayListExtra("Groups", groupsList);
+//                            intent.putParcelableArrayListExtra("Groups", groupsList); <--------------------ERSETZT DURCH DIREKTE DATENABFRAGE ÜBER VIEWMODEL
                             intent.putExtra("StudentData", student);
-                            Log.i("TEST", "onClick: " + groupsList.get(1).getName() + "Login 3");
                             startActivity(intent);
+
                         } else {
                             Toast.makeText(LogInActivity.this, "Falsches Passwort", Toast.LENGTH_SHORT).show();
                         }

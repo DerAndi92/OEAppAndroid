@@ -7,16 +7,26 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import javax.inject.Singleton;
+
+import de.caroliwo.hawoe_rallye.Configuration;
+import de.caroliwo.hawoe_rallye.ConfigurationAPI;
 import de.caroliwo.hawoe_rallye.DownloadJSONRetrofit;
 import de.caroliwo.hawoe_rallye.Group;
+import de.caroliwo.hawoe_rallye.GroupAPI;
 import de.caroliwo.hawoe_rallye.GroupsAPI;
 import de.caroliwo.hawoe_rallye.Retrofit;
+import de.caroliwo.hawoe_rallye.Student;
+import de.caroliwo.hawoe_rallye.Task;
+import de.caroliwo.hawoe_rallye.TaskAPI;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+@Singleton
 public class DataRepository {
 
     // Variablen für Data-Access-Objects für Datenbank
@@ -26,11 +36,18 @@ public class DataRepository {
     // Variablen für LiveData-Datensätze aus Datenbank
     private LiveData<ConfigurationEntity> configEntity;
     private LiveData<StudentEntity> studentEntity;
+
+    // Variablen für LiveData-Datensätze aus API-Calls
     private MutableLiveData<ArrayList<Group>> groupList;
+    private MutableLiveData<ArrayList<Task>> taskList;
+    private MutableLiveData<ArrayList<Student>> studentList;
 
     // Variablen für API-Calls an Web-Interface
     private DownloadJSONRetrofit downloadJSONRetrofit;
     //private ArrayList<Group> groupList;
+
+    // Variablen für Caches
+
 
     // Konstruktor
     public DataRepository(Application application) {
@@ -45,10 +62,12 @@ public class DataRepository {
         studDao = database.studDao();
         Log.i("DataRepository", "3");
 
-        // LiveData-variablen zuweisen
+        // LiveData-Variablen zuweisen
         configEntity = configDao.getConfigLiveData();
         studentEntity = studDao.getStudentLiveData();
         groupList = new MutableLiveData<>();
+        taskList = new MutableLiveData<>();
+        studentList = new MutableLiveData<>();
 
         // Retrofit instanziieren
         Retrofit retrofitClass = new Retrofit();
@@ -58,8 +77,34 @@ public class DataRepository {
     }
 
 
+    // Methoden um eigene Student-Id in Datenbank nachzutragen
+    private void correctStudentId() {
 
-    // Methoden welche LiveData liefern
+        // Checken ob Inhalt von studentList nicht null ist
+        if (studentList.getValue() != null) {
+
+            // Student-Datensatz aus Datenbank holen
+            StudentEntity tempStudentEntity = getStudent();
+
+            // Name und Kurs mit allen Gruppenmitgliedern vergleichen um eigenen Eintrag zu finden
+            for (Student student : studentList.getValue()) {
+                if (student.getFirst_name().equals(tempStudentEntity.getFirst_name())
+                        && student.getLast_name().equals(tempStudentEntity.getLast_name())
+                        && student.getCourse().equals(tempStudentEntity.getCourse())) {
+
+                    // Richtige student-ID setzen
+                    tempStudentEntity.setStudentId(student.getStudentId());
+                    // Datenbankeintrag updaten
+                    updateStudent(tempStudentEntity);
+                }
+            }
+        }
+
+    }
+    private boolean studentIdIsCorrect() { return getStudent().getStudentId() != -1; }
+
+
+    // Methoden welche LiveData aus der Datenbank liefern
 
     public LiveData<ConfigurationEntity> getConfigLiveData() {
         return configEntity;
@@ -69,19 +114,23 @@ public class DataRepository {
         return studentEntity;
     }
 
-
-
-    // Methoden für direkte Datenabfrage auf dem Main-Thread
-
-    public StudentEntity getStudent() {
-
-        return studDao.getStudent();
+    public LiveData<ArrayList<Group>> getGroupListLiveData() {
+        return groupList;
     }
 
-    public ConfigurationEntity getConfig() {
-
-        return configDao.getConfig();
+    public LiveData<ArrayList<Task>> getTaskListLiveData() {
+        return taskList;
     }
+
+    public LiveData<ArrayList<Student>> getStudentListLiveData() { return studentList; }
+
+
+
+    // Methoden für direkte Datenbankabfrage auf dem Main-Thread
+
+    public StudentEntity getStudent() { return studDao.getStudent(); }
+
+    public ConfigurationEntity getConfig() { return configDao.getConfig(); }
 
 
 
@@ -98,7 +147,6 @@ public class DataRepository {
     public void deleteAllConfigs() {
         new DeleteAllConfigsAsyncTask(configDao).execute();
     }
-
 
     public void insertStudent(StudentEntity entity) {
         new InsertStudentAsyncTask(studDao).execute(entity);
@@ -209,11 +257,44 @@ public class DataRepository {
 
     // Methoden für API-Calls (Retrofit)
 
+    //Konfigurationen laden
+    public void fetchConfig () {
+        Call<ConfigurationAPI> call = downloadJSONRetrofit.getConfiguration();
+
+        //execute on background-thread
+        call.enqueue(new Callback<ConfigurationAPI>() {
+            @Override
+            public void onResponse(Call<ConfigurationAPI> call, Response<ConfigurationAPI> response) {
+                //wenn HTTP-Request nicht erfolgreich:
+                if (!response.isSuccessful()) {
+                    Log.i("TEST ErrorResponse: ", String.valueOf(response.code()));
+                    return;
+                }
+
+                //wenn HTTP-Request erfolgreich:
+                // Konfiguration extrahieren
+                ConfigurationAPI configurationAPI = response.body();
+                Configuration configuration = configurationAPI.getConfig();
+
+                // Alte Datenbankeinträge löschen
+                deleteAllConfigs();
+
+                // Neue Konfiguration in Datenbank speichern
+                insertConfig(new ConfigurationEntity("bla"/*configuration.getPassword()*/, configuration.getMaxTime()));
+            }
+
+            @Override
+            public void onFailure(Call<ConfigurationAPI> call, Throwable t) {
+                // something went completely south (like no internet connection)
+                Log.i("TEST Error", t.getMessage() + "Error");
+            }
+        });
+    }
+
     public void fetchGroups () {
         Log.i("DataRepository", "fetchGroups()");
         Call<GroupsAPI> call = downloadJSONRetrofit.getGroups();
         Log.i("DataRepository", "Call<GroupsAPI> call = downloadJSONRetrofit.getGroups();");
-        //final MutableLiveData<ArrayList<Group>> groupList = new MutableLiveData<>();
 
         //execute on background-thread
         call.enqueue(new Callback<GroupsAPI>() {
@@ -231,6 +312,8 @@ public class DataRepository {
                 Log.i("DataRepository", "response successfull");
                 GroupsAPI groupsAPI = response.body();
                 Log.i("DataRepository", "response.body(): " + response.body());
+
+                // GruppenListe in groupList-LiveData speichern
                 groupList.setValue(new ArrayList<>(groupsAPI.getGroupList()));
                 Log.i("DataRepository", "groupList: " + groupList.toString());
             }
@@ -256,9 +339,6 @@ public class DataRepository {
         return null;
     }*/
 
-    public LiveData<ArrayList<Group>> getGroupListLiveData() {
-        return groupList;
-    }
 
     public void deleteStudent (int studentID) {
         Call<Void> call = downloadJSONRetrofit.deleteStudent(studentID);
@@ -277,6 +357,68 @@ public class DataRepository {
         });
     }
 
+    //Tasks der eigenen Gruppe laden
+    public void fetchTasks(int groupID) {
+        Call<TaskAPI> call = downloadJSONRetrofit.getTasks(groupID);
+
+        //execute on background-thread
+        call.enqueue(new Callback<TaskAPI>() {
+            @Override
+            public void onResponse(Call<TaskAPI> call, Response<TaskAPI> response) {
+
+                //wenn HTTP-Request nicht erfolgreich:
+                if (!response.isSuccessful()) {
+                    Log.i("TEST Error get Tasks ", String.valueOf(response.code()));
+                    return;
+                }
+
+                //wenn HTTP-Request erfolgreich:
+                TaskAPI taskAPI = response.body();
+                // ArrayList mit Tasks in taskList-LiveData speichern
+                taskList.setValue(new ArrayList<>(taskAPI.getTaskList()));
+            }
+
+            @Override
+            public void onFailure(Call<TaskAPI> call, Throwable t) {
+                // something went completely south (like no internet connection)
+                Log.i("TEST Error", t.getMessage() + "Error");
+            }
+        });
+    }
+
+    //Eigene Gruppe laden
+    public void fetchGroup(final int groupID) {
+        Call<GroupAPI> call = downloadJSONRetrofit.getGroup(groupID);
+
+        //execute on background-thread
+        call.enqueue(new Callback<GroupAPI>() {
+            @Override
+            public void onResponse(Call<GroupAPI> call, Response<GroupAPI> response) {
+
+                //wenn HTTP-Request nicht erfolgreich:
+                if (!response.isSuccessful()) {
+                    Log.i("TEST Error: getGroup ", String.valueOf(response.code()));
+                    return;
+                }
+
+                //wenn HTTP-Request erfolgreich:
+                GroupAPI groupAPI = response.body();
+                List<Student> students = groupAPI.getGroup().getStudentList();
+                // Liste in studentList-LiveData speichern
+                studentList.setValue(new ArrayList<>(students));
+                // Eigene Student-ID in Datenbank nachtragen
+                while (!studentIdIsCorrect()) {
+                    correctStudentId();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GroupAPI> call, Throwable t) {
+                // something went completely south (like no internet connection)
+                Log.i("TEST Error", t.getMessage() + "Error");
+            }
+        });
+    }
 
 
 }
