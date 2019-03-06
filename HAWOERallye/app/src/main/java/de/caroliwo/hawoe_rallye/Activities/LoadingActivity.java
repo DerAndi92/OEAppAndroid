@@ -65,9 +65,9 @@ public class LoadingActivity extends AppCompatActivity {
 
 
         // Retrofit für API-Calls
-        Retrofit retrofitClass = new Retrofit();
+//        Retrofit retrofitClass = new Retrofit();
         Log.i("LoadingActivity", "6");
-        downloadJSONRetrofit = retrofitClass.createlogInterceptor();
+//        downloadJSONRetrofit = retrofitClass.createlogInterceptor(getApplicationContext());
         Log.i("LoadingActivity", "7");
 
 

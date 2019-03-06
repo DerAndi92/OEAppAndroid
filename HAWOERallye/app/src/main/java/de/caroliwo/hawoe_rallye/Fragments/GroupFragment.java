@@ -70,7 +70,7 @@ public class GroupFragment extends Fragment {
 
         //Retrofit
         Retrofit retrofitClass = new Retrofit();
-        downloadJSONRetrofit = retrofitClass.createlogInterceptor();
+        downloadJSONRetrofit = retrofitClass.createlogInterceptor(getContext().getApplicationContext());
 
         //Bundle
         Bundle bundle = getArguments();

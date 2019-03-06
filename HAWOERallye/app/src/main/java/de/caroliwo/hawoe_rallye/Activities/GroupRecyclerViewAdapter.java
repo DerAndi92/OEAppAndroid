@@ -57,9 +57,9 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
         viewModel = ViewModelProviders.of((GroupActivity) context).get(DataViewModel.class);
 
         //Retrofit
-        Retrofit retrofitClass = new Retrofit();
+//        Retrofit retrofitClass = new Retrofit();
         //Log.i("LoadingActivity", "6");
-        downloadJSONRetrofit = retrofitClass.createlogInterceptor();
+//        downloadJSONRetrofit = retrofitClass.createlogInterceptor(context.getApplicationContext());
 
         // Gruppen-Dialog erstellen
         groupDialog = new Dialog(context);

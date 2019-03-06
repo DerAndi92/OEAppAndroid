@@ -71,7 +71,7 @@ public class DataRepository {
 
         // Retrofit instanziieren
         Retrofit retrofitClass = new Retrofit();
-        downloadJSONRetrofit = retrofitClass.createlogInterceptor();
+        downloadJSONRetrofit = retrofitClass.createlogInterceptor(application);
 
 
     }

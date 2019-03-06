@@ -73,7 +73,7 @@ public class GroupAdapter extends ArrayAdapter {
 
         //Retrofit
         Retrofit retrofitClass = new Retrofit();
-        downloadJSONRetrofit = retrofitClass.createlogInterceptor();
+        downloadJSONRetrofit = retrofitClass.createlogInterceptor(getContext().getApplicationContext());
 
         //Delete
         deleteButton.setOnClickListener(new View.OnClickListener() {
