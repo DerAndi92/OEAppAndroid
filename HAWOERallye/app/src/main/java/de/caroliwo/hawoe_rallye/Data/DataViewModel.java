@@ -72,6 +72,8 @@ public class DataViewModel extends AndroidViewModel {
 
     public void deleteStudent(int studentID) { repository.deleteStudent(studentID); }
 
+    public void sendStudent(Student student) { repository.sendStudent(student); }
+
     public void fetchTasks(int groupID) { repository.fetchTasks(groupID); }
 
 

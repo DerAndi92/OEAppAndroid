@@ -357,6 +357,29 @@ public class DataRepository {
         });
     }
 
+    public void sendStudent(Student student){
+        Call<Student> call = downloadJSONRetrofit.sendStudent(student);
+
+        call.enqueue(new Callback<Student>() {
+            @Override
+            public void onResponse(Call<Student> call, Response<Student> response) {
+
+                if (!response.isSuccessful()) {
+                    Log.i("ErrorRes:GroRecViewAdap", String.valueOf(response.code()));
+                    return;
+                }
+                Student studResponse = response.body();
+
+            }
+
+            @Override
+            public void onFailure(Call<Student> call, Throwable t) {
+                // something went completely south (like no internet connection)
+                Log.i("Error GroupRecViewAdap", t.getMessage());
+            }
+        });
+    }
+
     //Tasks der eigenen Gruppe laden
     public void fetchTasks(int groupID) {
         Call<TaskAPI> call = downloadJSONRetrofit.getTasks(groupID);

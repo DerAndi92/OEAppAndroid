@@ -48,7 +48,7 @@ private ConfigurationEntity configEntity;
         Button loginButton = findViewById(R.id.logInBTN);
         final Map<String, String> userData = new HashMap<>();
 
-        // ViewModel für Daten aus Datenbank (über Repository)
+        // ViewModel-Instanz holen
         DataViewModel viewModel = ViewModelProviders.of(this).get(DataViewModel.class);
         Log.i("LogInActivity", "viewModel.getConfig().getValue(): " + configEntity);
 
@@ -61,7 +61,7 @@ private ConfigurationEntity configEntity;
             public void onChanged(@Nullable ConfigurationEntity configurationEntity) {
 
                 // Bei geladener Konfiguration neu zuweisen
-                configEntity = configurationEntity;
+                if (configurationEntity != null) { configEntity = configurationEntity; }
                 Log.i("LogInActivity", "configEntity assigned by Observer: " + configEntity);
             }
         });
@@ -77,6 +77,7 @@ private ConfigurationEntity configEntity;
             public void onClick(View view)  {
 
                 Log.i("TEST", "onClick Login 1aaaa");
+
                 // userData-Objekt mit Inputs füllen
                 userData.put("name", name.getText().toString());
                 userData.put("lastname", lastname.getText().toString());

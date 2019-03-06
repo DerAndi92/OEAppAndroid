@@ -97,7 +97,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
                             intent.putExtra("student", student);
 
                             //POST-Request
-                            sendStudent();
+                            viewModel.sendStudent(student);
 
                             // Student mit vorläufiger Student-ID in Datenbank speichern, Student-ID wird nachgetragen wenn Liste aller Gruppenmitglieder vorliegt
                             viewModel.insertStudent(new StudentEntity(-1, student.getFirst_name(), student.getLast_name(), student.getCourse(), student.getGroupId()));
@@ -148,29 +148,32 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
         }
     }
 
+
+    //----------------------------------------MIGRATED TO REPOSITORY--------------------------------
+
     //POST Student zu Gruppe hinzufügen
-   private void sendStudent(){
-        Call<Student> call = downloadJSONRetrofit.sendStudent(student);
-
-        call.enqueue(new Callback<Student>() {
-            @Override
-            public void onResponse(Call<Student> call, Response<Student> response) {
-
-                if (!response.isSuccessful()) {
-                    Log.i("ErrorRes:GroRecViewAdap", String.valueOf(response.code()));
-                    return;
-                }
-                    Student studResponse = response.body();
-
-            }
-
-            @Override
-            public void onFailure(Call<Student> call, Throwable t) {
-                // something went completely south (like no internet connection)
-                Log.i("Error GroupRecViewAdap", t.getMessage());
-            }
-        });
-    }
+//   private void sendStudent(){
+//        Call<Student> call = downloadJSONRetrofit.sendStudent(student);
+//
+//        call.enqueue(new Callback<Student>() {
+//            @Override
+//            public void onResponse(Call<Student> call, Response<Student> response) {
+//
+//                if (!response.isSuccessful()) {
+//                    Log.i("ErrorRes:GroRecViewAdap", String.valueOf(response.code()));
+//                    return;
+//                }
+//                    Student studResponse = response.body();
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Student> call, Throwable t) {
+//                // something went completely south (like no internet connection)
+//                Log.i("Error GroupRecViewAdap", t.getMessage());
+//            }
+//        });
+//    }
 
 }
 
