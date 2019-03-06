@@ -1,5 +1,7 @@
 package de.caroliwo.hawoe_rallye.Fragments;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,6 +14,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.caroliwo.hawoe_rallye.Data.DataViewModel;
 import de.caroliwo.hawoe_rallye.DownloadJSONRetrofit;
 import de.caroliwo.hawoe_rallye.R;
 import de.caroliwo.hawoe_rallye.Retrofit;
@@ -24,27 +27,49 @@ import retrofit2.Response;
 
 public class TimesFragment extends Fragment {
 
-    TimesAdapter timesAdapter;
-    ArrayList<Task> taskList;
-    ListView timesLV;
+    private TimesAdapter timesAdapter;
+    private ArrayList<Task> taskList;
+    private ListView timesLV;
+    private DataViewModel viewModel;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_times, container, false);
 
-        Log.i("Test TimesFragment", "1" );
+        Log.i("TimesFragment", "1" );
+
+        // Viewmodel-Instanz holen
+        viewModel = ViewModelProviders.of(this).get(DataViewModel.class);
+        // Tasks holen
+        viewModel.fetchTasks(viewModel.getStudent().getGroupId());
 
         //ListView erstellen
         timesLV = rootView.findViewById(R.id.timesLV);
 
-        //Bundle
-        Bundle bundle = getArguments();
-        taskList= bundle.getParcelableArrayList("Tasks");
-       // Log.i("Test TimesFragment", "2 Bundle" + taskList.get(1).getName() );
+        // Tasks holen
+//        Bundle bundle = getArguments();
+//        taskList= bundle.getParcelableArrayList("Tasks");
+        taskList = viewModel.getTaskListLiveData().getValue();
+        Log.i("TimesFragment", "taskList: " + taskList);
+        // Falls taskList noch nicht verfügbar leere ArrayList zuweisen (wird später vom Observer geupdated)
+        if (taskList == null) { taskList = new ArrayList<>(); }
 
-        //Adapter setzen
+        //Adapter instanziieren
         timesAdapter = new TimesAdapter(getActivity(), taskList);
+
+        // taskList-LiveData observieren
+        viewModel.getTaskListLiveData().observe(this, new Observer<ArrayList<Task>>() {
+            @Override
+            public void onChanged(@Nullable ArrayList<Task> tasks) {
+
+                // Bei Änderungen Adapter updaten
+                timesAdapter.setTasks(tasks);
+                Log.i("TimesFragment", "Tasks updated by Observer: " + tasks);
+            }
+        });
+
+        // Adapter setzen
         timesLV.setAdapter(timesAdapter);
 
         return rootView;

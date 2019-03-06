@@ -171,6 +171,12 @@ public class GroupAdapter extends ArrayAdapter {
         return rowView;
     }
 
+    public void setStudents(ArrayList<Student> students) {
+        this.studentList.clear();
+        this.studentList.addAll(students);
+        notifyDataSetChanged();
+    }
+
     //-------------------------------------MIGRATED TO REPOSITORY-----------------------------------
     /*private void deleteStudent () {
         Call<Void> call = downloadJSONRetrofit.deleteStudent(studentID);

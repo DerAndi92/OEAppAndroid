@@ -26,9 +26,6 @@ public class RoomplansFragment extends Fragment {
         pdfView = rootView.findViewById(R.id.pdfView);
         pdfView.fromAsset("Raumplaene.pdf")
                 .spacing(5)
-                .pageSnap(true)
-                .autoSpacing(true)
-                //.pageFling(true)
                 .load();
 
 

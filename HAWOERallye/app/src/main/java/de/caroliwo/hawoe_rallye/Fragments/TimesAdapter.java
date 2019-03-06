@@ -63,4 +63,10 @@ public class TimesAdapter extends ArrayAdapter {
 
         return rowView;
     }
+
+    public void setTasks (ArrayList<Task> tasks) {
+        taskList.clear();
+        taskList.addAll(tasks);
+        notifyDataSetChanged();
+    }
 }

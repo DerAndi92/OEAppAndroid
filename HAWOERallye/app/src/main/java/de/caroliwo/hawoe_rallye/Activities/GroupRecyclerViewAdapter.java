@@ -118,7 +118,8 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
     }
 
     public void setGroups(ArrayList<Group> groups) {
-        this.groupsList = groups;
+        this.groupsList.clear();
+        this.groupsList.addAll(groups);
         notifyDataSetChanged();
     }
 

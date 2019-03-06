@@ -90,6 +90,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         viewModel.getStudentLiveData().observe(this, new Observer<StudentEntity>() {
             @Override
             public void onChanged(@Nullable StudentEntity studentEntity) {
+
+                // Check auf nicht-null weil der Observer sonst im Moment eines LogOuts versucht auf die bereits gelöschte studentEntity zuzugreifen
                 if (studentEntity != null ) { navName.setText(studentEntity.getFirst_name() + " " + studentEntity.getLast_name() + studentEntity.getStudentId()); }
             }
         });

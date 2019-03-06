@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.caroliwo.hawoe_rallye.R;
@@ -92,5 +93,11 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
             taskItem = (ConstraintLayout) itemView.findViewById(R.id.task_item_CL);
             textView = (TextView) itemView.findViewById(R.id.task_item_TW);
         }
+    }
+
+    public void setTasks(ArrayList<Task> tasks) {
+        this.taskList.clear();
+        this.taskList.addAll(tasks);
+        notifyDataSetChanged();
     }
 }

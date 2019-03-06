@@ -2,6 +2,7 @@ package de.caroliwo.hawoe_rallye.Fragments;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
@@ -55,6 +56,7 @@ public class GroupFragment extends Fragment {
     private EditText nameDialog;
     private EditText lastnameDialog;
     private Spinner spinnerDialog;
+    private DataViewModel viewModel;
 
     public GroupFragment() {
     }
@@ -68,13 +70,20 @@ public class GroupFragment extends Fragment {
         Button addStudentBtn = rootView.findViewById(R.id.addStudentBTN);
         studentsLV = rootView.findViewById(R.id.membersLV);
 
+        // Viewmodel-Instanz holen
+        viewModel = ViewModelProviders.of(this).get(DataViewModel.class);
+        viewModel.fetchGroup(viewModel.getStudent().getGroupId());
+
         //Retrofit
         Retrofit retrofitClass = new Retrofit();
         downloadJSONRetrofit = retrofitClass.createlogInterceptor(getContext().getApplicationContext());
 
-        //Bundle
-        Bundle bundle = getArguments();
-        studentList = bundle.getParcelableArrayList("Students");
+        // studentList holen
+//        Bundle bundle = getArguments();
+//        studentList = bundle.getParcelableArrayList("Students");
+        studentList = viewModel.getStudentListLiveData().getValue();
+        // Falls studentList noch nicht verfügbar leere ArrayList zuweisen (wird später vom Observer geupdated)
+        if (studentList == null) { studentList = new ArrayList<>(); }
 
        //Student zu Liste hinzufügen
         addStudentBtn.setOnClickListener(new View.OnClickListener() {
@@ -113,8 +122,20 @@ public class GroupFragment extends Fragment {
             }
         });
 
-        //Adapter setzen
+        //Adapter instanziieren
         groupAdapter = new GroupAdapter(getActivity(), studentList);
+
+        // studentList-LiveData observieren
+        viewModel.getStudentListLiveData().observe(this, new Observer<ArrayList<Student>>() {
+            @Override
+            public void onChanged(@Nullable ArrayList<Student> students) {
+
+                // Bei Änderung Adapter updaten
+                groupAdapter.setStudents(students);
+            }
+        });
+
+        // adapter setzen
         studentsLV.setAdapter(groupAdapter);
 
 
