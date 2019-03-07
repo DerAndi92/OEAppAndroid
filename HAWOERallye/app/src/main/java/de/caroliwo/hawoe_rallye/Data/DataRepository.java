@@ -536,7 +536,7 @@ public class DataRepository {
         });
     }
 
-    // Lösung(en) einer Aufgabe einer Gruppe abschicken //TODO
+    // Lösung(en) einer Aufgabe einer Gruppe abschicken
     public void sendAnswer (final Object object) {
         Call<Object> call = downloadJSONRetrofit.sendAnswer(object);
 

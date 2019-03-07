@@ -41,7 +41,7 @@ public class TasksFragment extends Fragment {
         final TasksRecyclerViewAdapter recyclerViewAdapter = new TasksRecyclerViewAdapter((MainActivity) getActivity(), taskList, taskDetailList);
         if (debug) Log.i("TasksFragment-Log","taskList: " + taskList.toString());
 
-        // taskDetailList-LiveData observieren, diese wird im Repository nach dem Laden der taskList automatisch zusammengestellt TODO: Leider funktioniert das nicht richtig (siehe Repository)
+        // taskDetailList-LiveData observieren, diese wird im Repository nach dem Laden der taskList automatisch zusammengestellt
         viewModel.getTaskDetailsLiveData().observe(this, new Observer<ArrayList<Task>>() {
             @Override
             public void onChanged(@Nullable ArrayList<Task> tasks) {
