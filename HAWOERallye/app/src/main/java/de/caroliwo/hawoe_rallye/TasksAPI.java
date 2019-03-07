@@ -4,17 +4,19 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class TaskAPI {
+public class TasksAPI {
 
     @SerializedName("data")
-    private Task task;
+    private List<Task> taskList;
     private String message;
 
-    public Task getTask() {
-        return task;
+    public List<Task> getTaskList() {
+        return taskList;
     }
 
     public String getMessage() {
         return message;
     }
 }
+
+

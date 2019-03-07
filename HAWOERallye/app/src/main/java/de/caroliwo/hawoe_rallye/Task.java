@@ -19,6 +19,7 @@ public class Task implements Parcelable {
     private String destination;
     private Times times;
     private boolean completed;
+    @SerializedName("fields")
     private List<Field> fieldList;
     private int order;
 
@@ -54,14 +55,6 @@ public class Task implements Parcelable {
 
     public int getOrder() {
         return order;
-    }
-
-
-    public class Field {
-        private int id;
-        private String type;
-        private String value;
-        private int order;
     }
 
     //Parcelable

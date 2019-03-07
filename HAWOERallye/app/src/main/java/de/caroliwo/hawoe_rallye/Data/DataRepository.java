@@ -471,13 +471,13 @@ public class DataRepository {
     }
 
     //Tasks der eigenen Gruppe laden
-    public void fetchTasks(int groupID) {
-        Call<TaskAPI> call = downloadJSONRetrofit.getTasks(groupID);
+    public void fetchTasks(final int groupID) { //TODO: Checken, ob "final" OK
+        Call<TasksAPI> call = downloadJSONRetrofit.getTasks(groupID);
 
         //execute on background-thread
-        call.enqueue(new Callback<TaskAPI>() {
+        call.enqueue(new Callback<TasksAPI>() {
             @Override
-            public void onResponse(Call<TaskAPI> call, Response<TaskAPI> response) {
+            public void onResponse(Call<TasksAPI> call, Response<TasksAPI> response) {
 
                 //wenn HTTP-Request nicht erfolgreich:
                 if (!response.isSuccessful()) {
@@ -486,27 +486,27 @@ public class DataRepository {
                 }
 
                 //wenn HTTP-Request erfolgreich:
-                TaskAPI taskAPI = response.body();
+                TasksAPI taskAPI = response.body();
                 // ArrayList mit Tasks in taskList-LiveData speichern
                 ArrayList<Task> tempTaskList = new ArrayList<>(taskAPI.getTaskList());
                 for (Task task: tempTaskList) {
-                    fetchTask(task.getId());
+                    fetchTask(groupID, task.getId());
                 }
                 taskList.setValue(tempTaskList);
                 Log.i("DataRepository", "fetchTasks() taskList: " + taskList.getValue().toString());
             }
 
             @Override
-            public void onFailure(Call<TaskAPI> call, Throwable t) {
+            public void onFailure(Call<TasksAPI> call, Throwable t) {
                 // something went completely south (like no internet connection)
                 Log.i("TEST Error", t.getMessage() + "Error");
             }
         });
     }
 
-    // Eine bestimmte Aufgabe laden
-    public void fetchTask(int taskID) {
-        Call<TaskAPI> call = downloadJSONRetrofit.getTask(taskID);
+    // Eine bestimmten Task/Aufgabe einer Gruppe laden
+    public void fetchTask(int groupID, int taskID) {
+        Call<TaskAPI> call = downloadJSONRetrofit.getTask(taskID, groupID);
 
         //execute on background-thread
         call.enqueue(new Callback<TaskAPI>() {
@@ -522,15 +522,48 @@ public class DataRepository {
                 //wenn HTTP-Request erfolgreich:
                 TaskAPI taskAPI = response.body();
                 Log.i("DataRepository", "fetchTask() response.body(): " + response.body());
-                // TODO: Hier muss man möglicherweise noch das JSON parsen und umwandeln damit es in's Task-Objekt passt
+
                 // Task in taskDetailList LiveData-Objekt speichern
-                addTaskToLiveDataList(taskAPI.getTaskList().get(0), taskDetailList);
+                addTaskToLiveDataList(taskAPI.getTask(), taskDetailList);
                 Log.i("DataRepository", "fetchTask() taskDetailList: " + taskDetailList.getValue().toString());
             }
 
             @Override
             public void onFailure(Call<TaskAPI> call, Throwable t) {
-                // something went completely south (like no internet connection) // TODO: leider landet man beim Versuch die einzelnen Aufgaben zu laden hier
+                // something went completely south (like no internet connection)
+                Log.i("DataRepository", "fetchTask() onFailure(): " + t.getMessage());
+            }
+        });
+    }
+
+    // Lösung(en) einer Aufgabe einer Gruppe abschicken //TODO
+    public void sendAnswer (final Object object) {
+        Call<Object> call = downloadJSONRetrofit.sendAnswer(object);
+
+        //execute on background-thread
+        call.enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+
+                //wenn HTTP-Request nicht erfolgreich:
+                if (!response.isSuccessful()) {
+                    Log.i("DataRepository ", "fetchTask() Response unsuccessfull: " + String.valueOf(response.code()));
+                    return;
+                }
+
+                //wenn HTTP-Request erfolgreich:
+                Object obj = response.body();
+                Log.i("DataRepository", "fetchTask() response.body(): " + response.body());
+
+                // Task in taskDetailList LiveData-Objekt speichern
+                //TODO: obj liefert nur dataArrayList der Antworten mit je id und value. Das muss in ein bestehendes Task-Objekt eingefügt werden um danach die Liste aktualisieren zu können
+               // addTaskToLiveDataList(task, taskDetailList);
+                //Log.i("DataRepository", "fetchTask() taskDetailList: " + taskDetailList.getValue().toString());
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+                // something went completely south (like no internet connection)
                 Log.i("DataRepository", "fetchTask() onFailure(): " + t.getMessage());
             }
         });

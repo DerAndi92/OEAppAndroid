@@ -85,7 +85,9 @@ public class DataViewModel extends AndroidViewModel {
 
     public void fetchTasks(int groupID) { repository.fetchTasks(groupID); }
 
-    public void fetchTask(int taskID) { repository.fetchTask(taskID); }
+    public void fetchTask(int groupID, int taskID) { repository.fetchTask(groupID, taskID); }
+
+    public void sendAnswer (Object object) {repository.sendAnswer(object);}
 
 
 
