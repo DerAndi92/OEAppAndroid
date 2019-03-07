@@ -35,11 +35,11 @@ public interface DownloadJSONRetrofit {
     Call<Object> sendObject(@Body Student student);
 
     @POST ("student")
-    Call<Student> sendStudent(@Body Student student);
+    Call<StudentAPI> sendStudent(@Body Student student);
 
     //Studierenden bearbeiten
     @PATCH("student/{studentID}")
-    Call<Student> changeStudent(@Path("studentID") int studentID, @Body Student student);
+    Call<StudentAPI> changeStudent(@Path("studentID") int studentID, @Body Student student);
 
     //Studierenden löschen
     @DELETE ("student/{studentID}")

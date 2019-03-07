@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Instanz des ViewModels holen
         final DataViewModel viewModel = ViewModelProviders.of(this).get(DataViewModel.class);
-        // Laden der Gruppen um Gruppenname/-Farbe zu holen <---------VORLÄUFIG
+        // Laden der Gruppen um Gruppenname/-Farbe zu holen
         viewModel.fetchGroups();
 
         //Toolbar setzen

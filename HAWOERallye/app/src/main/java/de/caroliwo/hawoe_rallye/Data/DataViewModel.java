@@ -8,9 +8,6 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
-
-import javax.inject.Inject;
 
 import de.caroliwo.hawoe_rallye.Activities.LoadingActivity;
 import de.caroliwo.hawoe_rallye.Group;
@@ -59,6 +56,14 @@ public class DataViewModel extends AndroidViewModel {
         getApplication().startActivity(intent);
     }
 
+    // Methode um LiveData lokal zu ändern
+    public void addStudent(Student student) { repository.addStudentLiveData(student); }
+
+    public void removeStudent(Student student) {
+        Log.i("DataViewModel", "removeStudentLiveData() student: " + student.toString());
+        repository.removeStudentLiveData(student);
+    }
+
     // Methoden für API-Calls an's Web-Interface
     public void fetchGroups() { repository.fetchGroups(); }
 
@@ -73,6 +78,8 @@ public class DataViewModel extends AndroidViewModel {
     public void deleteStudent(int studentID) { repository.deleteStudent(studentID); }
 
     public void sendStudent(Student student) { repository.sendStudent(student); }
+
+    public void changeStudent(Student student) { repository.changeStudent(student); }
 
     public void fetchTasks(int groupID) { repository.fetchTasks(groupID); }
 

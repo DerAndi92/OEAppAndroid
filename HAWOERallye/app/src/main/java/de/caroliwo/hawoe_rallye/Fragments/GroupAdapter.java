@@ -90,7 +90,9 @@ public class GroupAdapter extends ArrayAdapter {
 
                     // Student im Web-Interface löschen
                     //deleteStudent(); <----------------------------ALT
+                    Log.i("GroupAdapter", "student: " + student.toString());
                     viewModel.deleteStudent(studentID); // <--------NEU
+                    Log.i("GroupAdapter", "student: " + student.toString());
 
                     Log.i("GroupAdapter", "studentID: " + studentID);
                     Log.i("GroupAdapter", "studentEntity.getStudentId(): " + studentEntity.getStudentId());
@@ -105,8 +107,13 @@ public class GroupAdapter extends ArrayAdapter {
                         Intent intent = new Intent(context, LoadingActivity.class);
                         context.startActivity(intent);
                     }
-                    remove(studentList.get(position)); //Daten aus aktueller Liste löschen
-                    notifyDataSetChanged(); //Fragment aktualisieren
+
+//                    remove(studentList.get(position)); //Daten aus aktueller Liste löschen
+//                    notifyDataSetChanged(); //Fragment aktualisieren
+
+                    // Student aus LiveData-Liste im Repository löschen
+                    Log.i("GroupAdapter", "student: " + student.toString());
+                    viewModel.removeStudent(student);
                 } else {
                     Toast.makeText(context, "Nur manuell hinzugefügte Studenten können gelöscht werden", Toast.LENGTH_LONG).show();
                 }
@@ -129,7 +136,8 @@ public class GroupAdapter extends ArrayAdapter {
                 //Aktuelle Daten in Dialog setzen
                 nameDialog.setText(studentList.get(position).getFirst_name());
                 lastnameDialog.setText(studentList.get(position).getLast_name());
-                int spinPos = getPosition(studentList.get(position).getCourse());
+                String course = studentList.get(position).getCourse();
+                int spinPos = course.equals("MT") ? 1 : 2;
                 Log.i("TEST", "GroupAdapter spinner1 " + studentList.get(position).getCourse());
                 Log.i("TEST", "GroupAdapter spinner2 " + spinPos);
                 spinnerDialog.setSelection(spinPos);
@@ -141,25 +149,35 @@ public class GroupAdapter extends ArrayAdapter {
                        String name = nameDialog.getText().toString();
                        String lastname = lastnameDialog.getText().toString();
                        String course = spinnerDialog.getSelectedItem().toString();
+                       course = course.equals("Medientechnik") ? "MT" : (course.equals("Media Systems") ? "MS" : course);
                        studentID = studentList.get(position).getStudentId();
                        Integer groupID = studentList.get(position).getGroupId();
                        Integer manually = studentList.get(position).getManually();
 
-                       changeStudent(studentID, name, lastname, course);
+                       // Checken ob alle Felder ausgefüllt sind
+                       if(name.length() > 0 && lastname.length() > 0 && !course.equals("Studiengang wählen")) {
 
-                       //Fragment aktualisieren
-                       Student student = new Student(groupID, studentID, name, lastname, course, manually );
-                       remove(studentList.get(position)); //Daten aus aktueller Liste löschen
-                        insert(student, position);
-                        notifyDataSetChanged(); //Fragment aktualisieren
-                        dialog.hide();
+                           Student student = new Student(groupID, studentID, name, lastname, course, manually);
+                           // Änderung an Web-Interface schicken (wird im Repository automatisch bei Response eigener Gruppe hinzugefügt & per LiveData geupdated)
+                           viewModel.changeStudent(student);
 
-                        //Bei Änderungen am eigenen Account: Student in interner DB aktualisieren
-                        if(studentEntity.getStudentId() == studentID) {
-                            studentEntity.setCourse(course);
-                            studentEntity.setFirst_name(name);
-                            studentEntity.setLast_name(lastname);
-                            viewModel.updateStudent(studentEntity);
+                           //Bei Änderungen am eigenen Account: Student in interner DB aktualisieren
+                           if (studentEntity.getStudentId() == studentID) {
+                               studentEntity.setCourse(course);
+                               studentEntity.setFirst_name(name);
+                               studentEntity.setLast_name(lastname);
+                               viewModel.updateStudent(studentEntity);
+                           }
+
+                           //Fragment aktualisieren
+//                           remove(studentList.get(position)); //Daten aus aktueller Liste löschen
+//                           insert(student, position);
+//                           notifyDataSetChanged(); //Fragment aktualisieren
+                           dialog.hide();
+
+
+                       } else {
+                           Toast.makeText((MainActivity) context, "Fülle bitte alle Felder aus.", Toast.LENGTH_SHORT).show();
                        }
 
                     }
@@ -174,6 +192,8 @@ public class GroupAdapter extends ArrayAdapter {
     public void setStudents(ArrayList<Student> students) {
         this.studentList.clear();
         this.studentList.addAll(students);
+        Log.i("GroupAdapter", "setStudents() input: " + students.toString());
+        Log.i("GroupAdapter", "setStudents() this.studentList: " + this.studentList.toString());
         notifyDataSetChanged();
     }
 
@@ -193,7 +213,7 @@ public class GroupAdapter extends ArrayAdapter {
                 Log.i("TEST Error", t.getMessage() + "Error");
             }
         });
-    }*/
+    }
 
     private void changeStudent(Integer studentID, String name, String lastname, String course) {
         Student student = new Student(null, studentID, name, lastname, course, null);
@@ -204,7 +224,7 @@ public class GroupAdapter extends ArrayAdapter {
             @Override
             public void onResponse(Call<Student> call, Response<Student> response) {
 
-                if (!response.isSuccessful()) {  //TODO: Response ist hier immer !successful --> Fehler: Benennung Api studentId, hier: id
+                if (!response.isSuccessful()) {
                     Log.i("TEST ErrorResponse: ", String.valueOf(response.code()));
                     return;
                 }
@@ -218,5 +238,5 @@ public class GroupAdapter extends ArrayAdapter {
                 Log.i("TEST Error", t.getMessage() + "Error");
             }
         });
-    }
+    }*/
 }

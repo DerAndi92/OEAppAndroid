@@ -70,20 +70,25 @@ public class GroupFragment extends Fragment {
         Button addStudentBtn = rootView.findViewById(R.id.addStudentBTN);
         studentsLV = rootView.findViewById(R.id.membersLV);
 
-        // Viewmodel-Instanz holen
-        viewModel = ViewModelProviders.of(this).get(DataViewModel.class);
-        viewModel.fetchGroup(viewModel.getStudent().getGroupId());
+        // Viewmodel-Instanz aus MainActivity holen
+        viewModel = ViewModelProviders.of((MainActivity) getActivity()).get(DataViewModel.class);
+        final Integer groupId = viewModel.getStudent().getGroupId();
+        viewModel.fetchGroup(groupId);
 
         //Retrofit
-        Retrofit retrofitClass = new Retrofit();
-        downloadJSONRetrofit = retrofitClass.createlogInterceptor(getContext().getApplicationContext());
+//        Retrofit retrofitClass = new Retrofit();
+//        downloadJSONRetrofit = retrofitClass.createlogInterceptor(getContext().getApplicationContext());
 
         // studentList holen
 //        Bundle bundle = getArguments();
 //        studentList = bundle.getParcelableArrayList("Students");
         studentList = viewModel.getStudentListLiveData().getValue();
+
         // Falls studentList noch nicht verfügbar leere ArrayList zuweisen (wird später vom Observer geupdated)
         if (studentList == null) { studentList = new ArrayList<>(); }
+
+        //Adapter instanziieren
+        groupAdapter = new GroupAdapter(getActivity(), studentList);
 
        //Student zu Liste hinzufügen
         addStudentBtn.setOnClickListener(new View.OnClickListener() {
@@ -99,22 +104,23 @@ public class GroupFragment extends Fragment {
                 Button addButtonDialog = dialog.findViewById(R.id.changeButton);
                 addButtonDialog.setText("Hinzufügen");
                 Log.i("TEST Dialog ", spinnerDialog.getSelectedItem().toString());
+
                 //Erstellen absenden
                 addButtonDialog.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                         String name = nameDialog.getText().toString();
                         String lastname = lastnameDialog.getText().toString();
                         String majorTemp = spinnerDialog.getSelectedItem().toString();
                         String course = majorTemp.equals("Medientechnik") ? "MT" : (majorTemp.equals("Media Systems") ? "MS" : majorTemp);
 
-                        //Student der Liste hinzufügen
-                        DataViewModel viewModel = ViewModelProviders.of((MainActivity) getContext()).get(DataViewModel.class);
-                        Integer groupId = viewModel.getStudent().getGroupId();
-                        student = new Student(groupId, null ,name, lastname, course, 0);
+                        // Neuen Studenten erstellen
+                        student = new Student(groupId, null ,name, lastname, course, 1);
 
-                        //POST-Request
-                        sendStudent();
+                        // Neuen Studenten per POST-Request an API senden (wird im Repository automatisch bei Response eigener Gruppe hinzugefügt & per LiveData geupdated)
+                        viewModel.sendStudent(student);
+
                         dialog.hide();
                     }
                 });
@@ -122,8 +128,6 @@ public class GroupFragment extends Fragment {
             }
         });
 
-        //Adapter instanziieren
-        groupAdapter = new GroupAdapter(getActivity(), studentList);
 
         // studentList-LiveData observieren
         viewModel.getStudentListLiveData().observe(this, new Observer<ArrayList<Student>>() {
@@ -132,6 +136,7 @@ public class GroupFragment extends Fragment {
 
                 // Bei Änderung Adapter updaten
                 groupAdapter.setStudents(students);
+                Log.i("GroupFragment", "Adapter updated by Observer: " + students.toString());
             }
         });
 
@@ -143,33 +148,35 @@ public class GroupFragment extends Fragment {
 
     }
 
+    //----------------------------------------MIGRATED TO REPOSITORY--------------------------------
+
     //POST Student zu Gruppe hinzufügen
-    private void sendStudent(){
-        Call<Object> call = downloadJSONRetrofit.sendObject(student);
-
-        call.enqueue(new Callback<Object>() {
-            @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
-
-                if (!response.isSuccessful()) {
-                    Log.i("ErrorRes:GroupFragment ", String.valueOf(response.code()));
-                     Toast.makeText(getContext(),"Gruppe ist voll",Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                //JSON manuell in Objekt umwandeln
-                Gson gson = new Gson();
-                StudentAPI stud = gson.fromJson(gson.toJson(response.body()), StudentAPI.class);
-                student = stud.getStudent();
-                studentList.add(student);
-                groupAdapter = new GroupAdapter(getActivity(), studentList);
-                studentsLV.setAdapter(groupAdapter);
-            }
-
-            @Override
-            public void onFailure(Call<Object> call, Throwable t) {
-                // something went completely south (like no internet connection)
-                Log.i("Error GroupFragment", t.getMessage());
-            }
-        });
-    }
+//    private void sendStudent(){
+//        Call<Object> call = downloadJSONRetrofit.sendObject(student);
+//
+//        call.enqueue(new Callback<Object>() {
+//            @Override
+//            public void onResponse(Call<Object> call, Response<Object> response) {
+//
+//                if (!response.isSuccessful()) {
+//                    Log.i("ErrorRes:GroupFragment ", String.valueOf(response.code()));
+//                     Toast.makeText(getContext(),"Gruppe ist voll",Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                //JSON manuell in Objekt umwandeln
+//                Gson gson = new Gson();
+//                StudentAPI stud = gson.fromJson(gson.toJson(response.body()), StudentAPI.class);
+//                student = stud.getStudent();
+//                studentList.add(student);
+//                groupAdapter = new GroupAdapter(getActivity(), studentList);
+//                studentsLV.setAdapter(groupAdapter);
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Object> call, Throwable t) {
+//                // something went completely south (like no internet connection)
+//                Log.i("Error GroupFragment", t.getMessage());
+//            }
+//        });
+//    }
 }

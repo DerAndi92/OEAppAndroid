@@ -15,6 +15,7 @@ import android.support.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.caroliwo.hawoe_rallye.Activities.MainActivity;
 import de.caroliwo.hawoe_rallye.Data.DataViewModel;
 import de.caroliwo.hawoe_rallye.R;
 import de.caroliwo.hawoe_rallye.Task;
@@ -62,7 +63,7 @@ public class TasksFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         // Viewmodel-Instanz holen
-        viewModel = ViewModelProviders.of(this).get(DataViewModel.class);
+        viewModel = ViewModelProviders.of((MainActivity) getActivity()).get(DataViewModel.class);
         // Tasks holen
         viewModel.fetchTasks(viewModel.getStudent().getGroupId());
 

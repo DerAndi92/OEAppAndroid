@@ -8,7 +8,6 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import javax.inject.Singleton;
 
@@ -20,6 +19,7 @@ import de.caroliwo.hawoe_rallye.GroupAPI;
 import de.caroliwo.hawoe_rallye.GroupsAPI;
 import de.caroliwo.hawoe_rallye.Retrofit;
 import de.caroliwo.hawoe_rallye.Student;
+import de.caroliwo.hawoe_rallye.StudentAPI;
 import de.caroliwo.hawoe_rallye.Task;
 import de.caroliwo.hawoe_rallye.TaskAPI;
 import retrofit2.Call;
@@ -74,6 +74,34 @@ public class DataRepository {
         downloadJSONRetrofit = retrofitClass.createlogInterceptor(application);
 
 
+    }
+
+    // Methoden um LiveData von API-Calls lokal zu ändern
+    public void addStudentLiveData(Student student) {
+        Log.i("DataRepository", "addStudentLiveData() input: " + student.toString());
+        ArrayList<Student> tempList = this.studentList.getValue();
+        Log.i("DataRepository", "addStudentLiveData() tempList: " + tempList.toString());
+        tempList.add(student);
+        this.studentList.setValue(tempList);
+        Log.i("DataRepository", "addStudentLiveData() studentList: " + this.studentList.getValue().toString());
+    }
+
+    public void removeStudentLiveData(Student student) {
+        Log.i("DataRepository", "removeStudentLiveData() student: " + student.toString());
+        ArrayList<Student> tempList = this.studentList.getValue();
+        Log.i("DataRepository", "removeStudentLiveData() studentList.getValue(): " + this.studentList.getValue());
+        tempList.remove(student);
+        this.studentList.setValue(tempList);
+    }
+
+    public void changeStudentLiveData(Student newStudent) {
+        Log.i("DataRepository", "changeStudent() student: " + newStudent.toString());
+        ArrayList<Student> tempList = this.studentList.getValue();
+        Log.i("DataRepository", "changeStudent() studentList.getValue(): " + this.studentList.getValue());
+        for (Student student: tempList) {
+            if (student.getStudentId() == newStudent.getStudentId()) removeStudentLiveData(student);
+        }
+        addStudentLiveData(newStudent);
     }
 
 
@@ -358,24 +386,66 @@ public class DataRepository {
     }
 
     public void sendStudent(Student student){
-        Call<Student> call = downloadJSONRetrofit.sendStudent(student);
+        Call<StudentAPI> call = downloadJSONRetrofit.sendStudent(student);
 
-        call.enqueue(new Callback<Student>() {
+        call.enqueue(new Callback<StudentAPI>() {
             @Override
-            public void onResponse(Call<Student> call, Response<Student> response) {
+            public void onResponse(Call<StudentAPI> call, Response<StudentAPI> response) {
 
                 if (!response.isSuccessful()) {
                     Log.i("ErrorRes:GroRecViewAdap", String.valueOf(response.code()));
                     return;
                 }
-                Student studResponse = response.body();
+
+                // Student aus Response holen
+                StudentAPI studResponseAPI = response.body();
+                Student studResponse = studResponseAPI.getStudent();
+                Log.i("DataRepository", "sendStudent() response: " + response.toString());
+                Log.i("DataRepository", "sendStudent() response.body(): " + response.body().toString());
+                Log.i("DataRepository", "sendStudent() studResponse: " + studResponse.toString());
+
+                // Student zur Gruppe hinzufügen
+                addStudentLiveData(studResponse);
 
             }
 
             @Override
-            public void onFailure(Call<Student> call, Throwable t) {
+            public void onFailure(Call<StudentAPI> call, Throwable t) {
                 // something went completely south (like no internet connection)
                 Log.i("Error GroupRecViewAdap", t.getMessage());
+            }
+        });
+    }
+
+    public void changeStudent(/*Integer studentID, String name, String lastname, String course*/Student student) {
+//        Student student = new Student(null, studentID, name, lastname, course, null);
+
+        Call<StudentAPI> call = downloadJSONRetrofit.changeStudent(student.getStudentId(), student);
+
+        call.enqueue(new Callback<StudentAPI>() {
+            @Override
+            public void onResponse(Call<StudentAPI> call, Response<StudentAPI> response) {
+
+                if (!response.isSuccessful()) {
+                    Log.i("TEST ErrorResponse: ", String.valueOf(response.code()));
+                    return;
+                }
+
+                // Student aus Response holen
+                StudentAPI studResponseAPI = response.body();
+                Student studResponse = studResponseAPI.getStudent();
+                Log.i("DataRepository", "sendStudent() response: " + response.toString());
+                Log.i("DataRepository", "sendStudent() response.body(): " + response.body().toString());
+                Log.i("DataRepository", "sendStudent() studResponse: " + studResponse.toString());
+
+                // Student in Gruppe ändern
+                changeStudentLiveData(studResponse);
+            }
+
+            @Override
+            public void onFailure(Call<StudentAPI> call, Throwable t) {
+                // something went completely south (like no internet connection)
+                Log.i("TEST Error", t.getMessage() + "Error");
             }
         });
     }

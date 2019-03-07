@@ -14,6 +14,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.caroliwo.hawoe_rallye.Activities.MainActivity;
 import de.caroliwo.hawoe_rallye.Data.DataViewModel;
 import de.caroliwo.hawoe_rallye.DownloadJSONRetrofit;
 import de.caroliwo.hawoe_rallye.R;
@@ -40,7 +41,7 @@ public class TimesFragment extends Fragment {
         Log.i("TimesFragment", "1" );
 
         // Viewmodel-Instanz holen
-        viewModel = ViewModelProviders.of(this).get(DataViewModel.class);
+        viewModel = ViewModelProviders.of((MainActivity) getActivity()).get(DataViewModel.class);
         // Tasks holen
         viewModel.fetchTasks(viewModel.getStudent().getGroupId());
 
