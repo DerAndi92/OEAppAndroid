@@ -51,8 +51,8 @@ public interface DownloadJSONRetrofit {
     Call<TaskAPI> getTasks(@Query("group") int groupID); //api/task/byGroup?group={group}
 
     //Eine Aufgabe einer Gruppe laden
-    @GET("task/byGroup")
-    Call<TaskAPI> getTask (@Query("group") int groupID);
+    @GET("task/{ID}")
+    Call<TaskAPI> getTask (@Path("ID") int taskID);
 
     //Lösung einer Aufgabe abschicken
     @POST ("task/field")

@@ -24,6 +24,7 @@ public class DataViewModel extends AndroidViewModel {
     private LiveData<StudentEntity> studEntity;
     private LiveData<ArrayList<Group>> groupList;
     private LiveData<ArrayList<Task>> taskList;
+    private LiveData<ArrayList<Task>> taskDetailList;
     private LiveData<ArrayList<Student>> studentList;
 
 //    @Inject
@@ -43,6 +44,7 @@ public class DataViewModel extends AndroidViewModel {
         studEntity = repository.getStudentLiveData();
         groupList = repository.getGroupListLiveData();
         taskList = repository.getTaskListLiveData();
+        taskDetailList = repository.getTaskDetailsLiveData();
         studentList = repository.getStudentListLiveData();
 
     }
@@ -83,6 +85,8 @@ public class DataViewModel extends AndroidViewModel {
 
     public void fetchTasks(int groupID) { repository.fetchTasks(groupID); }
 
+    public void fetchTask(int taskID) { repository.fetchTask(taskID); }
+
 
 
     // Methoden für LiveData-Stream
@@ -95,6 +99,8 @@ public class DataViewModel extends AndroidViewModel {
     public LiveData<ArrayList<Task>> getTaskListLiveData () { return taskList; }
 
     public LiveData<ArrayList<Student>> getStudentListLiveData() { return studentList; }
+
+    public LiveData<ArrayList<Task>> getTaskDetailsLiveData() { return taskDetailList; }
 
 
 

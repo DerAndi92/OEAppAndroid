@@ -24,7 +24,8 @@ public class TasksFragment extends Fragment {
 
     View v;
     private RecyclerView recyclerView;
-    private ArrayList<Task> taskList;
+    private ArrayList<Task> taskList; // <------Liste mit allen Aufgaben der Gruppe
+    private ArrayList<Task> taskDetailList; // <-----Liste mit Aufgabendetails zu jeder Aufgabe (password, fields, etc)
     private boolean debug = false;
     private DataViewModel viewModel;
 
@@ -37,17 +38,24 @@ public class TasksFragment extends Fragment {
         if (debug) Log.i("TasksFragment-Log","3");
         v = inflater.inflate(R.layout.fragment_tasks, container, false);
         recyclerView = (RecyclerView) v.findViewById(R.id.tasks_recyclerview);
-        final TasksRecyclerViewAdapter recyclerViewAdapter = new TasksRecyclerViewAdapter(getContext(), taskList);
-        if (debug) Log.i("TasksFragment-Log","taskList: " + taskList);
+        final TasksRecyclerViewAdapter recyclerViewAdapter = new TasksRecyclerViewAdapter((MainActivity) getActivity(), taskList, taskDetailList);
+        if (debug) Log.i("TasksFragment-Log","taskList: " + taskList.toString());
 
-        // taskList-LiveData observieren
-        viewModel.getTaskListLiveData().observe(this, new Observer<ArrayList<Task>>() {
+        // taskDetailList-LiveData observieren, diese wird im Repository nach dem Laden der taskList automatisch zusammengestellt TODO: Leider funktioniert das nicht richtig (siehe Repository)
+        viewModel.getTaskDetailsLiveData().observe(this, new Observer<ArrayList<Task>>() {
             @Override
             public void onChanged(@Nullable ArrayList<Task> tasks) {
 
-                // Bei Änderung Adapter updaten
-                recyclerViewAdapter.setTasks(tasks);
-                if (debug) Log.i("TasksFragment-Log","Tasks updated by Observer: " + tasks);
+                // Bei Änderung beide Listen neu zuweisen
+                taskList = viewModel.getTaskListLiveData().getValue();
+                taskDetailList = viewModel.getTaskDetailsLiveData().getValue();
+
+                // Checken ob für jede Aufgabe die Details geladen wurden
+                if (taskList.size() == taskDetailList.size()) {
+                    // Adapter updaten
+                    recyclerViewAdapter.setTasks(taskList, taskDetailList);
+                    if (debug) Log.i("TasksFragment-Log", "Tasks updated by Observer: " + tasks.toString());
+                }
             }
         });
 
@@ -67,13 +75,17 @@ public class TasksFragment extends Fragment {
         // Tasks holen
         viewModel.fetchTasks(viewModel.getStudent().getGroupId());
 
-        //TaskList holen
+
+        // TaskList & TaskDetailList holen
 //        Bundle bundle = getArguments();
 //        taskList = bundle.getParcelableArrayList("Tasks");
 
         taskList = viewModel.getTaskListLiveData().getValue();
-        // Falls taskList noch nicht verfügbar leere ArrayList zuweisen (wird später vom Observer geupdated)
+        taskDetailList = viewModel.getTaskDetailsLiveData().getValue();
+
+        // Falls noch nicht verfügbar leere ArrayList zuweisen (wird später vom Observer geupdated)
         if (taskList == null) { taskList = new ArrayList<>(); }
+        if (taskDetailList == null) { taskDetailList = new ArrayList<>(); }
 
         if (debug) Log.i("TasksFragment-Log","2");
     }

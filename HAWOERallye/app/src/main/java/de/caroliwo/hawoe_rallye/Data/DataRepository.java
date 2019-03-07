@@ -40,6 +40,7 @@ public class DataRepository {
     // Variablen für LiveData-Datensätze aus API-Calls
     private MutableLiveData<ArrayList<Group>> groupList;
     private MutableLiveData<ArrayList<Task>> taskList;
+    private MutableLiveData<ArrayList<Task>> taskDetailList;
     private MutableLiveData<ArrayList<Student>> studentList;
 
     // Variablen für API-Calls an Web-Interface
@@ -68,6 +69,7 @@ public class DataRepository {
         groupList = new MutableLiveData<>();
         taskList = new MutableLiveData<>();
         studentList = new MutableLiveData<>();
+        taskDetailList = new MutableLiveData<>();
 
         // Retrofit instanziieren
         Retrofit retrofitClass = new Retrofit();
@@ -104,6 +106,14 @@ public class DataRepository {
         addStudentLiveData(newStudent);
     }
 
+    public void addTaskToLiveDataList(Task task, MutableLiveData<ArrayList<Task>> list) {
+        Log.i("DataRepository", "addTaskToLiveDataList() task: " + task.toString());
+        ArrayList<Task> tempList = list.getValue();
+        Log.i("DataRepository", "addTaskToLiveDataList() list: " + list.getValue().toString());
+        tempList.add(task);
+        list.setValue(tempList);
+    }
+
 
     // Methoden um eigene Student-Id in Datenbank nachzutragen
     private void correctStudentId() {
@@ -132,7 +142,7 @@ public class DataRepository {
     private boolean studentIdIsCorrect() { return getStudent().getStudentId() != -1; }
 
 
-    // Methoden welche LiveData aus der Datenbank liefern
+    // Methoden welche LiveData liefern
 
     public LiveData<ConfigurationEntity> getConfigLiveData() {
         return configEntity;
@@ -151,6 +161,8 @@ public class DataRepository {
     }
 
     public LiveData<ArrayList<Student>> getStudentListLiveData() { return studentList; }
+
+    public LiveData<ArrayList<Task>> getTaskDetailsLiveData() { return taskDetailList; }
 
 
 
@@ -468,13 +480,50 @@ public class DataRepository {
                 //wenn HTTP-Request erfolgreich:
                 TaskAPI taskAPI = response.body();
                 // ArrayList mit Tasks in taskList-LiveData speichern
-                taskList.setValue(new ArrayList<>(taskAPI.getTaskList()));
+                ArrayList<Task> tempTaskList = new ArrayList<>(taskAPI.getTaskList());
+                for (Task task: tempTaskList) {
+                    fetchTask(task.getId());
+                }
+                taskList.setValue(tempTaskList);
+                Log.i("DataRepository", "fetchTasks() taskList: " + taskList.getValue().toString());
             }
 
             @Override
             public void onFailure(Call<TaskAPI> call, Throwable t) {
                 // something went completely south (like no internet connection)
                 Log.i("TEST Error", t.getMessage() + "Error");
+            }
+        });
+    }
+
+    // Eine bestimmte Aufgabe laden
+    public void fetchTask(int taskID) {
+        Call<TaskAPI> call = downloadJSONRetrofit.getTask(taskID);
+
+        //execute on background-thread
+        call.enqueue(new Callback<TaskAPI>() {
+            @Override
+            public void onResponse(Call<TaskAPI> call, Response<TaskAPI> response) {
+
+                //wenn HTTP-Request nicht erfolgreich:
+                if (!response.isSuccessful()) {
+                    Log.i("DataRepository ", "fetchTask() Response unsuccessfull: " + String.valueOf(response.code()));
+                    return;
+                }
+
+                //wenn HTTP-Request erfolgreich:
+                TaskAPI taskAPI = response.body();
+                Log.i("DataRepository", "fetchTask() response.body(): " + response.body());
+                // TODO: Hier muss man möglicherweise noch das JSON parsen und umwandeln damit es in's Task-Objekt passt
+                // Task in taskDetailList LiveData-Objekt speichern
+                addTaskToLiveDataList(taskAPI.getTaskList().get(0), taskDetailList);
+                Log.i("DataRepository", "fetchTask() taskDetailList: " + taskDetailList.getValue().toString());
+            }
+
+            @Override
+            public void onFailure(Call<TaskAPI> call, Throwable t) {
+                // something went completely south (like no internet connection) // TODO: leider landet man beim Versuch die einzelnen Aufgaben zu laden hier
+                Log.i("DataRepository", "fetchTask() onFailure(): " + t.getMessage());
             }
         });
     }
