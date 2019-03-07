@@ -6,6 +6,8 @@ import android.arch.lifecycle.MutableLiveData;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +24,7 @@ import de.caroliwo.hawoe_rallye.Student;
 import de.caroliwo.hawoe_rallye.StudentAPI;
 import de.caroliwo.hawoe_rallye.Task;
 import de.caroliwo.hawoe_rallye.TaskAPI;
+import de.caroliwo.hawoe_rallye.TasksAPI;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -81,8 +84,11 @@ public class DataRepository {
     // Methoden um LiveData von API-Calls lokal zu ändern
     public void addStudentLiveData(Student student) {
         Log.i("DataRepository", "addStudentLiveData() input: " + student.toString());
-        ArrayList<Student> tempList = this.studentList.getValue();
-        Log.i("DataRepository", "addStudentLiveData() tempList: " + tempList.toString());
+        ArrayList<Student> tempList = new ArrayList<>();
+        if(this.studentList.getValue() != null) {
+            tempList = this.studentList.getValue();
+            Log.i("DataRepository", "addStudentLiveData() tempList: " + tempList.toString()); 
+        }
         tempList.add(student);
         this.studentList.setValue(tempList);
         Log.i("DataRepository", "addStudentLiveData() studentList: " + this.studentList.getValue().toString());
@@ -108,8 +114,11 @@ public class DataRepository {
 
     public void addTaskToLiveDataList(Task task, MutableLiveData<ArrayList<Task>> list) {
         Log.i("DataRepository", "addTaskToLiveDataList() task: " + task.toString());
-        ArrayList<Task> tempList = list.getValue();
-        Log.i("DataRepository", "addTaskToLiveDataList() list: " + list.getValue().toString());
+        ArrayList<Task> tempList = new ArrayList<>();
+        if(list.getValue()!=null) {
+            tempList = list.getValue();
+            Log.i("DataRepository", "addTaskToLiveDataList() list: " + list.getValue().toString());
+        }
         tempList.add(task);
         list.setValue(tempList);
     }
@@ -379,7 +388,7 @@ public class DataRepository {
         return null;
     }*/
 
-
+//Studierenden löschen
     public void deleteStudent (int studentID) {
         Call<Void> call = downloadJSONRetrofit.deleteStudent(studentID);
 
@@ -396,7 +405,7 @@ public class DataRepository {
             }
         });
     }
-
+//Studierenden hinzufügen
     public void sendStudent(Student student){
         Call<StudentAPI> call = downloadJSONRetrofit.sendStudent(student);
 
@@ -428,9 +437,8 @@ public class DataRepository {
             }
         });
     }
-
-    public void changeStudent(/*Integer studentID, String name, String lastname, String course*/Student student) {
-//        Student student = new Student(null, studentID, name, lastname, course, null);
+//Daten eines Studierenden ändern
+    public void changeStudent(Student student) {
 
         Call<StudentAPI> call = downloadJSONRetrofit.changeStudent(student.getStudentId(), student);
 
