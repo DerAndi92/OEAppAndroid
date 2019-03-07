@@ -28,7 +28,7 @@ import de.caroliwo.hawoe_rallye.Retrofit;
 import de.caroliwo.hawoe_rallye.Configuration;
 import de.caroliwo.hawoe_rallye.Student;
 import de.caroliwo.hawoe_rallye.Task;
-import de.caroliwo.hawoe_rallye.TaskAPI;
+import de.caroliwo.hawoe_rallye.TasksAPI;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,6 +42,8 @@ public class LoadingActivity extends AppCompatActivity {
     private Context applicationContext;
     private DataViewModel viewModel;
     private Intent intent;
+
+    //TODO: Vorschlag: die App sollte nur Hochkant funktionieren, also verhindern, dass sich die Elemente drehen, wenn man Bildschirm kippt
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -245,12 +247,12 @@ public class LoadingActivity extends AppCompatActivity {
 //
 //    //Tasks der eigenen Gruppe laden
 //    private void getTasks(int groupID) {
-//        Call<TaskAPI> call = downloadJSONRetrofit.getTasks(groupID);
+//        Call<TasksAPI> call = downloadJSONRetrofit.getTasks(groupID);
 //
 //        //execute on background-thread
-//        call.enqueue(new Callback<TaskAPI>() {
+//        call.enqueue(new Callback<TasksAPI>() {
 //            @Override
-//            public void onResponse(Call<TaskAPI> call, Response<TaskAPI> response) {
+//            public void onResponse(Call<TasksAPI> call, Response<TasksAPI> response) {
 //
 //                //wenn HTTP-Request nicht erfolgreich:
 //                if (!response.isSuccessful()) {
@@ -259,7 +261,7 @@ public class LoadingActivity extends AppCompatActivity {
 //                }
 //
 //                //wenn HTTP-Request erfolgreich:
-//                TaskAPI taskAPI = response.body();
+//                TasksAPI taskAPI = response.body();
 //                List<Task> tasks = taskAPI.getTaskList();
 //                ArrayList<Task> taskList = new ArrayList<>(tasks); //List in ArrayList umwandeln
 //                intent.putParcelableArrayListExtra("Tasks", taskList);
@@ -269,7 +271,7 @@ public class LoadingActivity extends AppCompatActivity {
 //            }
 //
 //            @Override
-//            public void onFailure(Call<TaskAPI> call, Throwable t) {
+//            public void onFailure(Call<TasksAPI> call, Throwable t) {
 //                // something went completely south (like no internet connection)
 //                Log.i("TEST Error", t.getMessage() + "Error");
 //            }

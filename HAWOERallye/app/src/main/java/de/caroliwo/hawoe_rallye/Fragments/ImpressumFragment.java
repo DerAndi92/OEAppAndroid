@@ -15,6 +15,10 @@ import de.caroliwo.hawoe_rallye.R;
 
 public class ImpressumFragment extends Fragment {
 
+    //TODO: brauchen wir auch Datenschutzerklärung?
+
+    //TODO: mit mehr Inhalt füllen
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
