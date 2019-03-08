@@ -32,6 +32,9 @@ public class TasksFragment extends Fragment {
     public TasksFragment() {
     }
 
+    //TODO: Für die UserExpericene wäre es besser, wenn wir für jede Aufgabe dasselbe icon verwenden wie in TimesFragment. So können die Aufgaben schneller wiedergefunden werden.
+    //TODO: Idee: Icon umfärben, wenn Aufgabe erledigt
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

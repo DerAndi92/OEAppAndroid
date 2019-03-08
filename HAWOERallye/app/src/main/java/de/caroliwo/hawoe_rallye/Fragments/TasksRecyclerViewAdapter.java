@@ -56,6 +56,7 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
         final TasksViewHolder viewHolder = new TasksViewHolder(view);
 
         //TODO: Für alle Dialoge einen Exit-Button, um den Dialog zu schließen
+        //TODO: Zeiten auch mit auf Dialog 
 
         //TODO: Manchmal öffnet er wenn man auf Poststelle klickt den Dialog für eine andere Aufgabe, z.B. Wettrennen usw. --> Bug fixen
         taskDialog = new Dialog(context);
