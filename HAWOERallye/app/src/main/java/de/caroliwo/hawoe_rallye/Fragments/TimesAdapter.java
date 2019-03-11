@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import de.caroliwo.hawoe_rallye.R;
@@ -31,7 +32,7 @@ public class TimesAdapter extends ArrayAdapter {
     }
 
     public View getView(int position, View view, ViewGroup parent){
-        LayoutInflater inflater=context.getLayoutInflater();
+        LayoutInflater inflater = context.getLayoutInflater();
         View rowView = inflater.inflate(R.layout.times_listview_layout2, null, true);
 
         ImageView laborIconIV = rowView.findViewById(R.id.laborIconIV);
@@ -41,8 +42,8 @@ public class TimesAdapter extends ArrayAdapter {
         Log.i("Test TimesAdapter", "1 ");
 
         //Icon
-        String iconname = taskList.get(position).getIcon();
-        int id = context.getResources().getIdentifier(iconname, "drawable", context.getPackageName());
+        String iconName = taskList.get(position).getIcon();
+        int id = context.getResources().getIdentifier(iconName, "drawable", "de.caroliwo.hawoe_rallye");
         laborIconIV.setImageResource(id);
         Log.i("Test TimesAdapter", "2" );
 

@@ -471,7 +471,7 @@ public class DataRepository {
     }
 
     //Tasks der eigenen Gruppe laden
-    public void fetchTasks(final int groupID) { //TODO: Checken, ob "final" OK
+    public void fetchTasks(final int groupID) {
         Call<TasksAPI> call = downloadJSONRetrofit.getTasks(groupID);
 
         //execute on background-thread

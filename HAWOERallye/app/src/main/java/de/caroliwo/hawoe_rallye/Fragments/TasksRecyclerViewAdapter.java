@@ -1,13 +1,10 @@
 package de.caroliwo.hawoe_rallye.Fragments;
 
 import android.app.Dialog;
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,7 +15,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,7 +26,6 @@ import de.caroliwo.hawoe_rallye.Data.DataViewModel;
 import de.caroliwo.hawoe_rallye.Field;
 import de.caroliwo.hawoe_rallye.R;
 import de.caroliwo.hawoe_rallye.Task;
-import de.caroliwo.hawoe_rallye.TaskItem;
 
 public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecyclerViewAdapter.TasksViewHolder> {
 
@@ -45,7 +40,10 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
         this.context = context;
         this.taskList = data;
         this.taskDetailList = details;
+
+        // ViewModel-Instanz holen
         viewModel = ViewModelProviders.of((MainActivity) context).get(DataViewModel.class);
+
     }
 
 
@@ -75,6 +73,8 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
                 TextView taskTitle = (TextView) taskDialog.findViewById(R.id.task_dialog_TV);
                 TextView taskDestination = taskDialog.findViewById(R.id.task_dialog_TV2);
                 ImageView taskIcon = (ImageView) taskDialog.findViewById(R.id.student_dialog_IV);
+                int id = context.getResources().getIdentifier(task.getIcon(), "drawable", "de.caroliwo.hawoe_rallye");
+                taskIcon.setImageResource(id);
                 List<Field> fieldList = task.getFieldList();
                 if (task.isCompleted()) {
                     taskIcon.setColorFilter(Color.parseColor("#00FF00"));
@@ -168,6 +168,8 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
     @Override
     public void onBindViewHolder(@NonNull TasksViewHolder tasksViewHolder, int i) {
         tasksViewHolder.textView.setText(taskList.get(i).getName());
+        int id = context.getResources().getIdentifier(taskList.get(i).getIcon(), "drawable", "de.caroliwo.hawoe_rallye");
+        tasksViewHolder.imageView.setImageResource(id);
     }
 
     @Override
@@ -179,11 +181,13 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
 
         private TextView textView;
         private ConstraintLayout taskItem;
+        private ImageView imageView;
 
         public TasksViewHolder(@NonNull View itemView) {
             super(itemView);
             taskItem = (ConstraintLayout) itemView.findViewById(R.id.task_item_CL);
             textView = (TextView) itemView.findViewById(R.id.task_item_TW);
+            imageView = (ImageView) itemView.findViewById(R.id.task_item_IW);
         }
     }
 

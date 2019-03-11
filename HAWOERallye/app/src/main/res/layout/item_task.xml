@@ -16,7 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/task_item_TW"
-        android:src="@drawable/ic_check_box_icon_big"
+        app:srcCompat="@drawable/ic_check_box_icon_big"
         android:id="@+id/task_item_IW"/>
 
     <TextView

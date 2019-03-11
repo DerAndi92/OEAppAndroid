@@ -70,10 +70,9 @@ public class TimesFragment extends Fragment {
         timesLV = rootView.findViewById(R.id.timesLV);
 
         // Tasks holen
-//        Bundle bundle = getArguments();
-//        taskList= bundle.getParcelableArrayList("Tasks");
         taskList = viewModel.getTaskListLiveData().getValue();
         Log.i("TimesFragment", "taskList: " + taskList);
+
         // Falls taskList noch nicht verfügbar leere ArrayList zuweisen (wird später vom Observer geupdated)
         if (taskList == null) { taskList = new ArrayList<>(); }
 
