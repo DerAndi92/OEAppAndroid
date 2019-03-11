@@ -15,22 +15,26 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".Activities.LoadingActivity"
-            android:noHistory="true">
+            android:noHistory="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.MainActivity" />
+        <activity android:name=".Activities.MainActivity"
+            android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
         <activity android:name=".Activities.LogInActivity"
-            android:noHistory="true" />
+            android:noHistory="true"
+            android:screenOrientation="portrait"/>
         <activity android:name=".Activities.GroupActivity"
-            android:noHistory="true"/>
+            android:noHistory="true"
+            android:screenOrientation="portrait"/>
 
     </application>
 

@@ -43,8 +43,6 @@ public class LoadingActivity extends AppCompatActivity {
     private DataViewModel viewModel;
     private Intent intent;
 
-    //TODO: Vorschlag: die App sollte nur Hochkant funktionieren, also verhindern, dass sich die Elemente drehen, wenn man Bildschirm kippt
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
