@@ -6,6 +6,9 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -53,10 +56,7 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
         View view = LayoutInflater.from(context).inflate(R.layout.item_task, viewGroup, false);
         final TasksViewHolder viewHolder = new TasksViewHolder(view);
 
-        //TODO: Für alle Dialoge einen Exit-Button, um den Dialog zu schließen
-        //TODO: Zeiten auch mit auf Dialog 
-
-        //TODO: Manchmal öffnet er wenn man auf Poststelle klickt den Dialog für eine andere Aufgabe, z.B. Wettrennen usw. --> Bug fixen
+        //TODO: Manchmal öffnet er wenn man auf Poststelle klickt den Dialog für eine andere Aufgabe, z.B. Wettrennen usw. <-----TOBI: Bei mir nicht
         taskDialog = new Dialog(context);
         taskDialog.setContentView(R.layout.dialog_tasks);
 
@@ -65,100 +65,118 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
             public void onClick(View v) {
 
                 // Task-Variable zuweisen
-                final Task task = taskDetailList.get(viewHolder.getAdapterPosition());
+                final Task taskDetail = taskDetailList.get(viewHolder.getAdapterPosition());
+                final Task task = taskList.get(viewHolder.getAdapterPosition());
                 Log.i("TasksRVAdapter-Log", "OnClick() task: " + task.toString());
 
+                openTaskFragment(task, taskDetail);
 
-                if (debug) Toast.makeText(context, "Test Click"+String.valueOf(viewHolder.getAdapterPosition()),Toast.LENGTH_SHORT).show();
-                TextView taskTitle = (TextView) taskDialog.findViewById(R.id.task_dialog_TV);
-                TextView taskDestination = taskDialog.findViewById(R.id.task_dialog_TV2);
-                ImageView taskIcon = (ImageView) taskDialog.findViewById(R.id.student_dialog_IV);
-                int id = context.getResources().getIdentifier(task.getIcon(), "drawable", "de.caroliwo.hawoe_rallye");
-                taskIcon.setImageResource(id);
-                List<Field> fieldList = task.getFieldList();
-                if (task.isCompleted()) {
-                    taskIcon.setColorFilter(Color.parseColor("#00FF00"));
-                }
-                taskTitle.setText(task.getName());
-                taskDestination.setText(task.getDestination());
-
-                //Dynamisches Erstellen der Dialog-Inhalte (Aufgaben)
-                LinearLayout fieldsContainer = (LinearLayout) taskDialog.findViewById(R.id.FieldsContainer);
-                //Für Abstand zwischen den Views im LinearLayout
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                layoutParams.setMargins(50,0,0,50);
-                //TODO: Breite der Elemente Button, EditText etc. an Dialog-Breite anpassen mit je 8dp Abstand zum Rand
-                fieldsContainer.removeAllViews();
-                for (Field field: fieldList) {
-                        String type = field.getType();
-                        switch (type) {
-                            case "button":
-                                Button button = new Button(context);
-                                button.setText(field.getValue());
-                                button.setTextColor(context.getResources().getColor( R.color.colorText));
-                                button.setBackground(context.getResources().getDrawable(R.drawable.buttonshape));
-                                fieldsContainer.addView(button, layoutParams);
-                                Log.i("TasksRVAdapter-Switch", "Button created");
-                                button.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-
-                                        //TODO: Daten für POST vervollständigen
-                                       /* int group = ; //groupID
-                                        int task = ; //taskID
-                                        String password = ; //optional
-                                        ArrayList<> inputs = ;
-
-                                        Object task1 = new Object(group, task, password, inputsArraylist);
-
-                                        viewModel.sendAnswer(task1); */
-                                    }
-                                });
-                                break;
-                            case "text":
-                                TextView textV = new TextView(context);
-                                textV.setText(field.getValue());
-                                textV.setTextColor(context.getResources().getColor( R.color.colorText));
-                                fieldsContainer.addView(textV,layoutParams);
-                                Log.i("TasksRVAdapter-Switch", "TV created");
-                                break;
-                            case "inputField":
-                                EditText editText = new EditText(context);
-                                if(field.getValue()!=null){
-                                    editText.setText(field.getValue());
-                                }
-                                editText.setTextColor(context.getResources().getColor( R.color.colorText));
-                                fieldsContainer.addView(editText,layoutParams);
-                                Log.i("TasksRVAdapter-Switch", "ET created");
-                                break;
-                            case "inputText":
-                                EditText editTextBig = new EditText(context);
-                                if(field.getValue()!=null) {
-                                    editTextBig.setText(field.getValue());
-                                }
-                                editTextBig.setHeight(50);
-                                editTextBig.setTextColor(context.getResources().getColor( R.color.colorText));
-                                fieldsContainer.addView(editTextBig,layoutParams);
-                                Log.i("TasksRVAdapter-Switch", "ET big created");
-                                break;
-                            case "inputInvisible":
-                                EditText editTextInvisible = new EditText(context);
-                                if(field.getValue()!=null) {
-                                    editTextInvisible.setText(field.getValue());
-                                }
-                                editTextInvisible.setVisibility(View.INVISIBLE);
-                                fieldsContainer.addView(editTextInvisible);
-                                Log.i("TasksRVAdapter-Switch", "ET invisible created");
-                                break;
-                            default:
-                                Log.i("TasksRVAdapter-Switch", "Field type is not defined");
-                        }
-                }
-
-                taskDialog.show();
-                if (debug) Log.i("TasksRVAdapter-Log","taskDialog.isShowing(): " + taskDialog.isShowing());
-                if (debug) Log.i("TasksRVAdapter-Log","taskDialog.getContext(): " + taskDialog.getContext());
+//---------------------------------------------IN NEUES TASKFRAGMENT VERSCHOBEN-----------------------------------------------------------
+//
+//                if (debug) Toast.makeText(context, "Test Click"+String.valueOf(viewHolder.getAdapterPosition()),Toast.LENGTH_SHORT).show();
+//
+//                // Views zuweisen
+//                TextView taskTitle = (TextView) taskDialog.findViewById(R.id.task_dialog_TV);
+//                TextView taskTime = (TextView) taskDialog.findViewById(R.id.task_dialog_TV3);
+//                TextView taskDestination = taskDialog.findViewById(R.id.task_dialog_TV2);
+//                ImageView taskIcon = (ImageView) taskDialog.findViewById(R.id.student_dialog_IV);
+//
+//                // Inhalt setzen
+//                int id = context.getResources().getIdentifier(task.getIcon(), "drawable", "de.caroliwo.hawoe_rallye");
+//                taskIcon.setImageResource(id);
+//                List<Field> fieldList = task.getFieldList();
+//                if (task.isCompleted()) {
+//                    taskIcon.setColorFilter(Color.parseColor("#00FF00"));
+//                }
+//                // Zeit setzen
+//                String time_from = (String) task.getTime().getTime_from();
+//                String time_to = (String) task.getTime().getTime_to();
+//                if(time_from != null && time_to != null){
+//                    taskTime.setText(time_from + " - " + time_to + " Uhr");
+//                } else {
+//                    taskTime.setText("");
+//                }
+//                taskTitle.setText(task.getName());
+//                taskDestination.setText(task.getDestination());
+//
+//                //Dynamisches Erstellen der Dialog-Inhalte (Aufgaben)
+//                LinearLayout fieldsContainer = (LinearLayout) taskDialog.findViewById(R.id.FieldsContainer);
+//                //Für Abstand zwischen den Views im LinearLayout
+//                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+//                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+//                layoutParams.setMargins(50,0,0,50);
+//                //
+//                fieldsContainer.removeAllViews();
+//                for (Field field: fieldList) {
+//                        String type = field.getType();
+//                        switch (type) {
+//                            case "button":
+//                                Button button = new Button(context);
+//                                button.setText(field.getValue());
+//                                button.setTextColor(context.getResources().getColor( R.color.colorText));
+//                                button.setBackground(context.getResources().getDrawable(R.drawable.buttonshape));
+//                                fieldsContainer.addView(button, layoutParams);
+//                                Log.i("TasksRVAdapter-Switch", "Button created");
+//                                button.setOnClickListener(new View.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(View v) {
+//
+//                                        //
+//                                       /* int group = ; //groupID
+//                                        int task = ; //taskID
+//                                        String password = ; //optional
+//                                        ArrayList<> inputs = ;
+//
+//                                        Object task1 = new Object(group, task, password, inputsArraylist);
+//
+//                                        viewModel.sendAnswer(task1); */
+//                                    }
+//                                });
+//                                break;
+//                            case "text":
+//                                TextView textV = new TextView(context);
+//                                textV.setText(field.getValue());
+//                                textV.setTextColor(context.getResources().getColor( R.color.colorText));
+//                                fieldsContainer.addView(textV,layoutParams);
+//                                Log.i("TasksRVAdapter-Switch", "TV created");
+//                                break;
+//                            case "inputField":
+//                                EditText editText = new EditText(context);
+//                                if(field.getValue()!=null){
+//                                    editText.setText(field.getValue());
+//                                }
+//                                editText.setTextColor(context.getResources().getColor( R.color.colorText));
+//                                fieldsContainer.addView(editText,layoutParams);
+//                                Log.i("TasksRVAdapter-Switch", "ET created");
+//                                break;
+//                            case "inputText":
+//                                EditText editTextBig = new EditText(context);
+//                                if(field.getValue()!=null) {
+//                                    editTextBig.setText(field.getValue());
+//                                }
+//                                editTextBig.setHeight(50);
+//                                editTextBig.setTextColor(context.getResources().getColor( R.color.colorText));
+//                                fieldsContainer.addView(editTextBig,layoutParams);
+//                                Log.i("TasksRVAdapter-Switch", "ET big created");
+//                                break;
+//                            case "inputInvisible":
+//                                EditText editTextInvisible = new EditText(context);
+//                                if(field.getValue()!=null) {
+//                                    editTextInvisible.setText(field.getValue());
+//                                }
+//                                editTextInvisible.setVisibility(View.INVISIBLE);
+//                                fieldsContainer.addView(editTextInvisible);
+//                                Log.i("TasksRVAdapter-Switch", "ET invisible created");
+//                                break;
+//                            default:
+//                                Log.i("TasksRVAdapter-Switch", "Field type is not defined");
+//                        }
+//                }
+//
+//                taskDialog.show();
+//                if (debug) Log.i("TasksRVAdapter-Log","taskDialog.isShowing(): " + taskDialog.isShowing());
+//                if (debug) Log.i("TasksRVAdapter-Log","taskDialog.getContext(): " + taskDialog.getContext());
+//--------------------------------------------------------------------------------------------------------------------------
             }
         });
 
@@ -197,5 +215,14 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
         this.taskDetailList.clear();
         this.taskDetailList.addAll(taskDetails);
         notifyDataSetChanged();
+    }
+
+    private void openTaskFragment(Task task, Task taskDetails) {
+        TaskFragment fragment = TaskFragment.newInstance(taskDetails);
+        FragmentManager fragmentManager = ((MainActivity)context).getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_right);
+        transaction.addToBackStack(null);
+        transaction.add(R.id.fragment_container, fragment, "TASK_FRAGMENT").commit();
     }
 }

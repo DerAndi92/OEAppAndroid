@@ -13,6 +13,9 @@ import java.util.List;
 
 import javax.inject.Singleton;
 
+import de.caroliwo.hawoe_rallye.Answer;
+import de.caroliwo.hawoe_rallye.AnswerAPI;
+import de.caroliwo.hawoe_rallye.AnswerField;
 import de.caroliwo.hawoe_rallye.Configuration;
 import de.caroliwo.hawoe_rallye.ConfigurationAPI;
 import de.caroliwo.hawoe_rallye.DownloadJSONRetrofit;
@@ -537,13 +540,13 @@ public class DataRepository {
     }
 
     // Lösung(en) einer Aufgabe einer Gruppe abschicken
-    public void sendAnswer (final Object object) {
-        Call<Object> call = downloadJSONRetrofit.sendAnswer(object);
+    public void sendAnswer (final Answer answer) {
+        Call<AnswerAPI> call = downloadJSONRetrofit.sendAnswer(answer);
 
         //execute on background-thread
-        call.enqueue(new Callback<Object>() {
+        call.enqueue(new Callback<AnswerAPI>() {
             @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
+            public void onResponse(Call<AnswerAPI> call, Response<AnswerAPI> response) {
 
                 //wenn HTTP-Request nicht erfolgreich:
                 if (!response.isSuccessful()) {
@@ -552,17 +555,18 @@ public class DataRepository {
                 }
 
                 //wenn HTTP-Request erfolgreich:
-                Object obj = response.body();
+                Answer answer = response.body().getAnswer();
                 Log.i("DataRepository", "fetchTask() response.body(): " + response.body());
 
                 // Task in taskDetailList LiveData-Objekt speichern
                 //TODO: obj liefert nur dataArrayList der Antworten mit je id und value. Das muss in ein bestehendes Task-Objekt eingefügt werden um danach die Liste aktualisieren zu können
+                // TODO: Auf API-Änderung warten, taskID ist notwendig für Eintragung
                // addTaskToLiveDataList(task, taskDetailList);
                 //Log.i("DataRepository", "fetchTask() taskDetailList: " + taskDetailList.getValue().toString());
             }
 
             @Override
-            public void onFailure(Call<Object> call, Throwable t) {
+            public void onFailure(Call<AnswerAPI> call, Throwable t) {
                 // something went completely south (like no internet connection)
                 Log.i("DataRepository", "fetchTask() onFailure(): " + t.getMessage());
             }

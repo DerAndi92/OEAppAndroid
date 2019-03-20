@@ -56,6 +56,6 @@ public interface DownloadJSONRetrofit {
 
     //Lösung einer Aufgabe abschicken
     @POST ("task/field")
-    Call<Object> sendAnswer(@Body Object object);
+    Call<AnswerAPI> sendAnswer(@Body Answer answer);
 
 }

@@ -9,4 +9,9 @@
         android:layout_height="match_parent"
         android:id="@+id/tasks_recyclerview"/>
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/tasks_framelayout"/>
+
 </LinearLayout>

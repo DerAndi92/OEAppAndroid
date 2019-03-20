@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.annotation.Nullable;
+import android.widget.FrameLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,18 +29,23 @@ public class TasksFragment extends Fragment {
     private ArrayList<Task> taskDetailList; // <-----Liste mit Aufgabendetails zu jeder Aufgabe (password, fields, etc)
     private boolean debug = false;
     private DataViewModel viewModel;
+    private FrameLayout fragmentContainer;
 
     public TasksFragment() {
     }
-
-    //TODO: Für die UserExpericene wäre es besser, wenn wir für jede Aufgabe dasselbe icon verwenden wie in TimesFragment. So können die Aufgaben schneller wiedergefunden werden.
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (debug) Log.i("TasksFragment-Log","3");
+
+        // Fragment-Layout inflaten
         v = inflater.inflate(R.layout.fragment_tasks, container, false);
+
+        // RecyclerView zuweisen
         recyclerView = (RecyclerView) v.findViewById(R.id.tasks_recyclerview);
+
+        // neuen Adapter erstellen und zuweisen
         final TasksRecyclerViewAdapter recyclerViewAdapter = new TasksRecyclerViewAdapter((MainActivity) getActivity(), taskList, taskDetailList);
         if (debug) Log.i("TasksFragment-Log","taskList: " + taskList.toString());
 

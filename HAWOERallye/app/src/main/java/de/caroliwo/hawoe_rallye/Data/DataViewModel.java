@@ -10,6 +10,7 @@ import android.util.Log;
 import java.util.ArrayList;
 
 import de.caroliwo.hawoe_rallye.Activities.LoadingActivity;
+import de.caroliwo.hawoe_rallye.Answer;
 import de.caroliwo.hawoe_rallye.Group;
 import de.caroliwo.hawoe_rallye.Student;
 import de.caroliwo.hawoe_rallye.Task;
@@ -87,7 +88,7 @@ public class DataViewModel extends AndroidViewModel {
 
     public void fetchTask(int groupID, int taskID) { repository.fetchTask(groupID, taskID); }
 
-    public void sendAnswer (Object object) {repository.sendAnswer(object);}
+    public void sendAnswer (Answer answer) {repository.sendAnswer(answer);}
 
 
 
