@@ -53,7 +53,6 @@ public class TaskFragment extends Fragment {
     private DataViewModel viewModel;
 
     private Task task;
-    private Task taskDetail;
     List<Field> fieldList;
     int taskID;
     String password;
@@ -92,7 +91,7 @@ public class TaskFragment extends Fragment {
         // Variablen zuweisen
         fieldList = task.getFieldList();
         taskID = task.getId();
-        password = ""; // TODO: Wie kommt man an das Passwort vom Task-Objekt?
+        password = ""; // TODO: Passwort-Field implementieren
     }
 
 

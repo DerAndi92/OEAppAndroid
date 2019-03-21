@@ -25,18 +25,15 @@ public class DataViewModel extends AndroidViewModel {
     private LiveData<StudentEntity> studEntity;
     private LiveData<ArrayList<Group>> groupList;
     private LiveData<ArrayList<Task>> taskList;
-    private LiveData<ArrayList<Task>> taskDetailList;
     private LiveData<ArrayList<Student>> studentList;
 
-//    @Inject
-    public DataViewModel(@NonNull Application application/*, DataRepository repository*/) {
+    public DataViewModel(@NonNull Application application) {
 
         // Application-Kontext an Superklasse weitergeben
         super(application);
         Log.i("DataViewModel", "1");
 
         // Repository zuweisen
-//        this.repository = repository;
         repository = new DataRepository(application);
         Log.i("DataViewModel", "2");
 
@@ -45,7 +42,6 @@ public class DataViewModel extends AndroidViewModel {
         studEntity = repository.getStudentLiveData();
         groupList = repository.getGroupListLiveData();
         taskList = repository.getTaskListLiveData();
-        taskDetailList = repository.getTaskDetailsLiveData();
         studentList = repository.getStudentListLiveData();
 
     }
@@ -102,8 +98,6 @@ public class DataViewModel extends AndroidViewModel {
     public LiveData<ArrayList<Task>> getTaskListLiveData () { return taskList; }
 
     public LiveData<ArrayList<Student>> getStudentListLiveData() { return studentList; }
-
-    public LiveData<ArrayList<Task>> getTaskDetailsLiveData() { return taskDetailList; }
 
 
 

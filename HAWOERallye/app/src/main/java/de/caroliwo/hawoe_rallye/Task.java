@@ -18,13 +18,14 @@ public class Task implements Parcelable {
     private String icon;
     private String destination;
     private Times times;
+    private boolean password;
     private boolean completed;
     @SerializedName("fields")
     private List<Field> fieldList;
     private int order;
 
 
-    //GETTER-Methoden
+    //GETTER- + SETTER-Methoden
     public int getId() {
         return taskId;
     }
@@ -56,6 +57,26 @@ public class Task implements Parcelable {
     public int getOrder() {
         return order;
     }
+
+    public boolean getPassword() { return password; }
+
+    public void setTaskId(int taskId) { this.taskId = taskId; }
+
+    public void setName(String name) { this.name = name; }
+
+    public void setIcon(String icon) { this.icon = icon; }
+
+    public void setDestination(String destination) { this.destination = destination; }
+
+    public void setTimes(Times times) { this.times = times; }
+
+    public void setPassword(boolean password) { this.password = password; }
+
+    public void setCompleted(boolean completed) { this.completed = completed; }
+
+    public void setFieldList(List<Field> fieldList) { this.fieldList = fieldList; }
+
+    public void setOrder(int order) { this.order = order; }
 
     //Parcelable
     @Override

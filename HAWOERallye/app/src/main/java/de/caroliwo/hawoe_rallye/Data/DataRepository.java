@@ -46,14 +46,10 @@ public class DataRepository {
     // Variablen für LiveData-Datensätze aus API-Calls
     private MutableLiveData<ArrayList<Group>> groupList;
     private MutableLiveData<ArrayList<Task>> taskList;
-    private MutableLiveData<ArrayList<Task>> taskDetailList;
     private MutableLiveData<ArrayList<Student>> studentList;
 
     // Variablen für API-Calls an Web-Interface
     private DownloadJSONRetrofit downloadJSONRetrofit;
-    //private ArrayList<Group> groupList;
-
-    // Variablen für Caches
 
 
     // Konstruktor
@@ -75,7 +71,6 @@ public class DataRepository {
         groupList = new MutableLiveData<>();
         taskList = new MutableLiveData<>();
         studentList = new MutableLiveData<>();
-        taskDetailList = new MutableLiveData<>();
 
         // Retrofit instanziieren
         Retrofit retrofitClass = new Retrofit();
@@ -173,8 +168,6 @@ public class DataRepository {
     }
 
     public LiveData<ArrayList<Student>> getStudentListLiveData() { return studentList; }
-
-    public LiveData<ArrayList<Task>> getTaskDetailsLiveData() { return taskDetailList; }
 
 
 
@@ -384,12 +377,15 @@ public class DataRepository {
         return groupList != null;
     }
 
-    /*public Group getGroup(int groupID) {
-        for (Group group: groupList) {
-            if (groupID == group.getGroupId()) return group;
+    private void addDetailsToTask(Task task) {
+        for (Task tempTask : taskList.getValue()) {
+            if (task.getId() == tempTask.getId()) {
+                tempTask.setPassword(task.getPassword());
+                tempTask.setFieldList(task.getFieldList());
+                break;
+            }
         }
-        return null;
-    }*/
+    }
 
 //Studierenden löschen
     public void deleteStudent (int studentID) {
@@ -408,6 +404,7 @@ public class DataRepository {
             }
         });
     }
+
 //Studierenden hinzufügen
     public void sendStudent(Student student){
         Call<StudentAPI> call = downloadJSONRetrofit.sendStudent(student);
@@ -440,6 +437,7 @@ public class DataRepository {
             }
         });
     }
+
 //Daten eines Studierenden ändern
     public void changeStudent(Student student) {
 
@@ -524,11 +522,15 @@ public class DataRepository {
 
                 //wenn HTTP-Request erfolgreich:
                 TaskAPI taskAPI = response.body();
+                Task responseTask = taskAPI.getTask();
                 Log.i("DataRepository", "fetchTask() response.body(): " + response.body());
 
                 // Task in taskDetailList LiveData-Objekt speichern
-                addTaskToLiveDataList(taskAPI.getTask(), taskDetailList);
-                Log.i("DataRepository", "fetchTask() taskDetailList: " + taskDetailList.getValue().toString());
+//                addTaskToLiveDataList(responseTask, taskDetailList);
+//                Log.i("DataRepository", "fetchTask() taskDetailList: " + taskDetailList.getValue().toString());
+
+                // Taskdetails in existierendem Task-Objekt speichern
+                addDetailsToTask(responseTask);
             }
 
             @Override
@@ -557,12 +559,6 @@ public class DataRepository {
                 //wenn HTTP-Request erfolgreich:
                 Answer answer = response.body().getAnswer();
                 Log.i("DataRepository", "fetchTask() response.body(): " + response.body());
-
-                // Task in taskDetailList LiveData-Objekt speichern
-                //TODO: obj liefert nur dataArrayList der Antworten mit je id und value. Das muss in ein bestehendes Task-Objekt eingefügt werden um danach die Liste aktualisieren zu können
-                // TODO: Auf API-Änderung warten, taskID ist notwendig für Eintragung
-               // addTaskToLiveDataList(task, taskDetailList);
-                //Log.i("DataRepository", "fetchTask() taskDetailList: " + taskDetailList.getValue().toString());
             }
 
             @Override

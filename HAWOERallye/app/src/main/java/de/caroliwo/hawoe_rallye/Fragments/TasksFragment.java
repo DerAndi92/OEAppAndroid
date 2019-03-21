@@ -26,12 +26,28 @@ public class TasksFragment extends Fragment {
     View v;
     private RecyclerView recyclerView;
     private ArrayList<Task> taskList; // <------Liste mit allen Aufgaben der Gruppe
-    private ArrayList<Task> taskDetailList; // <-----Liste mit Aufgabendetails zu jeder Aufgabe (password, fields, etc)
     private boolean debug = false;
     private DataViewModel viewModel;
-    private FrameLayout fragmentContainer;
 
     public TasksFragment() {
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        if (debug) Log.i("TasksFragment-Log","1");
+        super.onCreate(savedInstanceState);
+
+        // Viewmodel-Instanz holen
+        viewModel = ViewModelProviders.of((MainActivity) getActivity()).get(DataViewModel.class);
+        // Tasks holen
+        viewModel.fetchTasks(viewModel.getStudent().getGroupId());
+
+        taskList = viewModel.getTaskListLiveData().getValue();
+
+        // Falls noch nicht verfügbar leere ArrayList zuweisen (wird später vom Observer geupdated)
+        if (taskList == null) taskList = new ArrayList<>();
+
+        if (debug) Log.i("TasksFragment-Log","2");
     }
 
     @Nullable
@@ -46,24 +62,20 @@ public class TasksFragment extends Fragment {
         recyclerView = (RecyclerView) v.findViewById(R.id.tasks_recyclerview);
 
         // neuen Adapter erstellen und zuweisen
-        final TasksRecyclerViewAdapter recyclerViewAdapter = new TasksRecyclerViewAdapter((MainActivity) getActivity(), taskList, taskDetailList);
+        final TasksRecyclerViewAdapter recyclerViewAdapter = new TasksRecyclerViewAdapter((MainActivity) getActivity(), taskList);
         if (debug) Log.i("TasksFragment-Log","taskList: " + taskList.toString());
 
-        // taskDetailList-LiveData observieren, diese wird im Repository nach dem Laden der taskList automatisch zusammengestellt
-        viewModel.getTaskDetailsLiveData().observe(this, new Observer<ArrayList<Task>>() {
+        // taskList-LiveData observieren, diese wird im Repository nach dem Laden der taskList automatisch vervollständigt
+        viewModel.getTaskListLiveData().observe(this, new Observer<ArrayList<Task>>() {
             @Override
             public void onChanged(@Nullable ArrayList<Task> tasks) {
 
-                // Bei Änderung beide Listen neu zuweisen
+                // Bei Änderung die Liste neu zuweisen
                 taskList = viewModel.getTaskListLiveData().getValue();
-                taskDetailList = viewModel.getTaskDetailsLiveData().getValue();
 
-                // Checken ob für jede Aufgabe die Details geladen wurden
-                if (taskList.size() == taskDetailList.size()) {
                     // Adapter updaten
-                    recyclerViewAdapter.setTasks(taskList, taskDetailList);
+                    recyclerViewAdapter.setTasks(taskList/*, taskDetailList*/);
                     if (debug) Log.i("TasksFragment-Log", "Tasks updated by Observer: " + tasks.toString());
-                }
             }
         });
 
@@ -71,31 +83,6 @@ public class TasksFragment extends Fragment {
         recyclerView.setAdapter(recyclerViewAdapter);
         if (debug) Log.i("TasksFragment-Log","4");
         return v;
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        if (debug) Log.i("TasksFragment-Log","1");
-        super.onCreate(savedInstanceState);
-
-        // Viewmodel-Instanz holen
-        viewModel = ViewModelProviders.of((MainActivity) getActivity()).get(DataViewModel.class);
-        // Tasks holen
-        viewModel.fetchTasks(viewModel.getStudent().getGroupId());
-
-
-        // TaskList & TaskDetailList holen
-//        Bundle bundle = getArguments();
-//        taskList = bundle.getParcelableArrayList("Tasks");
-
-        taskList = viewModel.getTaskListLiveData().getValue();
-        taskDetailList = viewModel.getTaskDetailsLiveData().getValue();
-
-        // Falls noch nicht verfügbar leere ArrayList zuweisen (wird später vom Observer geupdated)
-        if (taskList == null) { taskList = new ArrayList<>(); }
-        if (taskDetailList == null) { taskDetailList = new ArrayList<>(); }
-
-        if (debug) Log.i("TasksFragment-Log","2");
     }
 
     public List<Task> getTaskList() {

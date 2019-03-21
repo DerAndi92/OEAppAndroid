@@ -34,15 +34,13 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
 
     private Context context;
     private List<Task> taskList;
-    private List<Task> taskDetailList;
     private Dialog taskDialog;
     private boolean debug = false;
     private DataViewModel viewModel;
 
-    public TasksRecyclerViewAdapter(Context context, List<Task> data, List<Task> details) {
+    public TasksRecyclerViewAdapter(Context context, List<Task> data) {
         this.context = context;
         this.taskList = data;
-        this.taskDetailList = details;
 
         // ViewModel-Instanz holen
         viewModel = ViewModelProviders.of((MainActivity) context).get(DataViewModel.class);
@@ -56,7 +54,7 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
         View view = LayoutInflater.from(context).inflate(R.layout.item_task, viewGroup, false);
         final TasksViewHolder viewHolder = new TasksViewHolder(view);
 
-        //TODO: Manchmal öffnet er wenn man auf Poststelle klickt den Dialog für eine andere Aufgabe, z.B. Wettrennen usw. <-----TOBI: Bei mir nicht
+        //TODO: Manchmal öffnet er wenn man auf Poststelle klickt den Dialog für eine andere Aufgabe, z.B. Wettrennen usw.
         taskDialog = new Dialog(context);
         taskDialog.setContentView(R.layout.dialog_tasks);
 
@@ -65,11 +63,10 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
             public void onClick(View v) {
 
                 // Task-Variable zuweisen
-                final Task taskDetail = taskDetailList.get(viewHolder.getAdapterPosition());
                 final Task task = taskList.get(viewHolder.getAdapterPosition());
                 Log.i("TasksRVAdapter-Log", "OnClick() task: " + task.toString());
 
-                openTaskFragment(task, taskDetail);
+                openTaskFragment(task);
 
 //---------------------------------------------IN NEUES TASKFRAGMENT VERSCHOBEN-----------------------------------------------------------
 //
@@ -209,16 +206,14 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
         }
     }
 
-    public void setTasks(ArrayList<Task> tasks, ArrayList<Task> taskDetails) {
+    public void setTasks(ArrayList<Task> tasks) {
         this.taskList.clear();
         this.taskList.addAll(tasks);
-        this.taskDetailList.clear();
-        this.taskDetailList.addAll(taskDetails);
         notifyDataSetChanged();
     }
 
-    private void openTaskFragment(Task task, Task taskDetails) {
-        TaskFragment fragment = TaskFragment.newInstance(taskDetails);
+    private void openTaskFragment(Task task) {
+        TaskFragment fragment = TaskFragment.newInstance(task);
         FragmentManager fragmentManager = ((MainActivity)context).getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_right);
