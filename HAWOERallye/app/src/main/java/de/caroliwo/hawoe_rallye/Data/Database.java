@@ -4,7 +4,7 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-//TODO Kommentar: Was passiert hier?
+//Datenbank
 
 @android.arch.persistence.room.Database(entities = {ConfigurationEntity.class, StudentEntity.class}, version = 3, exportSchema = false)
 public abstract class Database extends RoomDatabase {
@@ -15,6 +15,7 @@ public abstract class Database extends RoomDatabase {
 
     public abstract StudentDAO studDao();
 
+    //TODO: Was passiert hier?
     static synchronized Database getInstance(Context context) {
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(), Database.class, "sqlite_database")

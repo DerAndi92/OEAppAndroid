@@ -105,7 +105,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
 
     }
 
-//TODO Kommentar: Was passiert hier?
+//aktualisiert die Gruppenliste
     public void setGroups(ArrayList<Group> groups) {
         this.groupsList.clear();
         this.groupsList.addAll(groups);
@@ -119,7 +119,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
         groupViewHolder.textView.setText(groupsList.get(i).getName());
     }
 
-    //TODO Kommentar: Was passiert hier?
+    //Gibt die Anzahl der Gruppen an
     @Override
     public int getItemCount() {
         return groupsList.size();

@@ -2,7 +2,7 @@ package de.caroliwo.hawoe_rallye;
 
 public class AnswerField {
 
-    //TODO Kommentar: Wofür ist AnswerField-Klasse?
+    //Um Instanzen von Antwortfeld zu erstellen
 
     private int id;
     private String value;
