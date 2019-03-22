@@ -3,6 +3,8 @@ package de.caroliwo.hawoe_rallye.Data;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
+//TODO Kommentar: Was passiert hier?
+
 @Entity (tableName = "student_table")
 public class StudentEntity {
 

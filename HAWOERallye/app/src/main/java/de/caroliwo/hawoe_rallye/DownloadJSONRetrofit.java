@@ -12,6 +12,8 @@ import retrofit2.http.Query;
 
 public interface DownloadJSONRetrofit {
 
+    //Hier werden die Requests an die API definiert, die von Retrofit genutzt werden
+
     //Konfiguration laden
     @GET ("configuration")
     Call<ConfigurationAPI> getConfiguration();
@@ -31,9 +33,6 @@ public interface DownloadJSONRetrofit {
 
     //---------------Students----------------
     //Studierenden hinzufügen
-    @POST ("student")
-    Call<Object> sendObject(@Body Student student);
-
     @POST ("student")
     Call<StudentAPI> sendStudent(@Body Student student);
 

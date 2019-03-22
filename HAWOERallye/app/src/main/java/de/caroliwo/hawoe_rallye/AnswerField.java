@@ -2,6 +2,8 @@ package de.caroliwo.hawoe_rallye;
 
 public class AnswerField {
 
+    //TODO Kommentar: Wofür ist AnswerField-Klasse?
+
     private int id;
     private String value;
 
@@ -12,9 +14,7 @@ public class AnswerField {
         this.value = value;
     }
 
-
     // Getter + Setter
-
     public int getId() {
         return id;
     }

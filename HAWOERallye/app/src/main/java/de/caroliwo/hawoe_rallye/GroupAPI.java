@@ -6,6 +6,14 @@ import java.util.List;
 
 public class GroupAPI {
 
+    //Für den API-Aufruf GET: Eine Gruppe laden
+
+    @SerializedName("data")
+    private Group group;
+    private String message;
+
+    //GETTTER + SETTER
+
     public Group getGroup() {
         return group;
     }
@@ -22,8 +30,6 @@ public class GroupAPI {
         this.message = message;
     }
 
-    @SerializedName("data")
-    private Group group;
-    private String message;
+
 
 }

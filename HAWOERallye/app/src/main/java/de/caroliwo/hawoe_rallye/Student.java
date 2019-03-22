@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+//Klasse, mit der die Instanzen der Studierenden erstellt werden können
+
 public class Student implements Parcelable {
 
     @SerializedName("group")

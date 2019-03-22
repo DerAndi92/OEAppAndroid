@@ -24,19 +24,14 @@ import de.caroliwo.hawoe_rallye.Activities.LoadingActivity;
 import de.caroliwo.hawoe_rallye.Activities.MainActivity;
 import de.caroliwo.hawoe_rallye.Data.DataViewModel;
 import de.caroliwo.hawoe_rallye.Data.StudentEntity;
-import de.caroliwo.hawoe_rallye.DownloadJSONRetrofit;
 import de.caroliwo.hawoe_rallye.R;
-import de.caroliwo.hawoe_rallye.Retrofit;
 import de.caroliwo.hawoe_rallye.Student;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+
 
 public class GroupAdapter extends ArrayAdapter {
 
     private List<Student> studentList;
     private final Activity context;
-    private DownloadJSONRetrofit downloadJSONRetrofit;
     private Integer studentID;
     private EditText nameDialog;
     private EditText lastnameDialog;
@@ -71,10 +66,6 @@ public class GroupAdapter extends ArrayAdapter {
         lastname.setText(studentList.get(position).getLast_name());
         subject.setText(studentList.get(position).getCourse());
 
-        //Retrofit
-        Retrofit retrofitClass = new Retrofit();
-        downloadJSONRetrofit = retrofitClass.createlogInterceptor(getContext().getApplicationContext());
-
         //Delete
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,9 +80,8 @@ public class GroupAdapter extends ArrayAdapter {
                     studentID = student.getStudentId();
 
                     // Student im Web-Interface löschen
-                    //deleteStudent(); <----------------------------ALT
                     Log.i("GroupAdapter", "student: " + student.toString());
-                    viewModel.deleteStudent(studentID); // <--------NEU
+                    viewModel.deleteStudent(studentID);
                     Log.i("GroupAdapter", "student: " + student.toString());
 
                     Log.i("GroupAdapter", "studentID: " + studentID);
@@ -107,9 +97,6 @@ public class GroupAdapter extends ArrayAdapter {
                         Intent intent = new Intent(context, LoadingActivity.class);
                         context.startActivity(intent);
                     }
-
-//                    remove(studentList.get(position)); //Daten aus aktueller Liste löschen
-//                    notifyDataSetChanged(); //Fragment aktualisieren
 
                     // Student aus LiveData-Liste im Repository löschen
                     Log.i("GroupAdapter", "student: " + student.toString());
@@ -168,11 +155,6 @@ public class GroupAdapter extends ArrayAdapter {
                                studentEntity.setLast_name(lastname);
                                viewModel.updateStudent(studentEntity);
                            }
-
-                           //Fragment aktualisieren
-//                           remove(studentList.get(position)); //Daten aus aktueller Liste löschen
-//                           insert(student, position);
-//                           notifyDataSetChanged(); //Fragment aktualisieren
                            dialog.hide();
 
 
@@ -196,47 +178,4 @@ public class GroupAdapter extends ArrayAdapter {
         Log.i("GroupAdapter", "setStudents() this.studentList: " + this.studentList.toString());
         notifyDataSetChanged();
     }
-
-    //-------------------------------------MIGRATED TO REPOSITORY-----------------------------------
-    /*private void deleteStudent () {
-        Call<Void> call = downloadJSONRetrofit.deleteStudent(studentID);
-
-        call.enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                Log.i("TEST Response", String.valueOf(response.code()));
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                // something went completely south (like no internet connection)
-                Log.i("TEST Error", t.getMessage() + "Error");
-            }
-        });
-    }
-
-    private void changeStudent(Integer studentID, String name, String lastname, String course) {
-        Student student = new Student(null, studentID, name, lastname, course, null);
-
-        Call<Student> call = downloadJSONRetrofit.changeStudent(studentID, student);
-
-        call.enqueue(new Callback<Student>() {
-            @Override
-            public void onResponse(Call<Student> call, Response<Student> response) {
-
-                if (!response.isSuccessful()) {
-                    Log.i("TEST ErrorResponse: ", String.valueOf(response.code()));
-                    return;
-                }
-
-                Student studResponse = response.body();
-            }
-
-            @Override
-            public void onFailure(Call<Student> call, Throwable t) {
-                // something went completely south (like no internet connection)
-                Log.i("TEST Error", t.getMessage() + "Error");
-            }
-        });
-    }*/
 }

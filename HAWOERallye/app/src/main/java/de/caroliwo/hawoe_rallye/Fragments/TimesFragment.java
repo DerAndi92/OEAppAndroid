@@ -12,19 +12,12 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import de.caroliwo.hawoe_rallye.Activities.MainActivity;
 import de.caroliwo.hawoe_rallye.Data.DataViewModel;
-import de.caroliwo.hawoe_rallye.DownloadJSONRetrofit;
 import de.caroliwo.hawoe_rallye.R;
-import de.caroliwo.hawoe_rallye.Retrofit;
 import de.caroliwo.hawoe_rallye.Task;
-import de.caroliwo.hawoe_rallye.TasksAPI;
-import de.caroliwo.hawoe_rallye.Fragments.TimesAdapter;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+
 
 public class TimesFragment extends Fragment {
 

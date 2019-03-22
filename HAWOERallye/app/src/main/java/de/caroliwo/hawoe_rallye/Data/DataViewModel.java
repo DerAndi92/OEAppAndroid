@@ -43,9 +43,7 @@ public class DataViewModel extends AndroidViewModel {
         groupList = repository.getGroupListLiveData();
         taskList = repository.getTaskListLiveData();
         studentList = repository.getStudentListLiveData();
-
     }
-
 
     // LogOut-Methode um eigenen Nutzer auszuloggen
     public void logOut(int studentId) {
@@ -71,8 +69,6 @@ public class DataViewModel extends AndroidViewModel {
     public void fetchConfig() { repository.fetchConfig(); }
 
     public boolean groupsAreFetched() { return repository.groupsAreFetched(); }
-
-    //public Group getGroup(int groupID) { return repository.getGroup(groupID); }
 
     public void deleteStudent(int studentID) { repository.deleteStudent(studentID); }
 

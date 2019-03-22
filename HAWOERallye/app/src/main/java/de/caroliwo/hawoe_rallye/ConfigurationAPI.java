@@ -1,11 +1,8 @@
 package de.caroliwo.hawoe_rallye;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+//Für den API-Aufruf GET: Konfiguration laden
 
 public class ConfigurationAPI {
 

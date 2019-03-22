@@ -12,6 +12,8 @@ import de.caroliwo.hawoe_rallye.R;
 
 public class IntroductionFragment extends Fragment {
 
+    //Anleitung --> Text in values/strings.xml
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

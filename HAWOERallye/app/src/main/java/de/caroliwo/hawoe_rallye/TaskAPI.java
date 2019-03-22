@@ -2,7 +2,7 @@ package de.caroliwo.hawoe_rallye;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+//Für den API-Aufruf GET: Eine Aufgabe einer Gruppe laden
 
 public class TaskAPI {
 

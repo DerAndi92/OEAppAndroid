@@ -1,10 +1,8 @@
 package de.caroliwo.hawoe_rallye.Fragments;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,33 +15,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.Toast;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.List;
 
-import javax.security.auth.login.LoginException;
-
-import de.caroliwo.hawoe_rallye.Activities.GroupActivity;
 import de.caroliwo.hawoe_rallye.Activities.MainActivity;
 import de.caroliwo.hawoe_rallye.Data.DataViewModel;
-import de.caroliwo.hawoe_rallye.DownloadJSONRetrofit;
-import de.caroliwo.hawoe_rallye.Group;
-import de.caroliwo.hawoe_rallye.GroupAPI;
 import de.caroliwo.hawoe_rallye.R;
-import de.caroliwo.hawoe_rallye.Retrofit;
 import de.caroliwo.hawoe_rallye.Student;
-import de.caroliwo.hawoe_rallye.Fragments.GroupAdapter;
-import de.caroliwo.hawoe_rallye.StudentAPI;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class GroupFragment extends Fragment {
 
@@ -52,7 +29,6 @@ public class GroupFragment extends Fragment {
     private ListView studentsLV;
     private Dialog dialog;
     private Student student;
-    private DownloadJSONRetrofit downloadJSONRetrofit;
     private EditText nameDialog;
     private EditText lastnameDialog;
     private Spinner spinnerDialog;
@@ -75,13 +51,7 @@ public class GroupFragment extends Fragment {
         final Integer groupId = viewModel.getStudent().getGroupId();
         viewModel.fetchGroup(groupId);
 
-        //Retrofit
-//        Retrofit retrofitClass = new Retrofit();
-//        downloadJSONRetrofit = retrofitClass.createlogInterceptor(getContext().getApplicationContext());
-
         // studentList holen
-//        Bundle bundle = getArguments();
-//        studentList = bundle.getParcelableArrayList("Students");
         studentList = viewModel.getStudentListLiveData().getValue();
 
         // Falls studentList noch nicht verfügbar leere ArrayList zuweisen (wird später vom Observer geupdated)
@@ -143,40 +113,6 @@ public class GroupFragment extends Fragment {
         // adapter setzen
         studentsLV.setAdapter(groupAdapter);
 
-
         return rootView;
-
     }
-
-    //----------------------------------------MIGRATED TO REPOSITORY--------------------------------
-
-    //POST Student zu Gruppe hinzufügen
-//    private void sendStudent(){
-//        Call<Object> call = downloadJSONRetrofit.sendObject(student);
-//
-//        call.enqueue(new Callback<Object>() {
-//            @Override
-//            public void onResponse(Call<Object> call, Response<Object> response) {
-//
-//                if (!response.isSuccessful()) {
-//                    Log.i("ErrorRes:GroupFragment ", String.valueOf(response.code()));
-//                     Toast.makeText(getContext(),"Gruppe ist voll",Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//                //JSON manuell in Objekt umwandeln
-//                Gson gson = new Gson();
-//                StudentAPI stud = gson.fromJson(gson.toJson(response.body()), StudentAPI.class);
-//                student = stud.getStudent();
-//                studentList.add(student);
-//                groupAdapter = new GroupAdapter(getActivity(), studentList);
-//                studentsLV.setAdapter(groupAdapter);
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Object> call, Throwable t) {
-//                // something went completely south (like no internet connection)
-//                Log.i("Error GroupFragment", t.getMessage());
-//            }
-//        });
-//    }
 }

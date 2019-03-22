@@ -3,6 +3,8 @@ package de.caroliwo.hawoe_rallye;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+//Klasse, für Zeiten der einzelnen Tasks
+
 public class Times implements Parcelable {
 
     private String time_from;

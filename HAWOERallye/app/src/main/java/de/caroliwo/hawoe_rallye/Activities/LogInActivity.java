@@ -2,7 +2,6 @@ package de.caroliwo.hawoe_rallye.Activities;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,25 +14,16 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
-import de.caroliwo.hawoe_rallye.Configuration;
 import de.caroliwo.hawoe_rallye.Data.ConfigurationEntity;
 import de.caroliwo.hawoe_rallye.Data.DataViewModel;
-import de.caroliwo.hawoe_rallye.Group;
 import de.caroliwo.hawoe_rallye.R;
 import de.caroliwo.hawoe_rallye.Student;
-import de.caroliwo.hawoe_rallye.Task;
 
 public class LogInActivity  extends AppCompatActivity  {
-private ArrayList<Task> taskList;
-private Configuration configuration;
-private ArrayList<Group> groupsList;
-private Context applicationContext;
 private ConfigurationEntity configEntity;
 
     @Override
@@ -66,12 +56,6 @@ private ConfigurationEntity configEntity;
             }
         });
 
-        // Groups holen <-------------------------ERSETZT DURCH DIREKTE DATENABFRAGE ÜBER VIEWMODEL
-//        Intent intentFromLoading = getIntent();
-//        groupsList = intentFromLoading.getParcelableArrayListExtra("Groups");
-//        Log.i("TEST", "onClick: " + groupsList.get(1).getColor() + " Login 1a");
-
-
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)  {
@@ -102,10 +86,8 @@ private ConfigurationEntity configEntity;
                         Log.i("TEST", "onClick: Login 2");
                         if (passwordCorrect(userData.get("password"))) {
                             Intent intent = new Intent(LogInActivity.this, GroupActivity.class);
-//                            intent.putParcelableArrayListExtra("Groups", groupsList); <--------------------ERSETZT DURCH DIREKTE DATENABFRAGE ÜBER VIEWMODEL
                             intent.putExtra("StudentData", student);
                             startActivity(intent);
-
                         } else {
                             Toast.makeText(LogInActivity.this, "Falsches Passwort", Toast.LENGTH_SHORT).show();
                         }
@@ -118,6 +100,7 @@ private ConfigurationEntity configEntity;
         });
     }
 
+    //Methode prüft, ob das Passwort richtig ist
     private boolean passwordCorrect(String password) {
         if (!TextUtils.isEmpty(password)) {
             return password.equals(configEntity.getPassword());
@@ -125,7 +108,6 @@ private ConfigurationEntity configEntity;
             return false;
         }
     }
-
 
     public boolean stringContainsNumber( String s )
     {

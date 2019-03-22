@@ -6,6 +6,8 @@ import java.util.List;
 
 public class StudentAPI {
 
+    //Für den API-Aufruf POST: Studierenden hinzufügen und PATCH: Studierenden bearbeiten
+
     @SerializedName("data")
     private Student student;
     private String message;

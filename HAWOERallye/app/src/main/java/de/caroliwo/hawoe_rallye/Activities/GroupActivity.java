@@ -50,8 +50,7 @@ public class GroupActivity extends AppCompatActivity {
         student = intentFromLogIn.getParcelableExtra("StudentData");
 
         // Gruppen holen
-//        groupsList = intentFromLogIn.getParcelableArrayListExtra("Groups"); <-------ALT
-        groupsList = viewModel.getGroupListLiveData().getValue(); // <----------------NEU
+        groupsList = viewModel.getGroupListLiveData().getValue();
         // Falls groupList noch nicht verfügbar leere ArrayList zuweisen (wird später vom Observer geupdated)
         if (groupsList == null) { groupsList = new ArrayList<>(); }
 

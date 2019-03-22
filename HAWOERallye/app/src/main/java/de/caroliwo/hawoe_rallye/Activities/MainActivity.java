@@ -42,8 +42,6 @@ import de.caroliwo.hawoe_rallye.Task;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
-//    private ArrayList<Student> studentList;
-//    private ArrayList<Task> taskList;
     Bundle bundle;
 
     @Override
@@ -129,19 +127,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Startseite
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new IntroductionFragment()).commit();
         Log.i("Test MainActivity", "2" );
-
-        //----------------------------WIRD ERSETZT DURCH VIEWMODEL-DATENZUGRIFF---------------------
-        //Intent (holen von Infos von LoadingActivity)
-        //Intent intent = getIntent();
-        //studentList = intent.getParcelableArrayListExtra("Students");
-        //taskList = intent.getParcelableArrayListExtra("Tasks");
-        //Log.i("Test MainActivity", "3 intent " + taskList.get(1).getName() );
-
-        //Bundle (senden der Infos an Fragments)
-        //bundle = new Bundle();
-        //bundle.putParcelableArrayList("Students", studentList);
-        //bundle.putParcelableArrayList("Tasks", taskList);
-        //Log.i("Test MainActivity", "4 bundle " + taskList.get(1).getName() );
     }
 
     //Reaktion bei Touch auf Zurück-Button
@@ -154,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    //Weiterleiten zum richtigen Fragment, bei Klick auf MenüItem
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 

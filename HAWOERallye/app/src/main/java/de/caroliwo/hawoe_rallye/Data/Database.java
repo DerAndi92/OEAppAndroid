@@ -4,6 +4,8 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
+//TODO Kommentar: Was passiert hier?
+
 @android.arch.persistence.room.Database(entities = {ConfigurationEntity.class, StudentEntity.class}, version = 3, exportSchema = false)
 public abstract class Database extends RoomDatabase {
 

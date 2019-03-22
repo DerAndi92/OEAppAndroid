@@ -1,6 +1,6 @@
 package de.caroliwo.hawoe_rallye.Fragments;
 
-
+//TODO: Kommentare auf deutsch, weil sie überall anders auch deutsch sind. Alternativ überall anders die Kommentare auf englisch.
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.graphics.Color;

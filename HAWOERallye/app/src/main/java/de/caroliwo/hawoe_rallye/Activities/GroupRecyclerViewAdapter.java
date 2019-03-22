@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,15 +20,9 @@ import java.util.ArrayList;
 
 import de.caroliwo.hawoe_rallye.Data.DataViewModel;
 import de.caroliwo.hawoe_rallye.Data.StudentEntity;
-import de.caroliwo.hawoe_rallye.DownloadJSONRetrofit;
 import de.caroliwo.hawoe_rallye.Group;
 import de.caroliwo.hawoe_rallye.R;
-import de.caroliwo.hawoe_rallye.Retrofit;
 import de.caroliwo.hawoe_rallye.Student;
-import de.caroliwo.hawoe_rallye.StudentAPI;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecyclerViewAdapter.GroupViewHolder> {
 
@@ -39,7 +32,6 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
     private Dialog groupDialog;
     private int groupID;
     private DataViewModel viewModel;
-    private DownloadJSONRetrofit downloadJSONRetrofit;
 
     public GroupRecyclerViewAdapter(Context context, ArrayList<Group> groupsList, Student student) {
         this.context = context;
@@ -55,11 +47,6 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
 
         // Viewmodel-Instanz holen
         viewModel = ViewModelProviders.of((GroupActivity) context).get(DataViewModel.class);
-
-        //Retrofit
-//        Retrofit retrofitClass = new Retrofit();
-        //Log.i("LoadingActivity", "6");
-//        downloadJSONRetrofit = retrofitClass.createlogInterceptor(context.getApplicationContext());
 
         // Gruppen-Dialog erstellen
         groupDialog = new Dialog(context);
@@ -107,8 +94,9 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
                             context.startActivity(intent);
                         }
                     });
-                    groupDialog.show();
+                    groupDialog.show();  //Dialog anzeigen
                 } else {
+                    //Wen die maximale Gruppenanzahl bereits erreicht ist:
                     Toast.makeText( context, "Gruppe ist voll", Toast.LENGTH_SHORT ).show();
                 }
             }
@@ -117,6 +105,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
 
     }
 
+//TODO Kommentar: Was passiert hier?
     public void setGroups(ArrayList<Group> groups) {
         this.groupsList.clear();
         this.groupsList.addAll(groups);
@@ -130,11 +119,13 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
         groupViewHolder.textView.setText(groupsList.get(i).getName());
     }
 
+    //TODO Kommentar: Was passiert hier?
     @Override
     public int getItemCount() {
         return groupsList.size();
     }
 
+    //TODO Kommentar: Was passiert hier?
     public static class GroupViewHolder extends RecyclerView.ViewHolder {
 
         private ConstraintLayout groupItemCL;
@@ -148,33 +139,5 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
             textView = itemView.findViewById(R.id.group_item_TV);
         }
     }
-
-
-    //----------------------------------------MIGRATED TO REPOSITORY--------------------------------
-
-    //POST Student zu Gruppe hinzufügen
-//   private void sendStudent(){
-//        Call<Student> call = downloadJSONRetrofit.sendStudent(student);
-//
-//        call.enqueue(new Callback<Student>() {
-//            @Override
-//            public void onResponse(Call<Student> call, Response<Student> response) {
-//
-//                if (!response.isSuccessful()) {
-//                    Log.i("ErrorRes:GroRecViewAdap", String.valueOf(response.code()));
-//                    return;
-//                }
-//                    Student studResponse = response.body();
-//
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Student> call, Throwable t) {
-//                // something went completely south (like no internet connection)
-//                Log.i("Error GroupRecViewAdap", t.getMessage());
-//            }
-//        });
-//    }
-
 }
 

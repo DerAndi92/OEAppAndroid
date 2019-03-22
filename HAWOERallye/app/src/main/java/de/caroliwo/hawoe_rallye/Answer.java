@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+//Klasse, mit der die Instanzen der Antworten der Tasks erstellt werden können
+
 public class Answer {
 
     @SerializedName("group")
@@ -14,7 +16,6 @@ public class Answer {
     private List<AnswerField> inputs;
 
     // Konstruktor
-
     public Answer(int groupID, int taskID, String password, List<AnswerField> inputs) {
         this.groupID = groupID;
         this.taskID = taskID;
@@ -22,9 +23,7 @@ public class Answer {
         this.inputs = inputs;
     }
 
-
     // Getter + Setter
-
     public int getGroupID() {
         return groupID;
     }

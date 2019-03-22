@@ -6,8 +6,6 @@ import android.arch.lifecycle.MutableLiveData;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.google.gson.Gson;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +13,6 @@ import javax.inject.Singleton;
 
 import de.caroliwo.hawoe_rallye.Answer;
 import de.caroliwo.hawoe_rallye.AnswerAPI;
-import de.caroliwo.hawoe_rallye.AnswerField;
 import de.caroliwo.hawoe_rallye.Configuration;
 import de.caroliwo.hawoe_rallye.ConfigurationAPI;
 import de.caroliwo.hawoe_rallye.DownloadJSONRetrofit;
@@ -524,10 +521,6 @@ public class DataRepository {
                 TaskAPI taskAPI = response.body();
                 Task responseTask = taskAPI.getTask();
                 Log.i("DataRepository", "fetchTask() response.body(): " + response.body());
-
-                // Task in taskDetailList LiveData-Objekt speichern
-//                addTaskToLiveDataList(responseTask, taskDetailList);
-//                Log.i("DataRepository", "fetchTask() taskDetailList: " + taskDetailList.getValue().toString());
 
                 // Taskdetails in existierendem Task-Objekt speichern
                 addDetailsToTask(responseTask);

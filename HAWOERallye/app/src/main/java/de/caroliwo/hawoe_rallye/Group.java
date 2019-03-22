@@ -1,13 +1,11 @@
 package de.caroliwo.hawoe_rallye;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.google.gson.annotations.SerializedName;
-
 import java.util.List;
 
-public class Group implements Parcelable {
+//Group-Klasse, mit der die Instanzen der einzelnen Gruppen erstellt werden können
+
+public class Group {
 
     @SerializedName("id")
     private int groupId;
@@ -68,42 +66,4 @@ public class Group implements Parcelable {
         this.studentList = studentList;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.groupId);
-        dest.writeString(this.name);
-        dest.writeString(this.color);
-        dest.writeInt(this.max_members);
-        dest.writeInt(this.members);
-        dest.writeTypedList(this.studentList);
-    }
-
-    public Group() {
-    }
-
-    protected Group(Parcel in) {
-        this.groupId = in.readInt();
-        this.name = in.readString();
-        this.color = in.readString();
-        this.max_members = in.readInt();
-        this.members = in.readInt();
-        this.studentList = in.createTypedArrayList(Student.CREATOR);
-    }
-
-    public static final Creator<Group> CREATOR = new Creator<Group>() {
-        @Override
-        public Group createFromParcel(Parcel source) {
-            return new Group(source);
-        }
-
-        @Override
-        public Group[] newArray(int size) {
-            return new Group[size];
-        }
-    };
 }
