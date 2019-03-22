@@ -91,7 +91,7 @@ public class DataRepository {
 
     public void removeStudentLiveData(Student student) {
         Log.i("DataRepository", "removeStudentLiveData() student: " + student.toString());
-        ArrayList<Student> tempList = this.studentList.getValue();
+        ArrayList<Student> tempList = new ArrayList<Student>(this.studentList.getValue());
         Log.i("DataRepository", "removeStudentLiveData() studentList.getValue(): " + this.studentList.getValue());
         tempList.remove(student);
         this.studentList.setValue(tempList);
@@ -99,7 +99,7 @@ public class DataRepository {
 
     public void changeStudentLiveData(Student newStudent) {
         Log.i("DataRepository", "changeStudent() student: " + newStudent.toString());
-        ArrayList<Student> tempList = this.studentList.getValue();
+        ArrayList<Student> tempList = new ArrayList<Student>(this.studentList.getValue());
         Log.i("DataRepository", "changeStudent() studentList.getValue(): " + this.studentList.getValue());
         for (Student student: tempList) {
             if (student.getStudentId() == newStudent.getStudentId()) removeStudentLiveData(student);
