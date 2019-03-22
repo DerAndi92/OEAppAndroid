@@ -56,7 +56,7 @@ public class TaskFragment extends Fragment {
     List<Field> fieldList;
     int taskID;
     String password;
-//    private CustomGestureDetector gDetector
+//    private CustomGestureDetector gDetector //TODO: fertig machen
 
 
     public TaskFragment() {
@@ -94,6 +94,7 @@ public class TaskFragment extends Fragment {
         password = ""; // TODO: Passwort-Field implementieren
     }
 
+    //TODO
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
