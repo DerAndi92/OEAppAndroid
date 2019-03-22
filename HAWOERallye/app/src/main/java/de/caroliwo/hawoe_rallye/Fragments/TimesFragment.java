@@ -18,34 +18,12 @@ import de.caroliwo.hawoe_rallye.Data.DataViewModel;
 import de.caroliwo.hawoe_rallye.R;
 import de.caroliwo.hawoe_rallye.Task;
 
-
 public class TimesFragment extends Fragment {
 
     private TimesAdapter timesAdapter;
     private ArrayList<Task> taskList;
     private ListView timesLV;
     private DataViewModel viewModel;
-
-
-    //TODO: icons erstellen in drawable, wenn es Bilder dafür gibt. Ansonsten muss ich gucken, wie man selbstgemalte icons integrieren kann
-    //
-    //ic_network_icon für Netzwerklabor: PC, Bildschirm, Nezt
-    //
-    //ic_video_icon für Videolabor : Kamera
-    //
-    //ic_bonus_icon für Bonusaufgabe : Geldsack, $-Zeichen
-    //
-    //ic_food_icon für Mensa: Teller, Besteck, irgendwas zu Essen
-    //
-    //ic_quiz_icon für Quiz: Fragezeichen
-    //
-    //ic_bib_icon für Bibliothek : Buch
-    //
-    //ic_electronic_icon für Elektrotechniklabor : Blitz
-    //
-    //ic_sound_icon für Tonlabor : Note, Notenschlüssel
-    //
-    //ic_light_icon für Lichtlabor : Glühbirne, Sonne
 
     @Nullable
     @Override
