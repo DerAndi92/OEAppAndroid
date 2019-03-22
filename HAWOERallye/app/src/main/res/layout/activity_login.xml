@@ -7,7 +7,7 @@
     android:background="@drawable/gradient">
 
     <ImageView
-        android:id="@+id/hawlogo"
+        android:id="@+id/logo"
         android:layout_width="0dp"
         android:layout_height="150dp"
         android:layout_marginStart="16dp"
@@ -17,7 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/gradient" />
+        app:srcCompat="@drawable/ic_logo_icon" />
 
     <TextView
         android:id="@+id/rallyeHeadline"
@@ -33,7 +33,7 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hawlogo" />
+        app:layout_constraintTop_toBottomOf="@+id/logo" />
 
     <TextView
         android:id="@+id/rallyeText"
@@ -92,7 +92,7 @@
         android:layout_height="30dp"
         android:layout_marginTop="8dp"
         android:background="#11000000"
-        android:textColor="@color/colorGroupWhite"
+        android:textColor="@color/colorText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lastnameET">
@@ -103,7 +103,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:entries="@array/subject_array"
-            android:textColor="@color/colorGroupWhite" />
+            android:textColor="@color/colorText" />
 
     </RelativeLayout>
 

@@ -74,7 +74,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:background="#11000000"
-            android:textColor="@color/colorGroupWhite"
+            android:textColor="@color/colorText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lastnameET">
@@ -88,7 +88,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_marginTop="0dp"
                     android:entries="@array/subject_array"
-                    android:textColor="@color/colorGroupWhite"
+                    android:textColor="@color/colorText"
                     tools:layout_editor_absoluteX="81dp"
                     tools:layout_editor_absoluteY="38dp" />
         </RelativeLayout>

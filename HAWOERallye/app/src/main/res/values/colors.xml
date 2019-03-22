@@ -5,14 +5,4 @@
     <color name="colorAccent">#00ffa1</color>
     <color name="colorText">#ffffff</color>
 
-    <color name="colorGroupRed">#ff0000</color>
-    <color name="colorGroupBlue">#0000ff</color>
-    <color name="colorGroupGreen">#00ff00</color>
-    <color name="colorGroupYellow">#ffff00</color>
-    <color name="colorGroupPink">#ff00ff</color>
-    <color name="colorGroupPurple">#9600c8</color>
-    <color name="colorGroupOrange">#ff7d00</color>
-    <color name="colorGroupSilver">#939393</color>
-    <color name="colorGroupBlack">#000000</color>
-    <color name="colorGroupWhite">#FF0000</color>
 </resources>
