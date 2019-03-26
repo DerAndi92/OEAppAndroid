@@ -15,7 +15,7 @@ public abstract class Database extends RoomDatabase {
 
     public abstract StudentDAO studDao();
 
-    //TODO: Was passiert hier?
+    // Methode um die existierende Instanz der Datenbank bereitzustellen
     static synchronized Database getInstance(Context context) {
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(), Database.class, "sqlite_database")

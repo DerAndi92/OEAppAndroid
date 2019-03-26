@@ -1,6 +1,5 @@
 package de.caroliwo.hawoe_rallye.Fragments;
 
-//TODO: Kommentare
 import android.app.Dialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -28,8 +27,6 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
 
     private Context context;
     private List<Task> taskList;
-    private Dialog taskDialog;
-    private boolean debug = false;
     private DataViewModel viewModel;
 
     public TasksRecyclerViewAdapter(Context context, List<Task> data) {
@@ -43,13 +40,11 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
     @NonNull
     @Override
     public TasksViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+
         View view = LayoutInflater.from(context).inflate(R.layout.item_task, viewGroup, false);
         final TasksViewHolder viewHolder = new TasksViewHolder(view);
 
-        //TODO: Manchmal öffnet er wenn man auf Poststelle klickt den Dialog für eine andere Aufgabe, z.B. Wettrennen usw.
-        taskDialog = new Dialog(context);
-        taskDialog.setContentView(R.layout.dialog_tasks);
-
+        // Click-Listener für Aufgaben
         viewHolder.taskItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,6 +53,7 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
                 final Task task = taskList.get(viewHolder.getAdapterPosition());
                 Log.i("TasksRVAdapter-Log", "OnClick() task: " + task.toString());
 
+                // Fragment für Aufgabe öffnen
                 openTaskFragment(task);
             }
         });
@@ -65,9 +61,13 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
         return viewHolder;
     }
 
+
+    // Wird für jede Aufgabe ausgeführt
     @Override
     public void onBindViewHolder(@NonNull TasksViewHolder tasksViewHolder, int i) {
+        // Namen der Aufgabe zu TextView zuweisen
         tasksViewHolder.textView.setText(taskList.get(i).getName());
+        // Icon der Aufgabe zuweisen
         int id = context.getResources().getIdentifier(taskList.get(i).getIcon(), "drawable", "de.caroliwo.hawoe_rallye");
         tasksViewHolder.imageView.setImageResource(id);
     }
@@ -77,32 +77,38 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
         return taskList.size();
     }
 
+    // Klasse für Aufgaben-ViewHolder
     public static class TasksViewHolder extends RecyclerView.ViewHolder {
 
+        // Variablen für die Views einer Aufgabe
         private TextView textView;
         private ConstraintLayout taskItem;
         private ImageView imageView;
 
         public TasksViewHolder(@NonNull View itemView) {
             super(itemView);
+
+            // Variablen den entsprechenden Views zuweisen
             taskItem = (ConstraintLayout) itemView.findViewById(R.id.task_item_CL);
             textView = (TextView) itemView.findViewById(R.id.task_item_TW);
             imageView = (ImageView) itemView.findViewById(R.id.task_item_IW);
         }
     }
 
+    // Aufgaben updaten falls es neue/veränderte gibt
     public void setTasks(ArrayList<Task> tasks) {
         this.taskList.clear();
         this.taskList.addAll(tasks);
         notifyDataSetChanged();
     }
 
+    // Fragment für angeklickte Aufgabe öffnen
     private void openTaskFragment(Task task) {
         TaskFragment fragment = TaskFragment.newInstance(task);
         FragmentManager fragmentManager = ((MainActivity)context).getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_right);
-        transaction.addToBackStack(null);
+        transaction.addToBackStack(null); // Damit man mit Back-Button hierher zurück kommt
         transaction.add(R.id.fragment_container, fragment, "TASK_FRAGMENT").commit();
     }
 }

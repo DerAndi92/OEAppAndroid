@@ -34,7 +34,8 @@ public class TimesFragment extends Fragment {
 
         // Viewmodel-Instanz holen
         viewModel = ViewModelProviders.of((MainActivity) getActivity()).get(DataViewModel.class);
-        // Tasks holen
+
+        // Tasks holen (beinhalten die Zeiten)
         viewModel.fetchTasks(viewModel.getStudent().getGroupId());
 
         //ListView erstellen

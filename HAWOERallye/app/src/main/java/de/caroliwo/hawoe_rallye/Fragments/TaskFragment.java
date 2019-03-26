@@ -1,6 +1,5 @@
 package de.caroliwo.hawoe_rallye.Fragments;
 
-//TODO: Kommentare auf deutsch, weil sie überall anders auch deutsch sind. Alternativ überall anders die Kommentare auf englisch.
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.graphics.Color;
@@ -12,7 +11,9 @@ import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
+import android.text.method.PasswordTransformationMethod;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -41,11 +42,7 @@ import de.caroliwo.hawoe_rallye.R;
 import de.caroliwo.hawoe_rallye.Student;
 import de.caroliwo.hawoe_rallye.Task;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link TaskFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+// Fragment um eine einzelne Aufgabe darzustellen
 public class TaskFragment extends Fragment {
 
     // the fragment initialization parameters
@@ -56,20 +53,13 @@ public class TaskFragment extends Fragment {
     List<Field> fieldList;
     int taskID;
     String password;
-//    private CustomGestureDetector gDetector //TODO: fertig machen
 
 
     public TaskFragment() {
-        // Required empty public constructor
+        // Benötigter leerer Konstruktor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param task Parameter 1.
-     * @return A new instance of fragment TaskFragment.
-     */
+    // Methode um eine neue Instanz dieses Fragments bereitzustellen
     public static TaskFragment newInstance(Task task) {
         TaskFragment fragment = new TaskFragment();
         Bundle args = new Bundle();
@@ -86,15 +76,13 @@ public class TaskFragment extends Fragment {
         }
         // Viewmodel-Instanz holen
         viewModel = ViewModelProviders.of((MainActivity) getActivity()).get(DataViewModel.class);
-//        gDetector = new GestureDetectorCompat(getContext(), new CustomGestureDetector());
 
         // Variablen zuweisen
         fieldList = task.getFieldList();
         taskID = task.getId();
-        password = ""; // TODO: Passwort-Field implementieren
+        password = "";
     }
 
-    //TODO
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -147,10 +135,40 @@ public class TaskFragment extends Fragment {
         fieldsContainer.removeAllViews();
 
 
+
         for (final Field field : fieldList) {
             String type = field.getType();
             switch (type) {
+
                 case "button":
+
+                    // Passwort-Feld einfügen falls benötigt
+                    if (task.getPassword()) {
+                        EditText passwordField = new EditText(context);
+                        passwordField.setHint("Passwort");
+                        passwordField.setTextColor(context.getResources().getColor(R.color.colorText));
+                        passwordField.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                        passwordField.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                            }
+
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+
+                                // Nach Änderung Passwort in Variable speichern
+                                password = s.toString();
+                            }
+                        });
+                        fieldsContainer.addView(passwordField);
+                    }
+
                     Button button = new Button(context);
                     button.setText(field.getValue());
                     button.setTextColor(context.getResources().getColor(R.color.colorText));
@@ -166,6 +184,7 @@ public class TaskFragment extends Fragment {
                         }
                     });
                     break;
+
                 case "text":
                     TextView textV = new TextView(context);
                     textV.setText(field.getValue());
@@ -173,6 +192,7 @@ public class TaskFragment extends Fragment {
                     fieldsContainer.addView(textV, layoutParams);
                     Log.i("TasksRVAdapter-Switch", "TV created");
                     break;
+
                 case "inputField":
                     EditText editText = new EditText(context);
                     if (field.getValue() != null) {
@@ -200,6 +220,7 @@ public class TaskFragment extends Fragment {
                     fieldsContainer.addView(editText, layoutParams);
                     Log.i("TasksRVAdapter-Switch", "ET created");
                     break;
+
                 case "inputText":
                     EditText editTextBig = new EditText(context);
                     if (field.getValue() != null) {
@@ -228,6 +249,7 @@ public class TaskFragment extends Fragment {
                     fieldsContainer.addView(editTextBig, layoutParams);
                     Log.i("TasksRVAdapter-Switch", "ET big created");
                     break;
+
                 case "inputInvisible":
                     EditText editTextInvisible = new EditText(context);
                     if (field.getValue() != null) {
@@ -237,10 +259,13 @@ public class TaskFragment extends Fragment {
                     fieldsContainer.addView(editTextInvisible);
                     Log.i("TasksRVAdapter-Switch", "ET invisible created");
                     break;
+
                 default:
                     Log.i("TasksRVAdapter-Switch", "Field type is not defined");
             }
         }
+
+
 
 
         return view;
@@ -264,228 +289,4 @@ public class TaskFragment extends Fragment {
 
 
 
-//----------------------------NOCH NICHT IMPLEMENTIERT----------------------------------------------
-
-
-    private class CustomGestureDetector extends GestureDetector.SimpleOnGestureListener {
-
-        private static final int SWIPE_MIN_DISTANCE = 120;
-        private static final int SWIPE_THRESHOLD_VELOCITY = 100;
-
-        @Override
-        public boolean onDown(MotionEvent e) {
-            return true;
-        }
-
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                getFragmentManager().popBackStack();
-                return true;
-            }
-            return false;
-        }
-    }
-
-
-    private class CustomConstraintLayout extends ConstraintLayout {
-
-        private int mTouchSlop;
-        private boolean mIsScrolling;
-        ViewConfiguration vc = ViewConfiguration.get(getContext());
-        private int mSlop = vc.getScaledTouchSlop();
-        private int mMinFlingVelocity = vc.getScaledMinimumFlingVelocity();
-        private int mMaxFlingVelocity = vc.getScaledMaximumFlingVelocity();
-        float downX;
-
-
-        public CustomConstraintLayout(Context context) {
-            super(context);
-        }
-
-        public CustomConstraintLayout(Context context, AttributeSet attrs) {
-            super(context, attrs);
-        }
-
-        public CustomConstraintLayout(Context context, AttributeSet attrs, int defStyleAttr) {
-            super(context, attrs, defStyleAttr);
-        }
-
-
-        @Override
-        public boolean onInterceptTouchEvent(MotionEvent ev) {
-            /*
-             * This method JUST determines whether we want to intercept the motion.
-             * If we return true, onTouchEvent will be called and we do the actual
-             * scrolling there.
-             */
-
-            Log.i("TaskFragment", "CustomConstraintLayout.onInterceptTouchEvent");
-
-            final int action = ev.getActionMasked();
-
-            // Always handle the case of the touch gesture being complete.
-            if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
-                // Release the scroll.
-                mIsScrolling = false;
-                return false; // Do not intercept touch event, let the child handle it
-            }
-
-            switch (action) {
-                case MotionEvent.ACTION_DOWN: {
-                    Log.i("TaskFragment", "CustomConstraintLayout.OnInterceptTouchEvent.ACTION_DOWN");
-                    downX = ev.getX();
-                }
-
-                case MotionEvent.ACTION_MOVE: {
-                    Log.i("TaskFragment", "CustomConstraintLayout.OnInterceptTouchEvent.ACTION_MOVE");
-                    if (mIsScrolling) {
-                        // We're currently scrolling, so yes, intercept the
-                        // touch event!
-                        return true;
-                    }
-
-                    // If the user has dragged her finger horizontally more than
-                    // the touch slop, start the scroll
-
-                    final float xDiff = ev.getX() - ev.getHistoricalX(0);
-
-                    // Touch slop should be calculated using ViewConfiguration
-                    // constants.
-                    if (xDiff > mTouchSlop) {
-                        // Start scrolling!
-                        mIsScrolling = true;
-                        return true;
-                    }
-                    break;
-                }
-
-            }
-
-            // In general, we don't want to intercept touch events. They should be
-            // handled by the child view.
-            return false;
-        }
-
-        @Override
-        public boolean onTouchEvent(MotionEvent ev) {
-            // Here we actually handle the touch event (e.g. if the action is ACTION_MOVE,
-            // scroll this container).
-            // This method will only be called if the touch event was intercepted in
-            // onInterceptTouchEvent
-
-            switch(ev.getAction()) {
-                case MotionEvent.ACTION_MOVE: {
-
-                    float deltaX = ev.getRawX() - downX;
-                    if (Math.abs(deltaX) > mSlop && deltaX < 0) {
-                        Log.i("TaskFragment", "CustomConstraintLayout.onTouchEvent.ACTION_LEFT");
-                        getFragmentManager().popBackStack();
-                        return true;
-                    }
-                }
-//--------------------------------------------------------------------------------------------------
-//                case MotionEvent.ACTION_UP: {
-//                    if (mMinFlingVelocity <= velocityX && velocityX <= mMaxFlingVelocity
-//                            && velocityY < velocityX) {
-//                        // The criteria have been satisfied, do something
-//                    }
-//                }
-//--------------------------------------------------------------------------------------------------
-            }
-
-
-            return false;
-        }
-    }
-
-//--------------------------------------------------------------------------------------------------
-//        float mLastX;
-//        float mLastY;
-//        float mStartY;
-//        boolean mIsBeingDragged;
-//
-//
-//        public CustomConstraintLayout(Context context) {
-//            super(context);
-//            gDetector = new CustomGestureDetector();
-//            setOnTouchListener();
-//        }
-//
-//        public CustomConstraintLayout(Context context, AttributeSet attrs) {
-//            super(context, attrs);
-//            gDetector = new CustomGestureDetector();
-//        }
-//
-//        public CustomConstraintLayout(Context context, AttributeSet attrs, int defStyleAttr) {
-//            super(context, attrs, defStyleAttr);
-//            gDetector = new CustomGestureDetector();
-//        }
-//
-//        @Override
-//        public boolean onInterceptTouchEvent(MotionEvent event) {
-//            switch (event.getAction()) {
-//                case MotionEvent.ACTION_DOWN:
-//                    mLastX = event.getX();
-//                    mLastY = event.getY();
-//                    mStartY = mLastY;
-//                    break;
-//                case MotionEvent.ACTION_CANCEL:
-//                case MotionEvent.ACTION_UP:
-//                    mIsBeingDragged = false;
-//                    break;
-//                case MotionEvent.ACTION_MOVE:
-//                    float x = event.getX();
-//                    float y = event.getY();
-//                    float xDelta = Math.abs(x - mLastX);
-//                    float yDelta = Math.abs(y - mLastY);
-//
-//                    float yDeltaTotal = y - mStartY;
-//                    if (yDelta < xDelta && Math.abs(yDeltaTotal) > mTouchSlop) {
-//                        mIsBeingDragged = true;
-//                        mStartY = y;
-//                        return true;
-//                    }
-//                    break;
-//            }
-//
-//            return false;
-//        }
-//
-//        @Override
-//        public boolean onTouchEvent(MotionEvent event) {
-//            switch (event.getAction()) {
-//                case MotionEvent.ACTION_CANCEL:
-//                case MotionEvent.ACTION_UP:
-//                    mIsBeingDragged = false;
-//                    break;
-//                case MotionEvent.ACTION_MOVE:
-//                    float x = event.getX();
-//                    float y = event.getY();
-//
-//                    float xDelta = Math.abs(x - mLastX);
-//                    float yDelta = Math.abs(y - mLastY);
-//
-//                    float yDeltaTotal = y - mStartY;
-//                    if (!mIsBeingDragged && yDelta > xDelta && Math.abs(yDeltaTotal) > mTouchSlop) {
-//                        mIsBeingDragged = true;
-//                        mStartY = y;
-//                        yDeltaTotal = 0;
-//                    }
-//                    if (yDeltaTotal < 0)
-//                        yDeltaTotal = 0;
-//
-//                    if (mIsBeingDragged) {
-//                        scrollTo(0, yDeltaTotal);
-//                    }
-//
-//                    mLastX = x;
-//                    mLastY = y;
-//                    break;
-//            }
-//
-//            return true;
-//        }
-//
-//    }
 }

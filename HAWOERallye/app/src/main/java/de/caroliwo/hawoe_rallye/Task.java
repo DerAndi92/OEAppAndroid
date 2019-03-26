@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 //Klasse, mit der die Instanzen der einzelnen Aufgaben erstellt werden können
-//TODO: Parcelable nötig? Wenn hier nicht, dann auch in Times löschen
 
 public class Task implements Parcelable {
 
@@ -27,7 +26,7 @@ public class Task implements Parcelable {
     private int order;
 
 
-    //GETTER- + SETTER-Methoden
+    //GETTER + SETTER-Methoden
     public int getId() {
         return taskId;
     }

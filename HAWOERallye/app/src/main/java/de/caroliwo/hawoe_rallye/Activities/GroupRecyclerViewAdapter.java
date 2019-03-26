@@ -125,7 +125,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
         return groupsList.size();
     }
 
-    //TODO Kommentar: Was passiert hier?
+    // ViewHolder für die einzelnen Gruppen-Views
     public static class GroupViewHolder extends RecyclerView.ViewHolder {
 
         private ConstraintLayout groupItemCL;
