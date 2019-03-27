@@ -80,9 +80,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final TextView navTeam = headerLayout.findViewById(R.id.navTeam);
         Button logOutButton = headerLayout.findViewById(R.id.logOutButton);
 
-        // Eigenen Namen (und ID zu testzwecken) in nav_header schreiben
+        // Eigenen Namen in nav_header schreiben
         final StudentEntity studentEntity = viewModel.getStudent();
-        navName.setText(studentEntity.getFirst_name() + " " + studentEntity.getLast_name() + studentEntity.getStudentId());
+        navName.setText(studentEntity.getFirst_name() + " " + studentEntity.getLast_name());
 
         // Eigenen Datenbankeintrag observieren & bei Änderungen automatisch nav_header updaten
         viewModel.getStudentLiveData().observe(this, new Observer<StudentEntity>() {
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onChanged(@Nullable StudentEntity studentEntity) {
 
                 // Check auf nicht-null weil der Observer sonst im Moment eines LogOuts versucht auf die bereits gelöschte studentEntity zuzugreifen
-                if (studentEntity != null ) { navName.setText(studentEntity.getFirst_name() + " " + studentEntity.getLast_name() + studentEntity.getStudentId()); }
+                if (studentEntity != null ) { navName.setText(studentEntity.getFirst_name() + " " + studentEntity.getLast_name()); }
             }
         });
 

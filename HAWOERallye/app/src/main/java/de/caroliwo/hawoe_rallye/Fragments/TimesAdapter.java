@@ -58,7 +58,7 @@ public class TimesAdapter extends ArrayAdapter {
         if(time_from!=null && time_to!=null){
             timeTV.setText(time_from + "-" + time_to + " Uhr");
         } else {
-            timeTV.setText(""); // TODO: Sollte hier dann nicht "Durchgehend geöffnet" stehen? Ansonsten aus TimesFragment streichen (?)
+            timeTV.setText("Durchgehend geöffnet");
         }
         Log.i("Test TimesAdapter", "4" );
 
