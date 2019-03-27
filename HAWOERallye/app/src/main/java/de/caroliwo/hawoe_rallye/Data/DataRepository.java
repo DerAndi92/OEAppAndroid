@@ -322,7 +322,7 @@ public class DataRepository {
                 deleteAllConfigs();
 
                 // Neue Konfiguration in Datenbank speichern
-                insertConfig(new ConfigurationEntity("bla"/*configuration.getPassword()*/, configuration.getMaxTime()));
+                insertConfig(new ConfigurationEntity(configuration.getPassword(), configuration.getMaxTime()));
             }
 
             @Override
