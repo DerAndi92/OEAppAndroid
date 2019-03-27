@@ -72,8 +72,6 @@ public class DataRepository {
         // Retrofit instanziieren
         Retrofit retrofitClass = new Retrofit();
         downloadJSONRetrofit = retrofitClass.createlogInterceptor(application);
-
-
     }
 
     // Methoden um LiveData von API-Calls lokal zu ändern
@@ -106,6 +104,30 @@ public class DataRepository {
         }
         addStudentLiveData(newStudent);
     }
+
+    public void addGroupLiveData(Group group) {
+        ArrayList<Group> tempList = new ArrayList<>();
+        if(this.groupList.getValue() != null) {
+            tempList = this.groupList.getValue();
+        }
+        tempList.add(group);
+        this.groupList.setValue(tempList);
+    }
+
+    public void removeGroupLiveData(Group group) {
+        ArrayList<Group> tempList = new ArrayList<Group>(this.groupList.getValue());
+        tempList.remove(group);
+        this.groupList.setValue(tempList);
+    }
+
+    public void changeGroupLiveData(Group newGroup) {
+        ArrayList<Group> tempList = new ArrayList<Group>(this.groupList.getValue());
+        for (Group group : tempList) {
+            if (group.getGroupId() == newGroup.getGroupId()) removeGroupLiveData(group);
+        }
+        addGroupLiveData(newGroup);
+    }
+
 
     public void addTaskToLiveDataList(Task task, MutableLiveData<ArrayList<Task>> list) {
         Log.i("DataRepository", "addTaskToLiveDataList() task: " + task.toString());
@@ -369,6 +391,39 @@ public class DataRepository {
         });
     }
 
+    //changeGroup
+    public void changeGroupName (final Group group) {
+
+        Call<GroupAPI> call = downloadJSONRetrofit.changeGroup(group.getGroupId(), group);
+
+        call.enqueue(new Callback<GroupAPI>() {
+            @Override
+            public void onResponse(Call<GroupAPI> call, Response<GroupAPI> response) {
+
+                if (!response.isSuccessful()) {
+                    Log.i("TEST ErrorResponse: ", String.valueOf(response.code()));
+                    return;
+                }
+
+                // Gruppe aus Response holen
+                GroupAPI groupResponseAPI = response.body();
+                Group groupResponse = groupResponseAPI.getGroup();
+                Log.i("DataRepository", "changeGroupName() response: " + response.toString());
+                Log.i("DataRepository", "changeGroupName() response.body(): " + response.body().toString());
+                Log.i("DataRepository", "changeGroupName()  studResponse: " + groupResponse.toString());
+
+                // Gruppenname ändern
+                changeGroupLiveData(groupResponse);
+            }
+
+            @Override
+            public void onFailure(Call<GroupAPI> call, Throwable t) {
+                // something went completely south (like no internet connection)
+                Log.i("TEST Error", t.getMessage() + "Error");
+            }
+        });
+    }
+
     public boolean groupsAreFetched() {
         Log.i("DataRepository", "groupList != null: " + (groupList != null));
         return groupList != null;
@@ -595,6 +650,4 @@ public class DataRepository {
             }
         });
     }
-
-
 }

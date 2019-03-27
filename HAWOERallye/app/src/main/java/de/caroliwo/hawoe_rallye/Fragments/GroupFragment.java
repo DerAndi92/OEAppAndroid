@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 import de.caroliwo.hawoe_rallye.Activities.MainActivity;
 import de.caroliwo.hawoe_rallye.Data.DataViewModel;
+import de.caroliwo.hawoe_rallye.Group;
 import de.caroliwo.hawoe_rallye.R;
 import de.caroliwo.hawoe_rallye.Student;
 
@@ -43,6 +44,8 @@ public class GroupFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_group, container,false);
 
+        Button changeGroupNameBtn = rootView.findViewById(R.id.groupNameBTN);
+        final EditText changeGroupNameET = rootView.findViewById(R.id.groupNameET);
         Button addStudentBtn = rootView.findViewById(R.id.addStudentBTN);
         studentsLV = rootView.findViewById(R.id.membersLV);
 
@@ -50,6 +53,18 @@ public class GroupFragment extends Fragment {
         viewModel = ViewModelProviders.of((MainActivity) getActivity()).get(DataViewModel.class);
         final Integer groupId = viewModel.getStudent().getGroupId();
         viewModel.fetchGroup(groupId);
+
+        //
+        changeGroupNameET.setText("");
+
+        //Gruppenname ändern
+        changeGroupNameBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Group group = new Group(groupId,changeGroupNameET.getText().toString());
+                viewModel.changeGroupName(group);
+            }
+        });
 
         // studentList holen
         studentList = viewModel.getStudentListLiveData().getValue();

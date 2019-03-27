@@ -11,10 +11,24 @@ public class Group {
     private int groupId;
     private String name;
     private String color;
-    private int max_members;
-    private int members;
+    private Integer max_members;
+    private Integer members;
     @SerializedName("students")
     private List<Student> studentList;
+
+    public Group(int groupId, String name, String color, int max_members, int members, List<Student> studentList) {
+        this.groupId = groupId;
+        this.name = name;
+        this.color = color;
+        this.max_members = max_members;
+        this.members = members;
+        this.studentList = studentList;
+    }
+
+    public Group(int groupId, String name) {
+        this.groupId = groupId;
+        this.name = name;
+    }
 
 
     //GETTER + SETTER

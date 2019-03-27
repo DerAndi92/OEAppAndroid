@@ -264,10 +264,6 @@ public class TaskFragment extends Fragment {
                     Log.i("TasksRVAdapter-Switch", "Field type is not defined");
             }
         }
-
-
-
-
         return view;
     }
 

@@ -28,8 +28,8 @@ public interface DownloadJSONRetrofit {
     Call<GroupAPI> getGroup (@Path("groupID") int groupID);
 
     //Gruppe bearbeiten
-    @PUT ("group/{groupID}")
-    Call<Group> changeGroup(@Path("groupID") int groupID, @Body Group group);
+    @PATCH ("group/{groupID}")
+    Call<GroupAPI> changeGroup(@Path("groupID") int groupID, @Body Group group);
 
     //---------------Students----------------
     //Studierenden hinzufügen

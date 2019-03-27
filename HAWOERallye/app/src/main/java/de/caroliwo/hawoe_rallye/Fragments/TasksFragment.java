@@ -74,7 +74,7 @@ public class TasksFragment extends Fragment {
                 taskList = viewModel.getTaskListLiveData().getValue();
 
                     // Adapter updaten
-                    recyclerViewAdapter.setTasks(taskList/*, taskDetailList*/);
+                    recyclerViewAdapter.setTasks(taskList/*, taskDetailList*/); //TODO: tasktDetailList???????????????
                     if (debug) Log.i("TasksFragment-Log", "Tasks updated by Observer: " + tasks.toString());
             }
         });

@@ -91,6 +91,10 @@
                     android:textColor="@color/colorText"
                     tools:layout_editor_absoluteX="81dp"
                     tools:layout_editor_absoluteY="38dp" />
+
+                <!-- TODO: Spinner textColor= weiß -->
+                <!-- TODO: Spinner nur Auswahl zwischen MT und MS (Studiengang wählen soll weg) -->
+
         </RelativeLayout>
 
         <Button

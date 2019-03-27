@@ -105,6 +105,8 @@
             android:entries="@array/subject_array"
             android:textColor="@color/colorText" />
 
+        <!--TODO: Spinner textColor soll weiß sein -->
+
     </RelativeLayout>
 
     <EditText

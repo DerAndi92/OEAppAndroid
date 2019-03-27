@@ -68,6 +68,8 @@ public class DataViewModel extends AndroidViewModel {
 
     public void fetchConfig() { repository.fetchConfig(); }
 
+    public void changeGroupName(Group group) { repository.changeGroupName(group); }
+
     public boolean groupsAreFetched() { return repository.groupsAreFetched(); }
 
     public void deleteStudent(int studentID) { repository.deleteStudent(studentID); }

@@ -66,6 +66,9 @@
     <!--group_fragment-->
     <string name="headline_group">DEINE GRUPPE</string>
     <string name="change">ÄNDERN</string>
+    <string name="changeName">GRUPPENNAME ÄNDERN</string>
+    <string name="changeNameText">Hier könnt ihr euren Gruppennamen ändern.</string>
+    <string name="newMemberText">Hier könnt ihr Mitglieder bearbeiten oder hinzufügen.</string>
     <string name="addStudent">PERSON HINZUFÜGEN</string>
 
     <!--fragment_impressum-->
