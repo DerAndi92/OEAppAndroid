@@ -70,6 +70,10 @@
     <string name="changeNameText">Hier könnt ihr euren Gruppennamen ändern.</string>
     <string name="newMemberText">Hier könnt ihr Mitglieder bearbeiten oder hinzufügen.</string>
     <string name="addStudent">PERSON HINZUFÜGEN</string>
+    <string-array name="subject_array2">
+        <item>Medientechnik</item>
+        <item>Media Systems</item>
+    </string-array>
 
     <!--fragment_impressum-->
     <string name="headline_impressum">IMPRESSUM</string>

@@ -38,6 +38,7 @@
             android:ems="10"
             android:fontFamily="@font/open_sans"
             android:hint="@string/nameFieldPlaceholder"
+            android:textColorHint="@color/colorText"
             android:inputType="textPersonName"
             android:textColor="@color/colorText"
             app:layout_constraintEnd_toEndOf="parent"
@@ -59,6 +60,7 @@
             android:ems="10"
             android:fontFamily="@font/open_sans"
             android:hint="@string/lastnameFieldPlaceholder"
+            android:textColorHint="@color/colorText"
             android:inputType="textPersonName"
             android:textColor="@color/colorText"
             app:layout_constraintBottom_toTopOf="@+id/relativeLayout"
@@ -81,19 +83,17 @@
 
                 <Spinner
                     android:id="@+id/MTMS_spinner"
-                    style="@style/Widget.AppCompat.Light.Spinner.DropDown.ActionBar"
+                    android:theme="@style/mySpinnerItemStyle"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
 
                     android:layout_alignParentTop="true"
                     android:layout_marginTop="0dp"
-                    android:entries="@array/subject_array"
+                    android:entries="@array/subject_array2"
                     android:textColor="@color/colorText"
+                    android:popupBackground="@color/colorPrimaryDark"
                     tools:layout_editor_absoluteX="81dp"
                     tools:layout_editor_absoluteY="38dp" />
-
-                <!-- TODO: Spinner textColor= weiß -->
-                <!-- TODO: Spinner nur Auswahl zwischen MT und MS (Studiengang wählen soll weg) -->
 
         </RelativeLayout>
 

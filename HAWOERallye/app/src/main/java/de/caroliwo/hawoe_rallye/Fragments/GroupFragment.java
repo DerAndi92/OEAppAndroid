@@ -3,6 +3,7 @@ package de.caroliwo.hawoe_rallye.Fragments;
 import android.app.Dialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -54,10 +55,19 @@ public class GroupFragment extends Fragment {
         final Integer groupId = viewModel.getStudent().getGroupId();
         viewModel.fetchGroup(groupId);
 
-        //
-        changeGroupNameET.setText("");
+        // aktuellen Gruppennamen in EditText schreiben
+        viewModel.getGroupListLiveData().observe(this, new Observer<ArrayList<Group>>() {
+            @Override
+            public void onChanged(@Nullable ArrayList<Group> groups) {
+                for (Group group: groups) {
+                    if (groupId == group.getGroupId()) {
+                        changeGroupNameET.setText(group.getName());
+                    }
+                }
+            }
+        });
 
-        //Gruppenname ändern
+        // Gruppenname ändern
         changeGroupNameBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

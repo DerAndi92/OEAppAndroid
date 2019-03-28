@@ -49,6 +49,8 @@ public class DataRepository {
     private DownloadJSONRetrofit downloadJSONRetrofit;
 
 
+
+
     // Konstruktor
     public DataRepository(Application application) {
 
@@ -72,6 +74,8 @@ public class DataRepository {
         // Retrofit instanziieren
         Retrofit retrofitClass = new Retrofit();
         downloadJSONRetrofit = retrofitClass.createlogInterceptor(application);
+
+
     }
 
     // Methoden um LiveData von API-Calls lokal zu ändern

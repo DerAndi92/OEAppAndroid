@@ -25,7 +25,7 @@ public class TasksFragment extends Fragment {
 
     View v;
     private RecyclerView recyclerView;
-    private ArrayList<Task> taskList; // <------Liste mit allen Aufgaben der Gruppe
+    private ArrayList<Task> taskList; // <------Liste mit allen Aufgaben + Aufgabendetails der Gruppe
     private boolean debug = false;
     private DataViewModel viewModel;
 
@@ -74,7 +74,7 @@ public class TasksFragment extends Fragment {
                 taskList = viewModel.getTaskListLiveData().getValue();
 
                     // Adapter updaten
-                    recyclerViewAdapter.setTasks(taskList/*, taskDetailList*/); //TODO: tasktDetailList???????????????
+                    recyclerViewAdapter.setTasks(taskList);
                     if (debug) Log.i("TasksFragment-Log", "Tasks updated by Observer: " + tasks.toString());
             }
         });

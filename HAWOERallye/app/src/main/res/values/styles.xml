@@ -14,4 +14,8 @@
         <item name="listPreferredItemHeightSmall">100dp</item><!-- item size in menu for older APIs -->
     </style>
 
+    <style name="mySpinnerItemStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
+        <item name="android:textColor">@color/colorText</item>
+    </style>
+
 </resources>
