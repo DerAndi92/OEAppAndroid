@@ -44,11 +44,15 @@ public class GroupFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_group, container,false);
-
-        Button changeGroupNameBtn = rootView.findViewById(R.id.groupNameBTN);
-        final EditText changeGroupNameET = rootView.findViewById(R.id.groupNameET);
-        Button addStudentBtn = rootView.findViewById(R.id.addStudentBTN);
         studentsLV = rootView.findViewById(R.id.membersLV);
+        View headerView = inflater.inflate(R.layout.group_fragment_header, null);
+        studentsLV.addHeaderView(headerView);
+
+
+        Button changeGroupNameBtn = headerView.findViewById(R.id.groupNameBTN);
+        final EditText changeGroupNameET = headerView.findViewById(R.id.groupNameET);
+        Button addStudentBtn = headerView.findViewById(R.id.addStudentBTN);
+
 
         // Viewmodel-Instanz aus MainActivity holen
         viewModel = ViewModelProviders.of((MainActivity) getActivity()).get(DataViewModel.class);

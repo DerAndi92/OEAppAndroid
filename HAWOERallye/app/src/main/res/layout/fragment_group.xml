@@ -4,126 +4,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient">
+    android:background="@drawable/gradient"
+    android:paddingBottom="16dp">
 
-    <ScrollView
+    <TextView
+        android:id="@+id/headlineTV"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/open_sans_bold"
+        android:text="@string/group"
+        android:textColor="@color/colorText"
+        android:textSize="36sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <android.support.constraint.ConstraintLayout
+
+    <ListView
+        android:id="@+id/membersLV"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:headerDividersEnabled="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headlineTV">
 
-        <Button
-            android:id="@+id/addStudentBTN"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/buttonshape"
-            android:fontFamily="@font/open_sans"
-            android:text="@string/addStudent"
-            android:textAlignment="center"
-            android:textColor="@color/colorText"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/newMemberTV" />
-
-        <EditText
-            android:id="@+id/groupNameET"
-            style="@style/Base.Widget.MaterialComponents.TextInputEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:ems="10"
-            android:fontFamily="@font/open_sans"
-            android:hint="Gruppenname"
-            android:inputType="text"
-            android:textColor="@color/colorText"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/groupNameTV" />
-
-        <ListView
-            android:id="@+id/membersLV"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addStudentBTN">
-
-        </ListView>
-
-        <TextView
-            android:id="@+id/groupNameTV"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/open_sans"
-            android:text="@string/changeNameText"
-            android:textColor="@color/colorText"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/headlineTV" />
-
-        <TextView
-            android:id="@+id/headlineTV"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:fontFamily="@font/open_sans_bold"
-            android:text="@string/group"
-            android:textColor="@color/colorText"
-            android:textSize="36sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/newMemberTV"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/open_sans"
-            android:text="@string/newMemberText"
-            android:textColor="@color/colorText"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/groupNameBTN" />
-
-        <Button
-            android:id="@+id/groupNameBTN"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/buttonshape"
-            android:fontFamily="@font/open_sans"
-            android:text="@string/changeName"
-            android:textAlignment="center"
-            android:textColor="@color/colorText"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/groupNameET" />
-    </android.support.constraint.ConstraintLayout>
-
-    </ScrollView>
-
+    </ListView>
     <!-- TODO: Aktuellen Gruppennamen in EditText einfügen -->
     <!-- TODO: Scrolling aller Seitenelemente statt nur der ListView -->
 
