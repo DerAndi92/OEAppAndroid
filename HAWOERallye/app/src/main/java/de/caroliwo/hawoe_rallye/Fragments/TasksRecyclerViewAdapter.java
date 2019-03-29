@@ -1,9 +1,13 @@
 package de.caroliwo.hawoe_rallye.Fragments;
 
 import android.app.Dialog;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.graphics.Color;
+import android.media.Image;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -57,10 +61,8 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
                 openTaskFragment(task);
             }
         });
-
         return viewHolder;
     }
-
 
     // Wird für jede Aufgabe ausgeführt
     @Override
@@ -70,6 +72,22 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
         // Icon der Aufgabe zuweisen
         int id = context.getResources().getIdentifier(taskList.get(i).getIcon(), "drawable", "de.caroliwo.hawoe_rallye");
         tasksViewHolder.imageView.setImageResource(id);
+
+        if (taskList.get(i).isCompleted()) {
+            tasksViewHolder.imageView.setColorFilter(Color.parseColor("#00FF00"));
+        }
+
+        // taskList-LiveData observieren, diese wird im Repository nach dem Laden der taskList automatisch vervollständigt
+       /* viewModel.getTaskListLiveData().observe(this, new Observer<ArrayList<Task>>() {
+            @Override
+            public void onChanged(@Nullable ArrayList<Task> tasks) {
+
+                // Adapter updaten
+               if (taskList.get(i).isCompleted()) { //TODO: grüne Färbung, wenn Aufgabe erledigt; Momentan erst nach neuladen der App
+                    tasksViewHolder.imageView.setColorFilter(Color.parseColor("#00FF00"));
+                }
+            }
+        });*/
     }
 
     @Override

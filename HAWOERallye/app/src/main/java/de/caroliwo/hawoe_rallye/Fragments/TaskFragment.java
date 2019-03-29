@@ -1,27 +1,17 @@
 package de.caroliwo.hawoe_rallye.Fragments;
 
+
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.GestureDetectorCompat;
-import android.support.v4.view.MotionEventCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.text.method.PasswordTransformationMethod;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.view.GestureDetector;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,7 +29,6 @@ import de.caroliwo.hawoe_rallye.Data.DataViewModel;
 import de.caroliwo.hawoe_rallye.Data.StudentEntity;
 import de.caroliwo.hawoe_rallye.Field;
 import de.caroliwo.hawoe_rallye.R;
-import de.caroliwo.hawoe_rallye.Student;
 import de.caroliwo.hawoe_rallye.Task;
 
 // Fragment um eine einzelne Aufgabe darzustellen
@@ -53,7 +42,7 @@ public class TaskFragment extends Fragment {
     List<Field> fieldList;
     int taskID;
     String password;
-
+    ImageView taskIcon;
 
     public TaskFragment() {
         // Benötigter leerer Konstruktor
@@ -96,14 +85,17 @@ public class TaskFragment extends Fragment {
         TextView taskTitle = (TextView) view.findViewById(R.id.task_dialog_TV);
         TextView taskTime = (TextView) view.findViewById(R.id.task_dialog_TV3);
         TextView taskDestination = view.findViewById(R.id.task_dialog_TV2);
-        ImageView taskIcon = (ImageView) view.findViewById(R.id.student_dialog_IV);
+        taskIcon = (ImageView) view.findViewById(R.id.student_dialog_IV);
 
         // Icon setzen
         int id = context.getResources().getIdentifier(task.getIcon(), "drawable", "de.caroliwo.hawoe_rallye");
         taskIcon.setImageResource(id);
+        //Task-Icon grün färben, wenn die Aufgabe erledigt ist
         if (task.isCompleted()) {
             taskIcon.setColorFilter(Color.parseColor("#00FF00"));
         }
+
+        //TODO: grüne Färbung, wenn Aufgabe erledigt; Momentan erst nach neuladen der App
 
         // Zeit setzen
         String time_from = (String) task.getTime().getTime_from();
@@ -284,6 +276,7 @@ public class TaskFragment extends Fragment {
             if (field2.getType().equals("inputInvisible")) {
                 inputsArraylist.add(new AnswerField(field2.getId(), String.valueOf(true)));
             }
+                //TODO: Bei Aufgaben mit Passwort: Checken, ob Passwort richtig war --> Toast, wenn es falsch ist, mit Hinweis, dass Antwort nicht gesendet
         }
         StudentEntity student = viewModel.getStudent();
         int group = student.getGroupId(); //groupID
@@ -291,9 +284,6 @@ public class TaskFragment extends Fragment {
         Answer task1 = new Answer(group, taskID, password, inputsArraylist);
 
         viewModel.sendAnswer(task1);
-
     }
-
-
 
 }
