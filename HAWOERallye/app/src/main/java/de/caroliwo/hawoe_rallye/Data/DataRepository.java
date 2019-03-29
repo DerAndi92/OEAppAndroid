@@ -604,19 +604,19 @@ public class DataRepository {
 
                 //wenn HTTP-Request nicht erfolgreich:
                 if (!response.isSuccessful()) {
-                    Log.i("DataRepository ", "fetchTask() Response unsuccessfull: " + String.valueOf(response.code()));
+                    Log.i("DataRepository ", "sendAnswer() Response unsuccessfull: " + String.valueOf(response.code()));
                     return;
                 }
 
                 //wenn HTTP-Request erfolgreich:
                 Answer answer = response.body().getAnswer();
-                Log.i("DataRepository", "fetchTask() response.body(): " + response.body());
+                Log.i("DataRepository", "sendAnswer() response.body(): " + response.body());
             }
 
             @Override
             public void onFailure(Call<AnswerAPI> call, Throwable t) {
                 // something went completely south (like no internet connection)
-                Log.i("DataRepository", "fetchTask() onFailure(): " + t.getMessage());
+                Log.i("DataRepository", "sendAnswer() onFailure(): " + t.getMessage());
             }
         });
     }

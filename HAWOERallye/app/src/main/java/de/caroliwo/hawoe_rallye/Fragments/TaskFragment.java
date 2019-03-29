@@ -92,15 +92,11 @@ public class TaskFragment extends Fragment {
         Context context = getContext();
         View view = inflater.inflate(R.layout.fragment_task, container, false);
 
-//        CustomConstraintLayout constraintLayout = view.findViewById(R.id.constraintLayout);
-
-
         // Views zuweisen
         TextView taskTitle = (TextView) view.findViewById(R.id.task_dialog_TV);
         TextView taskTime = (TextView) view.findViewById(R.id.task_dialog_TV3);
         TextView taskDestination = view.findViewById(R.id.task_dialog_TV2);
         ImageView taskIcon = (ImageView) view.findViewById(R.id.student_dialog_IV);
-
 
         // Icon setzen
         int id = context.getResources().getIdentifier(task.getIcon(), "drawable", "de.caroliwo.hawoe_rallye");
@@ -250,12 +246,7 @@ public class TaskFragment extends Fragment {
                     break;
 
                 case "inputInvisible":
-                    EditText editTextInvisible = new EditText(context);
-                    if (field.getValue() != null) {
-                        editTextInvisible.setText(field.getValue());
-                    }
-                    editTextInvisible.setVisibility(View.INVISIBLE);
-                    fieldsContainer.addView(editTextInvisible);
+                    TextView TextInvisible = new TextView(context);
                     Log.i("TasksRVAdapter-Switch", "ET invisible created");
                     break;
 
@@ -285,7 +276,11 @@ public class TaskFragment extends Fragment {
             if (field2.getType().equals("inputField") | field2.getType().equals("inputText")) {
                 inputsArraylist.add(new AnswerField(field2.getId(),field2.getValue()));
             }
+            if (field2.getType().equals("inputInvisible")) {
+                inputsArraylist.add(new AnswerField(field2.getId(), String.valueOf(true)));
+            }
         }
+
         StudentEntity student = viewModel.getStudent();
         int group = student.getGroupId(); //groupID
 
