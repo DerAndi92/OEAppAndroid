@@ -247,6 +247,11 @@ public class TaskFragment extends Fragment {
 
                 case "inputInvisible":
                     TextView TextInvisible = new TextView(context);
+                    if (field.getValue() != null) {
+                        TextInvisible.setText(field.getValue());
+                    }
+                    TextInvisible.setVisibility(View.INVISIBLE);
+                    fieldsContainer.addView(TextInvisible);
                     Log.i("TasksRVAdapter-Switch", "ET invisible created");
                     break;
 
@@ -280,7 +285,6 @@ public class TaskFragment extends Fragment {
                 inputsArraylist.add(new AnswerField(field2.getId(), String.valueOf(true)));
             }
         }
-
         StudentEntity student = viewModel.getStudent();
         int group = student.getGroupId(); //groupID
 
