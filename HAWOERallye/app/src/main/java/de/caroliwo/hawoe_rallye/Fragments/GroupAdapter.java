@@ -124,7 +124,7 @@ public class GroupAdapter extends ArrayAdapter {
                 nameDialog.setText(studentList.get(position).getFirst_name());
                 lastnameDialog.setText(studentList.get(position).getLast_name());
                 String course = studentList.get(position).getCourse();
-                int spinPos = course.equals("MT") ? 1 : 2;
+                int spinPos = course.equals("MT") ? 0 : 1;
                 Log.i("TEST", "GroupAdapter spinner1 " + studentList.get(position).getCourse());
                 Log.i("TEST", "GroupAdapter spinner2 " + spinPos);
                 spinnerDialog.setSelection(spinPos);
@@ -140,9 +140,10 @@ public class GroupAdapter extends ArrayAdapter {
                        studentID = studentList.get(position).getStudentId();
                        Integer groupID = studentList.get(position).getGroupId();
                        Integer manually = studentList.get(position).getManually();
+                        Log.i("TEST", "GroupAdapter changeBtn " + studentID);
 
                        // Checken ob alle Felder ausgefüllt sind
-                       if(name.length() > 0 && lastname.length() > 0 && !course.equals("Studiengang wählen")) {
+                       if(name.length() > 0 && lastname.length() > 0 ) {
 
                            Student student = new Student(groupID, studentID, name, lastname, course, manually);
                            // Änderung an Web-Interface schicken (wird im Repository automatisch bei Response eigener Gruppe hinzugefügt & per LiveData geupdated)

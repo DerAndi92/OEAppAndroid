@@ -134,8 +134,7 @@ public class TaskFragment extends Fragment {
 
         fieldsContainer.removeAllViews();
 
-
-
+        //Layout-Elemente generieren
         for (final Field field : fieldList) {
             String type = field.getType();
             switch (type) {
@@ -264,6 +263,19 @@ public class TaskFragment extends Fragment {
                     Log.i("TasksRVAdapter-Switch", "Field type is not defined");
             }
         }
+        //Zurück-Button
+        Button backButton = new Button(context);
+        backButton.setText("Zurück");
+        backButton.setTextColor(context.getResources().getColor(R.color.colorText));
+        backButton.setBackground(context.getResources().getDrawable(R.drawable.buttonshape));
+        fieldsContainer.addView(backButton, layoutParams);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().popBackStack();
+            }
+        });
         return view;
     }
 

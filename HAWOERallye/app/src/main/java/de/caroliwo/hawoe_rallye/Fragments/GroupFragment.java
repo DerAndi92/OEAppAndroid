@@ -43,6 +43,7 @@ public class GroupFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+
         View rootView = inflater.inflate(R.layout.fragment_group, container,false);
         studentsLV = rootView.findViewById(R.id.membersLV);
         View headerView = inflater.inflate(R.layout.group_fragment_header, null);

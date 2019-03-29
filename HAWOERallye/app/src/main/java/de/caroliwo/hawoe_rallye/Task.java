@@ -25,6 +25,8 @@ public class Task implements Parcelable {
     private List<Field> fieldList;
     private int order;
 
+    public Task() {
+    }
 
     //GETTER + SETTER-Methoden
     public int getId() {
@@ -97,8 +99,6 @@ public class Task implements Parcelable {
         dest.writeInt(this.order);
     }
 
-    public Task() {
-    }
 
     protected Task(Parcel in) {
         this.taskId = in.readInt();

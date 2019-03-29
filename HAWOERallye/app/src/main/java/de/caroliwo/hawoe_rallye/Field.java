@@ -1,6 +1,9 @@
 package de.caroliwo.hawoe_rallye;
 
-public class Field {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Field implements Parcelable {
 
     //Für die Felder einer Aufgabe, die von der API kommen:
     //Der Typ eines Feldes in den Aufgaben ist fest vorgegeben. Es gibt folgende Typen
@@ -15,6 +18,41 @@ public class Field {
     private String value;
     private int order;
 
+
+    //Parcelable
+    protected Field(Parcel in) {
+        id = in.readInt();
+        type = in.readString();
+        value = in.readString();
+        order = in.readInt();
+    }
+
+    public static final Creator<Field> CREATOR = new Creator<Field>() {
+        @Override
+        public Field createFromParcel(Parcel in) {
+            return new Field(in);
+        }
+
+        @Override
+        public Field[] newArray(int size) {
+            return new Field[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(type);
+        dest.writeString(value);
+        dest.writeInt(order);
+    }
+
+    //Getter & Setter
     public int getId() {
         return id;
     }
@@ -46,4 +84,5 @@ public class Field {
     public void setOrder(int order) {
         this.order = order;
     }
+
 }
