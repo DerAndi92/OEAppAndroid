@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,14 +18,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import de.caroliwo.hawoe_rallye.Activities.MainActivity;
 import de.caroliwo.hawoe_rallye.Answer;
 import de.caroliwo.hawoe_rallye.AnswerField;
+import de.caroliwo.hawoe_rallye.Data.ConfigurationEntity;
 import de.caroliwo.hawoe_rallye.Data.DataViewModel;
 import de.caroliwo.hawoe_rallye.Data.StudentEntity;
 import de.caroliwo.hawoe_rallye.Field;
@@ -128,7 +137,6 @@ public class TaskFragment extends Fragment {
             switch (type) {
 
                 case "button":
-
                     // Passwort-Feld einfügen falls benötigt
                     if (task.getPassword()) {
                         EditText passwordField = new EditText(context);
@@ -138,17 +146,14 @@ public class TaskFragment extends Fragment {
                         passwordField.addTextChangedListener(new TextWatcher() {
                             @Override
                             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
                             }
 
                             @Override
                             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
                             }
 
                             @Override
                             public void afterTextChanged(Editable s) {
-
                                 // Nach Änderung Passwort in Variable speichern
                                 password = s.toString();
                             }
@@ -189,17 +194,14 @@ public class TaskFragment extends Fragment {
                     editText.addTextChangedListener(new TextWatcher() {
                         @Override
                         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
                         }
 
                         @Override
                         public void onTextChanged(CharSequence s, int start, int before, int count) {
-
                         }
 
                         @Override
                         public void afterTextChanged(Editable s) {
-
                             // Nach Änderung Text in's Field-Objekt einfügen
                             field.setValue(s.toString());
                         }
@@ -218,17 +220,14 @@ public class TaskFragment extends Fragment {
                     editTextBig.addTextChangedListener(new TextWatcher() {
                         @Override
                         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
                         }
 
                         @Override
                         public void onTextChanged(CharSequence s, int start, int before, int count) {
-
                         }
 
                         @Override
                         public void afterTextChanged(Editable s) {
-
                             // Nach Änderung Text in's Field-Objekt einfügen
                             field.setValue(s.toString());
                         }
@@ -237,13 +236,59 @@ public class TaskFragment extends Fragment {
                     Log.i("TasksRVAdapter-Switch", "ET big created");
                     break;
 
-                case "inputInvisible":
-                    TextView TextInvisible = new TextView(context);
+                case "inputTime":
+                    NumberPicker numberPicker = new NumberPicker(context);
+                    numberPicker.setMinValue(0);
+                    numberPicker.setMaxValue(24);
                     if (field.getValue() != null) {
-                        TextInvisible.setText(field.getValue());
+                        numberPicker.setValue(Integer.valueOf(field.getValue()));
                     }
-                    TextInvisible.setVisibility(View.INVISIBLE);
-                    fieldsContainer.addView(TextInvisible);
+                    numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+                        @Override
+                        public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                            field.setValue(String.valueOf(newVal));
+                        }
+                    });
+                    fieldsContainer.addView(numberPicker, layoutParams);
+                    Log.i("TasksRVAdapter-Switch", "NP inputTime");
+                    break;
+
+                case "inputNumber":
+                    EditText inputNumber = new EditText(context);
+                    //nur Zahlen erlauben
+                    inputNumber.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+                    if (field.getValue() != null) {
+                        inputNumber.setText(field.getValue());
+                    }
+                    inputNumber.setTextColor(context.getResources().getColor(R.color.colorText));
+                    inputNumber.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                            // Nach Änderung Text in's Field-Objekt einfügen
+                            field.setValue(s.toString());
+                        }
+                    });
+
+                    fieldsContainer.addView(inputNumber, layoutParams);
+                    Log.i("TasksRVAdapter-Switch", "ET inputTime");
+                    break;
+
+                case "inputInvisible":
+                    TextView textInvisible = new TextView(context);
+                    if (field.getValue() != null) {
+                        textInvisible.setText(field.getValue());
+                    }
+                    textInvisible.setVisibility(View.INVISIBLE);
+                    fieldsContainer.addView(textInvisible, layoutParams);
                     Log.i("TasksRVAdapter-Switch", "ET invisible created");
                     break;
 
@@ -268,22 +313,44 @@ public class TaskFragment extends Fragment {
     }
 
     private void sendAnswer() {
+        //Passwort validieren
+       /* if (task.getPassword()) {
+            //TODO: Checken, ob Passwort richtig war bzw. Antwort aus Request abfangen--> Toast, wenn es falsch ist, mit Hinweis, dass Antwort nicht akzeptiert wurde
+        }*/
+
         List<AnswerField> inputsArraylist = new ArrayList<>();
-        for (Field field2: fieldList) {
-            if (field2.getType().equals("inputField") | field2.getType().equals("inputText")) {
-                inputsArraylist.add(new AnswerField(field2.getId(),field2.getValue()));
+        for (Field field2 : fieldList) {
+            if (field2.getType().equals("inputField") || field2.getType().equals("inputText") || field2.getType().equals("inputNumber") || field2.getType().equals("inputTime")) {
+                inputsArraylist.add(new AnswerField(field2.getId(), field2.getValue()));
             }
             if (field2.getType().equals("inputInvisible")) {
                 inputsArraylist.add(new AnswerField(field2.getId(), String.valueOf(true)));
             }
-                //TODO: Bei Aufgaben mit Passwort: Checken, ob Passwort richtig war --> Toast, wenn es falsch ist, mit Hinweis, dass Antwort nicht gesendet
         }
+        ConfigurationEntity configEntity = viewModel.getConfig();
         StudentEntity student = viewModel.getStudent();
         int group = student.getGroupId(); //groupID
 
         Answer task1 = new Answer(group, taskID, password, inputsArraylist);
 
-        viewModel.sendAnswer(task1);
-    }
+        //Antworten können nur abgesendet werden, wenn die AbgabeZeit nicht überschritten wurde.
+        DateFormat formatter = new SimpleDateFormat();
+        Date configTimeParsed;
+        Date currentTime = Calendar.getInstance().getTime();
+        String configTime = configEntity.getMaxTime();
 
+        try {
+            //configTime von String in Date parsen
+            DateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+            configTimeParsed = format.parse(configTime);
+            // feststellen, ob Abgabe-Zeit vor der momentanen Uhrzeit liegt
+            if (configTimeParsed.after(currentTime) || configTime.equals(currentTime)) {
+                viewModel.sendAnswer(task1);
+            } else {
+                Toast.makeText(getContext(), "Abgabezeit vorbei.", Toast.LENGTH_SHORT).show();
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
 }
