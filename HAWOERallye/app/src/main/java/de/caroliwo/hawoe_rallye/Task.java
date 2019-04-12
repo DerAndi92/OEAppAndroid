@@ -5,7 +5,6 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +21,7 @@ public class Task implements Parcelable {
     private boolean password;
     private boolean completed;
     @SerializedName("fields")
-    private List<Field> fieldList;
+    private List<TaskField> fieldList;
     private int order;
 
     public Task() {
@@ -53,7 +52,7 @@ public class Task implements Parcelable {
         return completed;
     }
 
-    public List<Field> getFieldList() {
+    public List<TaskField> getFieldList() {
         return fieldList;
     }
 
@@ -77,7 +76,7 @@ public class Task implements Parcelable {
 
     public void setCompleted(boolean completed) { this.completed = completed; }
 
-    public void setFieldList(List<Field> fieldList) { this.fieldList = fieldList; }
+    public void setFieldList(List<TaskField> fieldList) { this.fieldList = fieldList; }
 
     public void setOrder(int order) { this.order = order; }
 
@@ -107,8 +106,8 @@ public class Task implements Parcelable {
         this.destination = in.readString();
         this.times = in.readParcelable(Times.class.getClassLoader());
         this.completed = in.readByte() != 0;
-        this.fieldList = new ArrayList<Field>();
-        in.readList(this.fieldList, Field.class.getClassLoader());
+        this.fieldList = new ArrayList<TaskField>();
+        in.readList(this.fieldList, TaskField.class.getClassLoader());
         this.order = in.readInt();
     }
 

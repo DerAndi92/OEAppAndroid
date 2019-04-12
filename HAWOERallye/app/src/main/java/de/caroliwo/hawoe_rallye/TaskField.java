@@ -3,7 +3,7 @@ package de.caroliwo.hawoe_rallye;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Field implements Parcelable {
+public class TaskField implements Parcelable {
 
     //Für die Felder einer Aufgabe, die von der API kommen:
     //Der Typ eines Feldes in den Aufgaben ist fest vorgegeben. Es gibt folgende Typen
@@ -20,22 +20,22 @@ public class Field implements Parcelable {
 
 
     //Parcelable
-    protected Field(Parcel in) {
+    protected TaskField(Parcel in) {
         id = in.readInt();
         type = in.readString();
         value = in.readString();
         order = in.readInt();
     }
 
-    public static final Creator<Field> CREATOR = new Creator<Field>() {
+    public static final Creator<TaskField> CREATOR = new Creator<TaskField>() {
         @Override
-        public Field createFromParcel(Parcel in) {
-            return new Field(in);
+        public TaskField createFromParcel(Parcel in) {
+            return new TaskField(in);
         }
 
         @Override
-        public Field[] newArray(int size) {
-            return new Field[size];
+        public TaskField[] newArray(int size) {
+            return new TaskField[size];
         }
     };
 

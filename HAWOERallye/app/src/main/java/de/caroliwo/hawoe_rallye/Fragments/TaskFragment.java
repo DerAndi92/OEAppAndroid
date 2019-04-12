@@ -3,12 +3,15 @@ package de.caroliwo.hawoe_rallye.Fragments;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.InputType;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.lang.reflect.Field;
 
 import de.caroliwo.hawoe_rallye.Activities.MainActivity;
 import de.caroliwo.hawoe_rallye.Answer;
@@ -36,7 +40,7 @@ import de.caroliwo.hawoe_rallye.AnswerField;
 import de.caroliwo.hawoe_rallye.Data.ConfigurationEntity;
 import de.caroliwo.hawoe_rallye.Data.DataViewModel;
 import de.caroliwo.hawoe_rallye.Data.StudentEntity;
-import de.caroliwo.hawoe_rallye.Field;
+import de.caroliwo.hawoe_rallye.TaskField;
 import de.caroliwo.hawoe_rallye.R;
 import de.caroliwo.hawoe_rallye.Task;
 
@@ -48,7 +52,7 @@ public class TaskFragment extends Fragment {
     private DataViewModel viewModel;
 
     private Task task;
-    List<Field> fieldList;
+    List<TaskField> fieldList;
     int taskID;
     String password;
     ImageView taskIcon;
@@ -132,7 +136,7 @@ public class TaskFragment extends Fragment {
         fieldsContainer.removeAllViews();
 
         //Layout-Elemente generieren
-        for (final Field field : fieldList) {
+        for (final TaskField field : fieldList) {
             String type = field.getType();
             switch (type) {
 
@@ -202,7 +206,7 @@ public class TaskFragment extends Fragment {
 
                         @Override
                         public void afterTextChanged(Editable s) {
-                            // Nach Änderung Text in's Field-Objekt einfügen
+                            // Nach Änderung Text ins TaskField-Objekt einfügen
                             field.setValue(s.toString());
                         }
                     });
@@ -215,7 +219,7 @@ public class TaskFragment extends Fragment {
                     if (field.getValue() != null) {
                         editTextBig.setText(field.getValue());
                     }
-                    editTextBig.setHeight(50);
+                    editTextBig.setHeight(500);
                     editTextBig.setTextColor(context.getResources().getColor(R.color.colorText));
                     editTextBig.addTextChangedListener(new TextWatcher() {
                         @Override
@@ -228,7 +232,7 @@ public class TaskFragment extends Fragment {
 
                         @Override
                         public void afterTextChanged(Editable s) {
-                            // Nach Änderung Text in's Field-Objekt einfügen
+                            // Nach Änderung Text in's TaskField-Objekt einfügen
                             field.setValue(s.toString());
                         }
                     });
@@ -240,6 +244,7 @@ public class TaskFragment extends Fragment {
                     NumberPicker numberPicker = new NumberPicker(context);
                     numberPicker.setMinValue(0);
                     numberPicker.setMaxValue(24);
+                    setNumberPickerColor(numberPicker,  Color.parseColor("#ffffff"));
                     if (field.getValue() != null) {
                         numberPicker.setValue(Integer.valueOf(field.getValue()));
                     }
@@ -273,7 +278,7 @@ public class TaskFragment extends Fragment {
 
                         @Override
                         public void afterTextChanged(Editable s) {
-                            // Nach Änderung Text in's Field-Objekt einfügen
+                            // Nach Änderung Text ins TaskField-Objekt einfügen
                             field.setValue(s.toString());
                         }
                     });
@@ -293,7 +298,7 @@ public class TaskFragment extends Fragment {
                     break;
 
                 default:
-                    Log.i("TasksRVAdapter-Switch", "Field type is not defined");
+                    Log.i("TasksRVAdapter-Switch", "TaskField type is not defined");
             }
         }
         //Zurück-Button
@@ -319,7 +324,7 @@ public class TaskFragment extends Fragment {
         }*/
 
         List<AnswerField> inputsArraylist = new ArrayList<>();
-        for (Field field2 : fieldList) {
+        for (TaskField field2 : fieldList) {
             if (field2.getType().equals("inputField") || field2.getType().equals("inputText") || field2.getType().equals("inputNumber") || field2.getType().equals("inputTime")) {
                 inputsArraylist.add(new AnswerField(field2.getId(), field2.getValue()));
             }
@@ -351,6 +356,55 @@ public class TaskFragment extends Fragment {
             }
         } catch (ParseException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void setNumberPickerColor(NumberPicker numberPicker, int color) {
+
+        //TextColor
+        try{
+            Field selectorWheelPaintField = numberPicker.getClass()
+                    .getDeclaredField("mSelectorWheelPaint");
+            selectorWheelPaintField.setAccessible(true);
+            ((Paint)selectorWheelPaintField.get(numberPicker)).setColor(color);
+        }
+        catch(NoSuchFieldException e){
+            Log.w("setNumberPickerTextCol", e);
+        }
+        catch(IllegalAccessException e){
+            Log.w("setNumberPickerTextCol", e);
+        }
+        catch(IllegalArgumentException e){
+            Log.w("setNumberPickerTextCol", e);
+        }
+
+        final int count = numberPicker.getChildCount();
+        for(int i = 0; i < count; i++){
+            View child = numberPicker.getChildAt(i);
+            if(child instanceof EditText)
+                ((EditText)child).setTextColor(color);
+        }
+        numberPicker.invalidate();
+
+
+        //Divider
+        java.lang.reflect.Field[] pickerFields = NumberPicker.class.getDeclaredFields();
+        for (java.lang.reflect.Field pf : pickerFields) {
+            if (pf.getName().equals("mSelectionDivider")) {
+                pf.setAccessible(true);
+                try {
+                    ColorDrawable colorDrawable = new ColorDrawable(color);
+                    pf.set(numberPicker, colorDrawable);
+                } catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+                } catch (Resources.NotFoundException e) {
+                    e.printStackTrace();
+                }
+                catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+                break;
+            }
         }
     }
 }
