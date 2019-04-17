@@ -26,6 +26,7 @@ public class DataViewModel extends AndroidViewModel {
     private LiveData<ArrayList<Group>> groupList;
     private LiveData<ArrayList<Task>> taskList;
     private LiveData<ArrayList<Student>> studentList;
+    private LiveData<Boolean> correctPasswordLiveData;
 
     public DataViewModel(@NonNull Application application) {
 
@@ -43,6 +44,8 @@ public class DataViewModel extends AndroidViewModel {
         groupList = repository.getGroupListLiveData();
         taskList = repository.getTaskListLiveData();
         studentList = repository.getStudentListLiveData();
+        correctPasswordLiveData = repository.getCorrectPasswordLiveData();
+
     }
 
     // LogOut-Methode um eigenen Nutzer auszuloggen
@@ -82,7 +85,7 @@ public class DataViewModel extends AndroidViewModel {
 
     public void fetchTask(int groupID, int taskID) { repository.fetchTask(groupID, taskID); }
 
-    public void sendAnswer (Answer answer) {repository.sendAnswer(answer);}
+    public void sendAnswer (Answer answer) { repository.sendAnswer(answer); }
 
 
 
@@ -96,6 +99,8 @@ public class DataViewModel extends AndroidViewModel {
     public LiveData<ArrayList<Task>> getTaskListLiveData () { return taskList; }
 
     public LiveData<ArrayList<Student>> getStudentListLiveData() { return studentList; }
+
+    public LiveData<Boolean> getCorrectPasswordLiveData() { return correctPasswordLiveData; }
 
 
 

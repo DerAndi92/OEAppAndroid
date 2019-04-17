@@ -4,8 +4,10 @@ import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.os.AsyncTask;
+import android.os.StrictMode;
 import android.util.Log;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,9 +46,12 @@ public class DataRepository {
     private MutableLiveData<ArrayList<Group>> groupList;
     private MutableLiveData<ArrayList<Task>> taskList;
     private MutableLiveData<ArrayList<Student>> studentList;
+    private MutableLiveData<Boolean> correctPasswordLiveData;
 
     // Variablen für API-Calls an Web-Interface
     private DownloadJSONRetrofit downloadJSONRetrofit;
+
+
 
 
 
@@ -70,6 +75,7 @@ public class DataRepository {
         groupList = new MutableLiveData<>();
         taskList = new MutableLiveData<>();
         studentList = new MutableLiveData<>();
+        correctPasswordLiveData = new MutableLiveData<>();
 
         // Retrofit instanziieren
         Retrofit retrofitClass = new Retrofit();
@@ -191,6 +197,8 @@ public class DataRepository {
     }
 
     public LiveData<ArrayList<Student>> getStudentListLiveData() { return studentList; }
+
+    public LiveData<Boolean> getCorrectPasswordLiveData() { return correctPasswordLiveData; }
 
 
 
@@ -597,7 +605,8 @@ public class DataRepository {
     public void sendAnswer (final Answer answer) {
         Call<AnswerAPI> call = downloadJSONRetrofit.sendAnswer(answer);
 
-        //execute on background-thread
+
+        // execute on background-thread
         call.enqueue(new Callback<AnswerAPI>() {
             @Override
             public void onResponse(Call<AnswerAPI> call, Response<AnswerAPI> response) {
@@ -605,11 +614,13 @@ public class DataRepository {
                 //wenn HTTP-Request nicht erfolgreich:
                 if (!response.isSuccessful()) {
                     Log.i("DataRepository ", "sendAnswer() Response unsuccessfull: " + String.valueOf(response.code()));
+                    correctPasswordLiveData.setValue(false);
                     return;
                 }
 
                 //wenn HTTP-Request erfolgreich:
                 Answer answer = response.body().getAnswer();
+                correctPasswordLiveData.setValue(true);
                 Log.i("DataRepository", "sendAnswer() response.body(): " + response.body());
             }
 

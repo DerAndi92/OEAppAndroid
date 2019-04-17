@@ -1,6 +1,7 @@
 package de.caroliwo.hawoe_rallye.Fragments;
 
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.res.Resources;
@@ -9,6 +10,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.InputType;
@@ -175,8 +177,12 @@ public class TaskFragment extends Fragment {
                     button.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+//                            if (sendAnswer()) {
+//                                getFragmentManager().popBackStack();
+//                            } else {
+//                                Toast.makeText(getContext(), "Passwort nicht akzeptiert", Toast.LENGTH_LONG);
+//                            }
                             sendAnswer();
-                            getFragmentManager().popBackStack();
                         }
                     });
                     break;
@@ -318,10 +324,6 @@ public class TaskFragment extends Fragment {
     }
 
     private void sendAnswer() {
-        //Passwort validieren
-       /* if (task.getPassword()) {
-            //TODO: Checken, ob Passwort richtig war bzw. Antwort aus Request abfangen--> Toast, wenn es falsch ist, mit Hinweis, dass Antwort nicht akzeptiert wurde
-        }*/
 
         List<AnswerField> inputsArraylist = new ArrayList<>();
         for (TaskField field2 : fieldList) {
@@ -350,7 +352,19 @@ public class TaskFragment extends Fragment {
             configTimeParsed = format.parse(configTime);
             // feststellen, ob Abgabe-Zeit vor der momentanen Uhrzeit liegt
             if (configTimeParsed.after(currentTime) || configTime.equals(currentTime)) {
-                viewModel.sendAnswer(task1);
+            viewModel.sendAnswer(task1);
+            viewModel.getCorrectPasswordLiveData().observe(this, new Observer<Boolean>() {
+                @Override
+                public void onChanged(@Nullable Boolean aBoolean) {
+                    if (aBoolean) {
+                        getFragmentManager().popBackStack();
+                    } else {
+                        Toast.makeText(getContext(), "Passwort nicht akzeptiert", Toast.LENGTH_LONG).show();
+                        Log.i("TaskFragment", "Password Incorrect");
+                    }
+                }
+            });
+
             } else {
                 Toast.makeText(getContext(), "Abgabezeit vorbei.", Toast.LENGTH_SHORT).show();
             }
