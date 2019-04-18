@@ -356,15 +356,15 @@ public class TaskFragment extends Fragment {
             viewModel.getCorrectPasswordLiveData().observe(this, new Observer<Boolean>() {
                 @Override
                 public void onChanged(@Nullable Boolean aBoolean) {
-                    if (aBoolean) {
-                        // TODO: Erledigte Aufgabe wird danach ganz unten einsortiert, Bug oder Feature?
-                        task.setCompleted(true);
-                        viewModel.changeTask(task);
-                        getFragmentManager().popBackStack();
-                    } else {
-                        // TODO: wird auch angezeigt wenn nach ehemaliger Falscheingabe richtiges Passwort eingegeben wird
-                        Toast.makeText(getContext(), "Passwort nicht akzeptiert", Toast.LENGTH_LONG).show();
-                        Log.i("TaskFragment", "Password Incorrect");
+                    if (aBoolean != null) {
+                        if (aBoolean) {
+                            task.setCompleted(true);
+                            viewModel.changeTask(task);
+                            getFragmentManager().popBackStack();
+                        } else {
+                            Toast.makeText(getContext(), "Passwort nicht akzeptiert", Toast.LENGTH_LONG).show();
+                            Log.i("TaskFragment", "Password Incorrect");
+                        }
                     }
                 }
             });

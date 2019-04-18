@@ -144,9 +144,10 @@ public class DataRepository {
         ArrayList<Task> tempList = new ArrayList<>(this.taskList.getValue());
         Log.i("DataRepository", "changeTask() taskList.getValue(): " + this.taskList.getValue());
         for (Task task: tempList) {
-            if (task.getId() == newTask.getId()) removeTaskLiveData(task);
+            if (task.getId() == newTask.getId()) /*removeTaskLiveData(task);*/ {
+                tempList.set(tempList.indexOf(task), newTask);
+            }
         }
-        addTaskLiveData(newTask);
     }
 
     public void removeTaskLiveData(Task task) {
@@ -619,6 +620,7 @@ public class DataRepository {
 
     // Lösung(en) einer Aufgabe einer Gruppe abschicken
     public void sendAnswer (final Answer answer) {
+        correctPasswordLiveData.setValue(null);
         Call<AnswerAPI> call = downloadJSONRetrofit.sendAnswer(answer);
 
 
