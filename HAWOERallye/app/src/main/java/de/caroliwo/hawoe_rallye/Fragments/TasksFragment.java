@@ -28,6 +28,7 @@ public class TasksFragment extends Fragment {
     private ArrayList<Task> taskList; // <------Liste mit allen Aufgaben + Aufgabendetails der Gruppe
     private boolean debug = false;
     private DataViewModel viewModel;
+    private TasksRecyclerViewAdapter recyclerViewAdapter;
 
     public TasksFragment() {
     }
@@ -62,8 +63,9 @@ public class TasksFragment extends Fragment {
         recyclerView = (RecyclerView) v.findViewById(R.id.tasks_recyclerview);
 
         // neuen Adapter erstellen und zuweisen
-        final TasksRecyclerViewAdapter recyclerViewAdapter = new TasksRecyclerViewAdapter((MainActivity) getActivity(), taskList);
+        recyclerViewAdapter = new TasksRecyclerViewAdapter((MainActivity) getActivity(), taskList);
         if (debug) Log.i("TasksFragment-Log","taskList: " + taskList.toString());
+
 
         // taskList-LiveData observieren, diese wird im Repository nach dem Laden der taskList automatisch vervollständigt
         viewModel.getTaskListLiveData().observe(this, new Observer<ArrayList<Task>>() {
@@ -83,6 +85,12 @@ public class TasksFragment extends Fragment {
         recyclerView.setAdapter(recyclerViewAdapter);
         if (debug) Log.i("TasksFragment-Log","4");
         return v;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        recyclerViewAdapter.setTasks(taskList);
     }
 
     public List<Task> getTaskList() {

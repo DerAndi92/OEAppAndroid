@@ -64,6 +64,8 @@ public class DataViewModel extends AndroidViewModel {
         repository.removeStudentLiveData(student);
     }
 
+    public void changeTask (Task task) { repository.changeTaskLiveData(task); }
+
     // Methoden für API-Calls an's Web-Interface
     public void fetchGroups() { repository.fetchGroups(); }
 

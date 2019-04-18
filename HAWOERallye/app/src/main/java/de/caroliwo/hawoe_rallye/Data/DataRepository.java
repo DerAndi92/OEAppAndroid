@@ -125,13 +125,13 @@ public class DataRepository {
     }
 
     public void removeGroupLiveData(Group group) {
-        ArrayList<Group> tempList = new ArrayList<Group>(this.groupList.getValue());
+        ArrayList<Group> tempList = new ArrayList<>(this.groupList.getValue());
         tempList.remove(group);
         this.groupList.setValue(tempList);
     }
 
     public void changeGroupLiveData(Group newGroup) {
-        ArrayList<Group> tempList = new ArrayList<Group>(this.groupList.getValue());
+        ArrayList<Group> tempList = new ArrayList<>(this.groupList.getValue());
         for (Group group : tempList) {
             if (group.getGroupId() == newGroup.getGroupId()) removeGroupLiveData(group);
         }
@@ -139,15 +139,31 @@ public class DataRepository {
     }
 
 
-    public void addTaskToLiveDataList(Task task, MutableLiveData<ArrayList<Task>> list) {
+    public void changeTaskLiveData(Task newTask) {
+        Log.i("DataRepository", "changeTask() task: " + newTask.toString());
+        ArrayList<Task> tempList = new ArrayList<>(this.taskList.getValue());
+        Log.i("DataRepository", "changeTask() taskList.getValue(): " + this.taskList.getValue());
+        for (Task task: tempList) {
+            if (task.getId() == newTask.getId()) removeTaskLiveData(task);
+        }
+        addTaskLiveData(newTask);
+    }
+
+    public void removeTaskLiveData(Task task) {
+        ArrayList<Task> tempList = new ArrayList<>(this.taskList.getValue());
+        tempList.remove(task);
+        this.taskList.setValue(tempList);
+    }
+
+    public void addTaskLiveData(Task task) {
         Log.i("DataRepository", "addTaskToLiveDataList() task: " + task.toString());
         ArrayList<Task> tempList = new ArrayList<>();
-        if(list.getValue()!=null) {
-            tempList = list.getValue();
-            Log.i("DataRepository", "addTaskToLiveDataList() list: " + list.getValue().toString());
+        if(this.taskList.getValue()!=null) {
+            tempList = this.taskList.getValue();
+            Log.i("DataRepository", "addTaskToLiveDataList() list: " + this.taskList.getValue().toString());
         }
         tempList.add(task);
-        list.setValue(tempList);
+        this.taskList.setValue(tempList);
     }
 
 

@@ -126,7 +126,8 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
         FragmentManager fragmentManager = ((MainActivity)context).getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_right);
+        transaction.add(R.id.fragment_container, fragment, "TASK_FRAGMENT");
         transaction.addToBackStack(null); // Damit man mit Back-Button hierher zurück kommt
-        transaction.add(R.id.fragment_container, fragment, "TASK_FRAGMENT").commit();
+        transaction.commit();
     }
 }
