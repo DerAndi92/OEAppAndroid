@@ -19,7 +19,7 @@ public class Student implements Parcelable {
     private Integer manually;
 
     //Konstruktor
-    public Student(Integer groupId, Integer studentId ,String first_name, String last_name, String course, Integer manually) {
+    public Student(Integer groupId, Integer studentId, String first_name, String last_name, String course, Integer manually) {
         this.groupId = groupId;
         this.studentId = studentId;
         this.first_name = first_name;

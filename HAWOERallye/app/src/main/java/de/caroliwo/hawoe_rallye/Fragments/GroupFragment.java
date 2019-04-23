@@ -3,7 +3,7 @@ package de.caroliwo.hawoe_rallye.Fragments;
 import android.app.Dialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.graphics.Color;
+
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+
 import java.util.ArrayList;
 
 import de.caroliwo.hawoe_rallye.Activities.MainActivity;
@@ -43,17 +44,14 @@ public class GroupFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-
-        View rootView = inflater.inflate(R.layout.fragment_group, container,false);
+        View rootView = inflater.inflate(R.layout.fragment_group, container, false);
         studentsLV = rootView.findViewById(R.id.membersLV);
         View headerView = inflater.inflate(R.layout.group_fragment_header, null);
         studentsLV.addHeaderView(headerView);
 
-
         Button changeGroupNameBtn = headerView.findViewById(R.id.groupNameBTN);
         final EditText changeGroupNameET = headerView.findViewById(R.id.groupNameET);
         Button addStudentBtn = headerView.findViewById(R.id.addStudentBTN);
-
 
         // Viewmodel-Instanz aus MainActivity holen
         viewModel = ViewModelProviders.of((MainActivity) getActivity()).get(DataViewModel.class);
@@ -64,7 +62,7 @@ public class GroupFragment extends Fragment {
         viewModel.getGroupListLiveData().observe(this, new Observer<ArrayList<Group>>() {
             @Override
             public void onChanged(@Nullable ArrayList<Group> groups) {
-                for (Group group: groups) {
+                for (Group group : groups) {
                     if (groupId == group.getGroupId()) {
                         changeGroupNameET.setText(group.getName());
                     }
@@ -76,7 +74,7 @@ public class GroupFragment extends Fragment {
         changeGroupNameBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Group group = new Group(groupId,changeGroupNameET.getText().toString());
+                Group group = new Group(groupId, changeGroupNameET.getText().toString());
                 viewModel.changeGroupName(group);
             }
         });
@@ -85,12 +83,14 @@ public class GroupFragment extends Fragment {
         studentList = viewModel.getStudentListLiveData().getValue();
 
         // Falls studentList noch nicht verfügbar leere ArrayList zuweisen (wird später vom Observer geupdated)
-        if (studentList == null) { studentList = new ArrayList<>(); }
+        if (studentList == null) {
+            studentList = new ArrayList<>();
+        }
 
         //Adapter instanziieren
         groupAdapter = new GroupAdapter(getActivity(), studentList);
 
-       //Student zu Liste hinzufügen
+        //Student zu Liste hinzufügen
         addStudentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,7 +103,6 @@ public class GroupFragment extends Fragment {
                 spinnerDialog = dialog.findViewById(R.id.MTMS_spinner);
                 Button addButtonDialog = dialog.findViewById(R.id.changeButton);
                 addButtonDialog.setText("Hinzufügen");
-                Log.i("TEST Dialog ", spinnerDialog.getSelectedItem().toString());
 
                 //Erstellen absenden
                 addButtonDialog.setOnClickListener(new View.OnClickListener() {
@@ -116,7 +115,7 @@ public class GroupFragment extends Fragment {
                         String course = majorTemp.equals("Medientechnik") ? "MT" : (majorTemp.equals("Media Systems") ? "MS" : majorTemp);
 
                         // Neuen Studenten erstellen
-                        student = new Student(groupId, null ,name, lastname, course, 1);
+                        student = new Student(groupId, null, name, lastname, course, 1);
 
                         // Neuen Studenten per POST-Request an API senden (wird im Repository automatisch bei Response eigener Gruppe hinzugefügt & per LiveData geupdated)
                         viewModel.sendStudent(student);
@@ -128,7 +127,6 @@ public class GroupFragment extends Fragment {
             }
         });
 
-
         // studentList-LiveData observieren
         viewModel.getStudentListLiveData().observe(this, new Observer<ArrayList<Student>>() {
             @Override
@@ -136,7 +134,6 @@ public class GroupFragment extends Fragment {
 
                 // Bei Änderung Adapter updaten
                 groupAdapter.setStudents(students);
-                Log.i("GroupFragment", "Adapter updated by Observer: " + students.toString());
             }
         });
 

@@ -96,16 +96,15 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
                     });
                     groupDialog.show();  //Dialog anzeigen
                 } else {
-                    //Wen die maximale Gruppenanzahl bereits erreicht ist:
-                    Toast.makeText( context, "Gruppe ist voll", Toast.LENGTH_SHORT ).show();
+                    //Wenn die maximale Gruppenanzahl bereits erreicht ist:
+                    Toast.makeText(context, "Gruppe ist voll", Toast.LENGTH_SHORT).show();
                 }
             }
         });
         return viewHolder;
-
     }
 
-//aktualisiert die Gruppenliste
+    //aktualisiert die Gruppenliste
     public void setGroups(ArrayList<Group> groups) {
         this.groupsList.clear();
         this.groupsList.addAll(groups);
@@ -115,7 +114,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
     @Override
     public void onBindViewHolder(@NonNull GroupViewHolder groupViewHolder, int i) {
         // Gruppenname und -Farbe für jeden Viewholder setzen
-        groupViewHolder.imageView.setColorFilter(Color.parseColor( groupsList.get(i).getColor()));
+        groupViewHolder.imageView.setColorFilter(Color.parseColor(groupsList.get(i).getColor()));
         groupViewHolder.textView.setText(groupsList.get(i).getName());
     }
 
@@ -132,7 +131,7 @@ public class GroupRecyclerViewAdapter extends RecyclerView.Adapter<GroupRecycler
         private ImageView imageView;
         private TextView textView;
 
-        public GroupViewHolder(@NonNull View itemView){
+        public GroupViewHolder(@NonNull View itemView) {
             super(itemView);
             groupItemCL = (ConstraintLayout) itemView.findViewById(R.id.group_item_CL);
             imageView = (ImageView) itemView.findViewById(R.id.group_item_IV);

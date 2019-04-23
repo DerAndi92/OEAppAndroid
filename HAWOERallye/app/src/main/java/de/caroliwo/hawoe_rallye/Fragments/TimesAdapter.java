@@ -1,15 +1,14 @@
 package de.caroliwo.hawoe_rallye.Fragments;
 
 import android.app.Activity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import de.caroliwo.hawoe_rallye.R;
@@ -27,11 +26,11 @@ public class TimesAdapter extends ArrayAdapter {
     //Konstruktor
     public TimesAdapter(Activity context, ArrayList<Task> taskList) {
         super(context, R.layout.times_listview_layout2, taskList);
-        this.context=context;
-        this.taskList=taskList;
+        this.context = context;
+        this.taskList = taskList;
     }
 
-    public View getView(int position, View view, ViewGroup parent){
+    public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
         View rowView = inflater.inflate(R.layout.times_listview_layout2, null, true);
 
@@ -39,33 +38,29 @@ public class TimesAdapter extends ArrayAdapter {
         TextView laborNameTV = rowView.findViewById(R.id.laborNameTV);
         TextView locationTV = rowView.findViewById(R.id.locationTV);
         TextView timeTV = rowView.findViewById(R.id.timeTV);
-        Log.i("Test TimesAdapter", "1 ");
 
         //Icon
         String iconName = taskList.get(position).getIcon();
         int id = context.getResources().getIdentifier(iconName, "drawable", "de.caroliwo.hawoe_rallye");
         laborIconIV.setImageResource(id);
-        Log.i("Test TimesAdapter", "2" );
 
         //Name, Destination
         laborNameTV.setText(taskList.get(position).getName());
         locationTV.setText(taskList.get(position).getDestination());
-        Log.i("Test TimesAdapter", "3" + taskList.get(position).getName());
 
         //Time
         String time_from = (String) taskList.get(position).getTime().getTime_from();
         String time_to = (String) taskList.get(position).getTime().getTime_to();
-        if(time_from!=null && time_to!=null){
+        if (time_from != null && time_to != null) {
             timeTV.setText(time_from + "-" + time_to + " Uhr");
         } else {
             timeTV.setText("Durchgehend geöffnet");
         }
-        Log.i("Test TimesAdapter", "4" );
 
         return rowView;
     }
 
-    public void setTasks (ArrayList<Task> tasks) {
+    public void setTasks(ArrayList<Task> tasks) {
         taskList.clear();
         taskList.addAll(tasks);
         notifyDataSetChanged();

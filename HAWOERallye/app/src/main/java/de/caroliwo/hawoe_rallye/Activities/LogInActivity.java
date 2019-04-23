@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,11 +22,11 @@ import de.caroliwo.hawoe_rallye.Data.DataViewModel;
 import de.caroliwo.hawoe_rallye.R;
 import de.caroliwo.hawoe_rallye.Student;
 
-public class LogInActivity  extends AppCompatActivity  {
-private ConfigurationEntity configEntity;
+public class LogInActivity extends AppCompatActivity {
+    private ConfigurationEntity configEntity;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)  {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -40,7 +39,6 @@ private ConfigurationEntity configEntity;
 
         // ViewModel-Instanz holen
         DataViewModel viewModel = ViewModelProviders.of(this).get(DataViewModel.class);
-        Log.i("LogInActivity", "viewModel.getConfig().getValue(): " + configEntity);
 
         // Konfigurations aus Datenbank holen
         configEntity = viewModel.getConfig();
@@ -51,16 +49,15 @@ private ConfigurationEntity configEntity;
             public void onChanged(@Nullable ConfigurationEntity configurationEntity) {
 
                 // Bei geladener Konfiguration neu zuweisen
-                if (configurationEntity != null) { configEntity = configurationEntity; }
-                Log.i("LogInActivity", "configEntity assigned by Observer: " + configEntity);
+                if (configurationEntity != null) {
+                    configEntity = configurationEntity;
+                }
             }
         });
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)  {
-
-                Log.i("TEST", "onClick Login 1aaaa");
+            public void onClick(View view) {
 
                 // userData-Objekt mit Inputs füllen
                 userData.put("name", name.getText().toString());
@@ -69,21 +66,17 @@ private ConfigurationEntity configEntity;
                 majorTemp = majorTemp.equals("Medientechnik") ? "MT" : (majorTemp.equals("Media Systems") ? "MS" : majorTemp);
                 userData.put("major", majorTemp);
                 userData.put("password", password.getText().toString());
-                Log.i("TEST", "onClick Login 1b");
 
                 Student student = new Student(null, null, userData.get("name"), userData.get("lastname"), userData.get("major"), 1);
 
-                Log.i("TEST", "onClick Login 1c");
-
                 // Checken ob jedes Feld ausgefüllt ist
-                if(userData.get("password").length() > 0 && userData.get("name").length() > 0 && userData.get("lastname").length() > 0 && !userData.get("major").equals("Studiengang wählen")){
+                if (userData.get("password").length() > 0 && userData.get("name").length() > 0 && userData.get("lastname").length() > 0 && !userData.get("major").equals("Studiengang wählen")) {
 
                     // Auf Zahlen im Namen checken
                     if (stringContainsNumber(userData.get("name")) | stringContainsNumber(userData.get("lastname"))) {
                         Toast.makeText(LogInActivity.this, "Keine Zahlen in Namen erlaubt", Toast.LENGTH_SHORT).show();
-                    }else {
+                    } else {
                         //Checken ob Passwort korrekt
-                        Log.i("TEST", "onClick: Login 2");
                         if (passwordCorrect(userData.get("password"))) {
                             Intent intent = new Intent(LogInActivity.this, GroupActivity.class);
                             intent.putExtra("StudentData", student);
@@ -92,8 +85,7 @@ private ConfigurationEntity configEntity;
                             Toast.makeText(LogInActivity.this, "Falsches Passwort", Toast.LENGTH_SHORT).show();
                         }
                     }
-                }
-                else {
+                } else {
                     Toast.makeText(LogInActivity.this, "Fülle bitte alle Felder aus.", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -109,8 +101,7 @@ private ConfigurationEntity configEntity;
         }
     }
 
-    public boolean stringContainsNumber( String s )
-    {
-        return Pattern.compile( "[0-9]" ).matcher( s ).find();
+    public boolean stringContainsNumber(String s) {
+        return Pattern.compile("[0-9]").matcher(s).find();
     }
 }

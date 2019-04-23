@@ -5,7 +5,6 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -32,11 +31,9 @@ public class DataViewModel extends AndroidViewModel {
 
         // Application-Kontext an Superklasse weitergeben
         super(application);
-        Log.i("DataViewModel", "1");
 
         // Repository zuweisen
         repository = new DataRepository(application);
-        Log.i("DataViewModel", "2");
 
         // LiveData-Datensätze zuweisen
         configEntity = repository.getConfigLiveData();
@@ -45,7 +42,6 @@ public class DataViewModel extends AndroidViewModel {
         taskList = repository.getTaskListLiveData();
         studentList = repository.getStudentListLiveData();
         correctPasswordLiveData = repository.getCorrectPasswordLiveData();
-
     }
 
     // LogOut-Methode um eigenen Nutzer auszuloggen
@@ -57,69 +53,100 @@ public class DataViewModel extends AndroidViewModel {
     }
 
     // Methode um LiveData lokal zu ändern
-    public void addStudent(Student student) { repository.addStudentLiveData(student); }
+    public void addStudent(Student student) {
+        repository.addStudentLiveData(student);
+    }
 
     public void removeStudent(Student student) {
-        Log.i("DataViewModel", "removeStudentLiveData() student: " + student.toString());
         repository.removeStudentLiveData(student);
     }
 
-    public void changeTask (Task task) { repository.changeTaskLiveData(task); }
+    public void changeTask(Task task) {
+        repository.changeTaskLiveData(task);
+    }
 
     // Methoden für API-Calls an's Web-Interface
-    public void fetchGroups() { repository.fetchGroups(); }
+    public void fetchGroups() {
+        repository.fetchGroups();
+    }
 
-    public void fetchGroup(int groupID) { repository.fetchGroup(groupID); }
+    public void fetchGroup(int groupID) {
+        repository.fetchGroup(groupID);
+    }
 
-    public void fetchConfig() { repository.fetchConfig(); }
+    public void fetchConfig() {
+        repository.fetchConfig();
+    }
 
-    public void changeGroupName(Group group) { repository.changeGroupName(group); }
+    public void changeGroupName(Group group) {
+        repository.changeGroupName(group);
+    }
 
-    public boolean groupsAreFetched() { return repository.groupsAreFetched(); }
+    public boolean groupsAreFetched() {
+        return repository.groupsAreFetched();
+    }
 
-    public void deleteStudent(int studentID) { repository.deleteStudent(studentID); }
+    public void deleteStudent(int studentID) {
+        repository.deleteStudent(studentID);
+    }
 
-    public void sendStudent(Student student) { repository.sendStudent(student); }
+    public void sendStudent(Student student) {
+        repository.sendStudent(student);
+    }
 
-    public void changeStudent(Student student) { repository.changeStudent(student); }
+    public void changeStudent(Student student) {
+        repository.changeStudent(student);
+    }
 
-    public void fetchTasks(int groupID) { repository.fetchTasks(groupID); }
+    public void fetchTasks(int groupID) {
+        repository.fetchTasks(groupID);
+    }
 
-    public void fetchTask(int groupID, int taskID) { repository.fetchTask(groupID, taskID); }
+    public void fetchTask(int groupID, int taskID) {
+        repository.fetchTask(groupID, taskID);
+    }
 
-    public void sendAnswer (Answer answer) { repository.sendAnswer(answer); }
-
+    public void sendAnswer(Answer answer) {
+        repository.sendAnswer(answer);
+    }
 
 
     // Methoden für LiveData-Stream
-    public LiveData<ConfigurationEntity> getConfigLiveData() { return configEntity; }
+    public LiveData<ConfigurationEntity> getConfigLiveData() {
+        return configEntity;
+    }
 
-    public LiveData<StudentEntity> getStudentLiveData() { return studEntity; }
+    public LiveData<StudentEntity> getStudentLiveData() {
+        return studEntity;
+    }
 
-    public LiveData<ArrayList<Group>> getGroupListLiveData () { return groupList; }
+    public LiveData<ArrayList<Group>> getGroupListLiveData() {
+        return groupList;
+    }
 
-    public LiveData<ArrayList<Task>> getTaskListLiveData () { return taskList; }
+    public LiveData<ArrayList<Task>> getTaskListLiveData() {
+        return taskList;
+    }
 
-    public LiveData<ArrayList<Student>> getStudentListLiveData() { return studentList; }
+    public LiveData<ArrayList<Student>> getStudentListLiveData() {
+        return studentList;
+    }
 
-    public LiveData<Boolean> getCorrectPasswordLiveData() { return correctPasswordLiveData; }
-
+    public LiveData<Boolean> getCorrectPasswordLiveData() {
+        return correctPasswordLiveData;
+    }
 
 
     // Methoden für direkte Datenabfrage auf dem Main-Thread
-
     public StudentEntity getStudent() {
-
         return repository.getStudent();
     }
 
     public ConfigurationEntity getConfig() {
-
         return repository.getConfig();
     }
 
     // Andere Datenbankoperationen
-
     public void insertConfig(ConfigurationEntity entity) {
         repository.insertConfig(entity);
     }

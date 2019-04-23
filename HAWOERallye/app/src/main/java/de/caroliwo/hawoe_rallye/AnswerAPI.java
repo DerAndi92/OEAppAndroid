@@ -2,7 +2,6 @@ package de.caroliwo.hawoe_rallye;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
 
 public class AnswerAPI {
 

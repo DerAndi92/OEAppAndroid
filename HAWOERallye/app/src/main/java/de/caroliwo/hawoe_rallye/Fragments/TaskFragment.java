@@ -1,13 +1,11 @@
 package de.caroliwo.hawoe_rallye.Fragments;
 
-
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -87,7 +85,6 @@ public class TaskFragment extends Fragment {
         password = "";
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -109,8 +106,6 @@ public class TaskFragment extends Fragment {
         if (task.isCompleted()) {
             taskIcon.setColorFilter(Color.parseColor("#00FF00"));
         }
-
-        //TODO: grüne Färbung, wenn Aufgabe erledigt; Momentan erst nach neuladen der App
 
         // Zeit setzen
         String time_from = (String) task.getTime().getTime_from();
@@ -172,16 +167,10 @@ public class TaskFragment extends Fragment {
                     button.setTextColor(context.getResources().getColor(R.color.colorText));
                     button.setBackground(context.getResources().getDrawable(R.drawable.buttonshape));
                     fieldsContainer.addView(button, layoutParams);
-                    Log.i("TasksRVAdapter-Switch", "Button created");
 
                     button.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-//                            if (sendAnswer()) {
-//                                getFragmentManager().popBackStack();
-//                            } else {
-//                                Toast.makeText(getContext(), "Passwort nicht akzeptiert", Toast.LENGTH_LONG);
-//                            }
                             sendAnswer();
                         }
                     });
@@ -192,7 +181,6 @@ public class TaskFragment extends Fragment {
                     textV.setText(field.getValue());
                     textV.setTextColor(context.getResources().getColor(R.color.colorText));
                     fieldsContainer.addView(textV, layoutParams);
-                    Log.i("TasksRVAdapter-Switch", "TV created");
                     break;
 
                 case "inputField":
@@ -217,7 +205,6 @@ public class TaskFragment extends Fragment {
                         }
                     });
                     fieldsContainer.addView(editText, layoutParams);
-                    Log.i("TasksRVAdapter-Switch", "ET created");
                     break;
 
                 case "inputText":
@@ -243,14 +230,13 @@ public class TaskFragment extends Fragment {
                         }
                     });
                     fieldsContainer.addView(editTextBig, layoutParams);
-                    Log.i("TasksRVAdapter-Switch", "ET big created");
                     break;
 
                 case "inputTime":
                     NumberPicker numberPicker = new NumberPicker(context);
                     numberPicker.setMinValue(0);
                     numberPicker.setMaxValue(24);
-                    setNumberPickerColor(numberPicker,  Color.parseColor("#ffffff"));
+                    setNumberPickerColor(numberPicker, Color.parseColor("#ffffff"));
                     if (field.getValue() != null) {
                         numberPicker.setValue(Integer.valueOf(field.getValue()));
                     }
@@ -261,7 +247,6 @@ public class TaskFragment extends Fragment {
                         }
                     });
                     fieldsContainer.addView(numberPicker, layoutParams);
-                    Log.i("TasksRVAdapter-Switch", "NP inputTime");
                     break;
 
                 case "inputNumber":
@@ -290,7 +275,6 @@ public class TaskFragment extends Fragment {
                     });
 
                     fieldsContainer.addView(inputNumber, layoutParams);
-                    Log.i("TasksRVAdapter-Switch", "ET inputTime");
                     break;
 
                 case "inputInvisible":
@@ -300,11 +284,9 @@ public class TaskFragment extends Fragment {
                     }
                     textInvisible.setVisibility(View.INVISIBLE);
                     fieldsContainer.addView(textInvisible, layoutParams);
-                    Log.i("TasksRVAdapter-Switch", "ET invisible created");
                     break;
 
-                default:
-                    Log.i("TasksRVAdapter-Switch", "TaskField type is not defined");
+                default: //TODO: Muss hier was hin?
             }
         }
         //Zurück-Button
@@ -324,7 +306,6 @@ public class TaskFragment extends Fragment {
     }
 
     private void sendAnswer() {
-
         List<AnswerField> inputsArraylist = new ArrayList<>();
         for (TaskField field2 : fieldList) {
             if (field2.getType().equals("inputField") || field2.getType().equals("inputText") || field2.getType().equals("inputNumber") || field2.getType().equals("inputTime")) {
@@ -351,24 +332,22 @@ public class TaskFragment extends Fragment {
             DateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
             configTimeParsed = format.parse(configTime);
             // feststellen, ob Abgabe-Zeit vor der momentanen Uhrzeit liegt
-            if (/*configTimeParsed.after(currentTime) || configTime.equals(currentTime)*/true) {
-            viewModel.sendAnswer(task1);
-            viewModel.getCorrectPasswordLiveData().observe(this, new Observer<Boolean>() {
-                @Override
-                public void onChanged(@Nullable Boolean aBoolean) {
-                    if (aBoolean != null) {
-                        if (aBoolean) {
-                            task.setCompleted(true);
-                            viewModel.changeTask(task);
-                            getFragmentManager().popBackStack();
-                        } else {
-                            Toast.makeText(getContext(), "Passwort nicht akzeptiert", Toast.LENGTH_LONG).show();
-                            Log.i("TaskFragment", "Password Incorrect");
+            if (/*configTimeParsed.after(currentTime) || configTime.equals(currentTime)*/true) { //TODO: vor Abgabe Kommentare wegmachen
+                viewModel.sendAnswer(task1);
+                viewModel.getCorrectPasswordLiveData().observe(this, new Observer<Boolean>() {
+                    @Override
+                    public void onChanged(@Nullable Boolean aBoolean) {
+                        if (aBoolean != null) {
+                            if (aBoolean) {
+                                task.setCompleted(true);
+                                viewModel.changeTask(task);
+                                getFragmentManager().popBackStack();
+                            } else {
+                                Toast.makeText(getContext(), "Passwort nicht akzeptiert", Toast.LENGTH_LONG).show();
+                            }
                         }
                     }
-                }
-            });
-
+                });
             } else {
                 Toast.makeText(getContext(), "Abgabezeit vorbei.", Toast.LENGTH_SHORT).show();
             }
@@ -380,27 +359,24 @@ public class TaskFragment extends Fragment {
     public static void setNumberPickerColor(NumberPicker numberPicker, int color) {
 
         //TextColor
-        try{
+        try {
             Field selectorWheelPaintField = numberPicker.getClass()
                     .getDeclaredField("mSelectorWheelPaint");
             selectorWheelPaintField.setAccessible(true);
-            ((Paint)selectorWheelPaintField.get(numberPicker)).setColor(color);
-        }
-        catch(NoSuchFieldException e){
+            ((Paint) selectorWheelPaintField.get(numberPicker)).setColor(color);
+        } catch (NoSuchFieldException e) {
             Log.w("setNumberPickerTextCol", e);
-        }
-        catch(IllegalAccessException e){
+        } catch (IllegalAccessException e) {
             Log.w("setNumberPickerTextCol", e);
-        }
-        catch(IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             Log.w("setNumberPickerTextCol", e);
         }
 
         final int count = numberPicker.getChildCount();
-        for(int i = 0; i < count; i++){
+        for (int i = 0; i < count; i++) {
             View child = numberPicker.getChildAt(i);
-            if(child instanceof EditText)
-                ((EditText)child).setTextColor(color);
+            if (child instanceof EditText)
+                ((EditText) child).setTextColor(color);
         }
         numberPicker.invalidate();
 
@@ -417,8 +393,7 @@ public class TaskFragment extends Fragment {
                     e.printStackTrace();
                 } catch (Resources.NotFoundException e) {
                     e.printStackTrace();
-                }
-                catch (IllegalAccessException e) {
+                } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
                 break;

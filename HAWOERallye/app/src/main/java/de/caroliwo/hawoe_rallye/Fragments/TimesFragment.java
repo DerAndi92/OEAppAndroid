@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,10 +26,8 @@ public class TimesFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_times, container, false);
-
-        Log.i("TimesFragment", "1" );
 
         // Viewmodel-Instanz holen
         viewModel = ViewModelProviders.of((MainActivity) getActivity()).get(DataViewModel.class);
@@ -43,10 +40,11 @@ public class TimesFragment extends Fragment {
 
         // Tasks holen
         taskList = viewModel.getTaskListLiveData().getValue();
-        Log.i("TimesFragment", "taskList: " + taskList);
 
         // Falls taskList noch nicht verfügbar leere ArrayList zuweisen (wird später vom Observer geupdated)
-        if (taskList == null) { taskList = new ArrayList<>(); }
+        if (taskList == null) {
+            taskList = new ArrayList<>();
+        }
 
         //Adapter instanziieren
         timesAdapter = new TimesAdapter(getActivity(), taskList);
@@ -58,7 +56,6 @@ public class TimesFragment extends Fragment {
 
                 // Bei Änderungen Adapter updaten
                 timesAdapter.setTasks(tasks);
-                Log.i("TimesFragment", "Tasks updated by Observer: " + tasks);
             }
         });
 

@@ -6,12 +6,10 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.annotation.Nullable;
-import android.widget.FrameLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +33,6 @@ public class TasksFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        if (debug) Log.i("TasksFragment-Log","1");
         super.onCreate(savedInstanceState);
 
         // Viewmodel-Instanz holen
@@ -47,14 +44,11 @@ public class TasksFragment extends Fragment {
 
         // Falls noch nicht verfügbar leere ArrayList zuweisen (wird später vom Observer geupdated)
         if (taskList == null) taskList = new ArrayList<>();
-
-        if (debug) Log.i("TasksFragment-Log","2");
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (debug) Log.i("TasksFragment-Log","3");
 
         // Fragment-Layout inflaten
         v = inflater.inflate(R.layout.fragment_tasks, container, false);
@@ -64,8 +58,6 @@ public class TasksFragment extends Fragment {
 
         // neuen Adapter erstellen und zuweisen
         recyclerViewAdapter = new TasksRecyclerViewAdapter((MainActivity) getActivity(), taskList);
-        if (debug) Log.i("TasksFragment-Log","taskList: " + taskList.toString());
-
 
         // taskList-LiveData observieren, diese wird im Repository nach dem Laden der taskList automatisch vervollständigt
         viewModel.getTaskListLiveData().observe(this, new Observer<ArrayList<Task>>() {
@@ -75,15 +67,13 @@ public class TasksFragment extends Fragment {
                 // Bei Änderung die Liste neu zuweisen
                 taskList = viewModel.getTaskListLiveData().getValue();
 
-                    // Adapter updaten
-                    recyclerViewAdapter.setTasks(taskList);
-                    if (debug) Log.i("TasksFragment-Log", "Tasks updated by Observer: " + tasks.toString());
+                // Adapter updaten
+                recyclerViewAdapter.setTasks(taskList);
             }
         });
 
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         recyclerView.setAdapter(recyclerViewAdapter);
-        if (debug) Log.i("TasksFragment-Log","4");
         return v;
     }
 
@@ -94,7 +84,6 @@ public class TasksFragment extends Fragment {
     }
 
     public List<Task> getTaskList() {
-        if (debug) Log.i("TasksFragment-Log","return taskItemList: " + taskList);
         return taskList;
     }
 }

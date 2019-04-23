@@ -10,17 +10,14 @@ import android.util.Log;
 import android.widget.ProgressBar;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import android.arch.lifecycle.ViewModelProviders;
 
 import de.caroliwo.hawoe_rallye.Data.ConfigurationEntity;
 import de.caroliwo.hawoe_rallye.Data.DataViewModel;
 import de.caroliwo.hawoe_rallye.Data.StudentEntity;
-import de.caroliwo.hawoe_rallye.DownloadJSONRetrofit;
 import de.caroliwo.hawoe_rallye.Group;
 import de.caroliwo.hawoe_rallye.R;
-import de.caroliwo.hawoe_rallye.Configuration;
 import de.caroliwo.hawoe_rallye.Student;
 import de.caroliwo.hawoe_rallye.Task;
 
@@ -34,9 +31,7 @@ public class LoadingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i("LoadingActivity", "1");
         setContentView(R.layout.activity_loading);
-        Log.i("LoadingActivity", "2");
 
         // ViewModel für Daten
         viewModel = ViewModelProviders.of(this).get(DataViewModel.class);
@@ -45,16 +40,12 @@ public class LoadingActivity extends AppCompatActivity {
 
         // Progressbar zuweisen
         progressBar = findViewById(R.id.progressBar);
-        Log.i("LoadingActivity", "4");
 
         // Kontext für Intent
         applicationContext = getApplicationContext();
-        Log.i("LoadingActivity", "5");
 
         // Checken ob ein Student geladen wurde
         if (studentEntity != null) {
-
-            Log.i("LoadingActivity", "student vorhanden ");
 
             // Bei existierendem Eintrag: Intent zur Main-Activity
             intent = new Intent(applicationContext, MainActivity.class);
@@ -71,8 +62,7 @@ public class LoadingActivity extends AppCompatActivity {
                 public void onChanged(@Nullable ArrayList<Task> groups) {
 
                     // bei geladenen Aufgaben Progressbar erhöhen
-                    progressBar.setProgress(progressBar.getProgress()+50);
-                    Log.i("LoadingActivity","Tasks loaded");
+                    progressBar.setProgress(progressBar.getProgress() + 50);
                     progressCheck();
                 }
             });
@@ -86,17 +76,14 @@ public class LoadingActivity extends AppCompatActivity {
                 public void onChanged(@Nullable ArrayList<Student> students) {
 
                     // bei geladenen Gruppenmitgliedern Progressbar erhöhen
-                    progressBar.setProgress(progressBar.getProgress()+50);
-                    Log.i("LoadingActivity","Tasks loaded");
+                    progressBar.setProgress(progressBar.getProgress() + 50);
                     progressCheck();
                 }
             });
-            Log.i("LoadingActivity","8");
 
         } else {
             // Bei neuem User: Intent zur Login-Activity
             intent = new Intent(applicationContext, LogInActivity.class);
-            Log.i("LoadingActivity","9");
 
             // Konfiguration laden
             viewModel.fetchConfig();
@@ -107,8 +94,7 @@ public class LoadingActivity extends AppCompatActivity {
                 public void onChanged(@Nullable ConfigurationEntity configurationEntity) {
 
                     // bei geladener Konfiguration Progressbar erhöhen
-                    progressBar.setProgress(progressBar.getProgress()+50);
-                    Log.i("LoadingActivity","Configuration loaded");
+                    progressBar.setProgress(progressBar.getProgress() + 50);
                     progressCheck();
                 }
             });
@@ -122,18 +108,16 @@ public class LoadingActivity extends AppCompatActivity {
                 public void onChanged(@Nullable ArrayList<Group> groups) {
 
                     // bei geladenen Gruppen Progressbar erhöhen
-                    progressBar.setProgress(progressBar.getProgress()+50);
-                    Log.i("LoadingActivity","Groups loaded");
+                    progressBar.setProgress(progressBar.getProgress() + 50);
                     progressCheck();
                 }
             });
         }
     }
 
-    public void progressCheck (){
+    public void progressCheck() {
         if (progressBar.getProgress() == 100) {
             applicationContext.startActivity(intent);
-            Log.i("Test", "start from LoadingActivity");
         }
     }
 }

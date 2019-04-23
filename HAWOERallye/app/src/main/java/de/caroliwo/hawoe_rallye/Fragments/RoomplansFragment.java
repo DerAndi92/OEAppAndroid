@@ -9,8 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.barteksc.pdfviewer.PDFView;
-import com.github.barteksc.pdfviewer.util.FitPolicy;
-import com.github.barteksc.pdfviewer.util.Util;
 
 import de.caroliwo.hawoe_rallye.R;
 
@@ -24,7 +22,7 @@ public class RoomplansFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_roomplans, container,false);
+        View rootView = inflater.inflate(R.layout.fragment_roomplans, container, false);
         pdfView = rootView.findViewById(R.id.pdfView);
         pdfView.fromAsset("Raumplaene.pdf")
                 .spacing(5) //Abstand zwischen den einzelnen Seiten

@@ -3,7 +3,7 @@ package de.caroliwo.hawoe_rallye;
 
 //Klasse, mit der die Instanz der Konfiguration erstellt werden kann
 
-public class Configuration  {
+public class Configuration {
     private String password;
     private String maxTime;
 

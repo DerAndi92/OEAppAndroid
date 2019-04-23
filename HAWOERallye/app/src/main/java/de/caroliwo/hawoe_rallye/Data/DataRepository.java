@@ -4,10 +4,8 @@ import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.os.AsyncTask;
-import android.os.StrictMode;
 import android.util.Log;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,22 +50,15 @@ public class DataRepository {
     private DownloadJSONRetrofit downloadJSONRetrofit;
 
 
-
-
-
-
     // Konstruktor
     public DataRepository(Application application) {
 
         // Instanz der Datenbank holen
         Database database = Database.getInstance(application);
-        Log.i("DataRepository", "1");
 
         // Data-Access-Objects zuweisen
         configDao = database.configDao();
-        Log.i("DataRepository", "2");
         studDao = database.studDao();
-        Log.i("DataRepository", "3");
 
         // LiveData-Variablen zuweisen
         configEntity = configDao.getConfigLiveData();
@@ -80,36 +71,27 @@ public class DataRepository {
         // Retrofit instanziieren
         Retrofit retrofitClass = new Retrofit();
         downloadJSONRetrofit = retrofitClass.createlogInterceptor(application);
-
-
     }
 
     // Methoden um LiveData von API-Calls lokal zu ändern
     public void addStudentLiveData(Student student) {
-        Log.i("DataRepository", "addStudentLiveData() input: " + student.toString());
         ArrayList<Student> tempList = new ArrayList<>();
-        if(this.studentList.getValue() != null) {
+        if (this.studentList.getValue() != null) {
             tempList = this.studentList.getValue();
-            Log.i("DataRepository", "addStudentLiveData() tempList: " + tempList.toString()); 
         }
         tempList.add(student);
         this.studentList.setValue(tempList);
-        Log.i("DataRepository", "addStudentLiveData() studentList: " + this.studentList.getValue().toString());
     }
 
     public void removeStudentLiveData(Student student) {
-        Log.i("DataRepository", "removeStudentLiveData() student: " + student.toString());
         ArrayList<Student> tempList = new ArrayList<Student>(this.studentList.getValue());
-        Log.i("DataRepository", "removeStudentLiveData() studentList.getValue(): " + this.studentList.getValue());
         tempList.remove(student);
         this.studentList.setValue(tempList);
     }
 
     public void changeStudentLiveData(Student newStudent) {
-        Log.i("DataRepository", "changeStudent() student: " + newStudent.toString());
         ArrayList<Student> tempList = new ArrayList<Student>(this.studentList.getValue());
-        Log.i("DataRepository", "changeStudent() studentList.getValue(): " + this.studentList.getValue());
-        for (Student student: tempList) {
+        for (Student student : tempList) {
             if (student.getStudentId() == newStudent.getStudentId()) removeStudentLiveData(student);
         }
         addStudentLiveData(newStudent);
@@ -117,7 +99,7 @@ public class DataRepository {
 
     public void addGroupLiveData(Group group) {
         ArrayList<Group> tempList = new ArrayList<>();
-        if(this.groupList.getValue() != null) {
+        if (this.groupList.getValue() != null) {
             tempList = this.groupList.getValue();
         }
         tempList.add(group);
@@ -138,12 +120,9 @@ public class DataRepository {
         addGroupLiveData(newGroup);
     }
 
-
     public void changeTaskLiveData(Task newTask) {
-        Log.i("DataRepository", "changeTask() task: " + newTask.toString());
         ArrayList<Task> tempList = new ArrayList<>(this.taskList.getValue());
-        Log.i("DataRepository", "changeTask() taskList.getValue(): " + this.taskList.getValue());
-        for (Task task: tempList) {
+        for (Task task : tempList) {
             if (task.getId() == newTask.getId()) /*removeTaskLiveData(task);*/ {
                 tempList.set(tempList.indexOf(task), newTask);
             }
@@ -157,20 +136,16 @@ public class DataRepository {
     }
 
     public void addTaskLiveData(Task task) {
-        Log.i("DataRepository", "addTaskToLiveDataList() task: " + task.toString());
         ArrayList<Task> tempList = new ArrayList<>();
-        if(this.taskList.getValue()!=null) {
+        if (this.taskList.getValue() != null) {
             tempList = this.taskList.getValue();
-            Log.i("DataRepository", "addTaskToLiveDataList() list: " + this.taskList.getValue().toString());
         }
         tempList.add(task);
         this.taskList.setValue(tempList);
     }
 
-
     // Methoden um eigene Student-Id in Datenbank nachzutragen
     private void correctStudentId() {
-
         // Checken ob Inhalt von studentList nicht null ist
         if (studentList.getValue() != null) {
 
@@ -192,8 +167,10 @@ public class DataRepository {
         }
 
     }
-    private boolean studentIdIsCorrect() { return getStudent().getStudentId() != -1; }
 
+    private boolean studentIdIsCorrect() {
+        return getStudent().getStudentId() != -1;
+    }
 
     // Methoden welche LiveData liefern
 
@@ -213,18 +190,24 @@ public class DataRepository {
         return taskList;
     }
 
-    public LiveData<ArrayList<Student>> getStudentListLiveData() { return studentList; }
+    public LiveData<ArrayList<Student>> getStudentListLiveData() {
+        return studentList;
+    }
 
-    public LiveData<Boolean> getCorrectPasswordLiveData() { return correctPasswordLiveData; }
-
+    public LiveData<Boolean> getCorrectPasswordLiveData() {
+        return correctPasswordLiveData;
+    }
 
 
     // Methoden für direkte Datenbankabfrage auf dem Main-Thread
 
-    public StudentEntity getStudent() { return studDao.getStudent(); }
+    public StudentEntity getStudent() {
+        return studDao.getStudent();
+    }
 
-    public ConfigurationEntity getConfig() { return configDao.getConfig(); }
-
+    public ConfigurationEntity getConfig() {
+        return configDao.getConfig();
+    }
 
 
     // Methoden welche AsyncTasks aufrufen (für Datenbank-Operationen)
@@ -346,12 +329,10 @@ public class DataRepository {
         }
     }
 
-
-
     // Methoden für API-Calls (Retrofit)
 
     //Konfigurationen laden
-    public void fetchConfig () {
+    public void fetchConfig() {
         Call<ConfigurationAPI> call = downloadJSONRetrofit.getConfiguration();
 
         //execute on background-thread
@@ -360,7 +341,7 @@ public class DataRepository {
             public void onResponse(Call<ConfigurationAPI> call, Response<ConfigurationAPI> response) {
                 //wenn HTTP-Request nicht erfolgreich:
                 if (!response.isSuccessful()) {
-                    Log.i("TEST ErrorResponse: ", String.valueOf(response.code()));
+                    Log.i("loadConfig Error: ", String.valueOf(response.code()));
                     return;
                 }
 
@@ -379,49 +360,41 @@ public class DataRepository {
             @Override
             public void onFailure(Call<ConfigurationAPI> call, Throwable t) {
                 // something went completely south (like no internet connection)
-                Log.i("TEST Error", t.getMessage() + "Error");
+                Log.i("loadConfig Failure: ", t.getMessage());
             }
         });
     }
 
-    public void fetchGroups () {
-        Log.i("DataRepository", "fetchGroups()");
+    public void fetchGroups() {
         Call<GroupsAPI> call = downloadJSONRetrofit.getGroups();
-        Log.i("DataRepository", "Call<GroupsAPI> call = downloadJSONRetrofit.getGroups();");
 
         //execute on background-thread
         call.enqueue(new Callback<GroupsAPI>() {
             @Override
             public void onResponse(Call<GroupsAPI> call, Response<GroupsAPI> response) {
-                Log.i("DataRepository", "onResponse()");
                 //wenn HTTP-Request nicht erfolgreich:
                 if (!response.isSuccessful()) {
-                    Log.i("DataRepository", "response not successful");
-                    Log.i("TEST ErrorResponse: ", String.valueOf(response.code()));
+                    Log.i("fetchGroups Error: ", String.valueOf(response.code()));
                     return;
                 }
 
                 //wenn HTTP-Request erfolgreich:
-                Log.i("DataRepository", "response successfull");
                 GroupsAPI groupsAPI = response.body();
-                Log.i("DataRepository", "response.body(): " + response.body());
 
                 // GruppenListe in groupList-LiveData speichern
                 groupList.setValue(new ArrayList<>(groupsAPI.getGroupList()));
-                Log.i("DataRepository", "groupList: " + groupList.toString());
             }
 
             @Override
             public void onFailure(Call<GroupsAPI> call, Throwable t) {
                 // something went completely south (like no internet connection)
-                Log.i("TEST Error", t.getMessage() + "Error");
-                Log.i("DataRepository", "onFailure()");
+                Log.i("fetchGroups Failure: ", t.getMessage());
             }
         });
     }
 
     //changeGroup
-    public void changeGroupName (final Group group) {
+    public void changeGroupName(final Group group) {
 
         Call<GroupAPI> call = downloadJSONRetrofit.changeGroup(group.getGroupId(), group);
 
@@ -430,16 +403,13 @@ public class DataRepository {
             public void onResponse(Call<GroupAPI> call, Response<GroupAPI> response) {
 
                 if (!response.isSuccessful()) {
-                    Log.i("TEST ErrorResponse: ", String.valueOf(response.code()));
+                    Log.i("changeGroupName Error: ", String.valueOf(response.code()));
                     return;
                 }
 
                 // Gruppe aus Response holen
                 GroupAPI groupResponseAPI = response.body();
                 Group groupResponse = groupResponseAPI.getGroup();
-                Log.i("DataRepository", "changeGroupName() response: " + response.toString());
-                Log.i("DataRepository", "changeGroupName() response.body(): " + response.body().toString());
-                Log.i("DataRepository", "changeGroupName()  studResponse: " + groupResponse.toString());
 
                 // Gruppenname ändern
                 changeGroupLiveData(groupResponse);
@@ -448,13 +418,12 @@ public class DataRepository {
             @Override
             public void onFailure(Call<GroupAPI> call, Throwable t) {
                 // something went completely south (like no internet connection)
-                Log.i("TEST Error", t.getMessage() + "Error");
+                Log.i("changeGroupName Fail: ", t.getMessage());
             }
         });
     }
 
     public boolean groupsAreFetched() {
-        Log.i("DataRepository", "groupList != null: " + (groupList != null));
         return groupList != null;
     }
 
@@ -468,26 +437,26 @@ public class DataRepository {
         }
     }
 
-//Studierenden löschen
-    public void deleteStudent (int studentID) {
+    //Studierenden löschen
+    public void deleteStudent(int studentID) {
         Call<Void> call = downloadJSONRetrofit.deleteStudent(studentID);
 
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                Log.i("TEST Response", String.valueOf(response.code()));
+                Log.i("deleteStudent Error: ", String.valueOf(response.code()));
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 // something went completely south (like no internet connection)
-                Log.i("TEST Error", t.getMessage() + "Error");
+                Log.i("deleteStudent Failure: ", t.getMessage());
             }
         });
     }
 
-//Studierenden hinzufügen
-    public void sendStudent(Student student){
+    //Studierenden hinzufügen
+    public void sendStudent(Student student) {
         Call<StudentAPI> call = downloadJSONRetrofit.sendStudent(student);
 
         call.enqueue(new Callback<StudentAPI>() {
@@ -495,16 +464,13 @@ public class DataRepository {
             public void onResponse(Call<StudentAPI> call, Response<StudentAPI> response) {
 
                 if (!response.isSuccessful()) {
-                    Log.i("ErrorRes:GroRecViewAdap", String.valueOf(response.code()));
+                    Log.i("sendStudent Error: ", String.valueOf(response.code()));
                     return;
                 }
 
                 // Student aus Response holen
                 StudentAPI studResponseAPI = response.body();
                 Student studResponse = studResponseAPI.getStudent();
-                Log.i("DataRepository", "sendStudent() response: " + response.toString());
-                Log.i("DataRepository", "sendStudent() response.body(): " + response.body().toString());
-                Log.i("DataRepository", "sendStudent() studResponse: " + studResponse.toString());
 
                 // Student zur Gruppe hinzufügen
                 addStudentLiveData(studResponse);
@@ -514,12 +480,12 @@ public class DataRepository {
             @Override
             public void onFailure(Call<StudentAPI> call, Throwable t) {
                 // something went completely south (like no internet connection)
-                Log.i("Error GroupRecViewAdap", t.getMessage());
+                Log.i("sendStudent Failure: ", t.getMessage());
             }
         });
     }
 
-//Daten eines Studierenden ändern
+    //Daten eines Studierenden ändern
     public void changeStudent(Student student) {
 
         Call<StudentAPI> call = downloadJSONRetrofit.changeStudent(student.getStudentId(), student);
@@ -529,16 +495,13 @@ public class DataRepository {
             public void onResponse(Call<StudentAPI> call, Response<StudentAPI> response) {
 
                 if (!response.isSuccessful()) {
-                    Log.i("TEST ErrorResponse: ", String.valueOf(response.code()));
+                    Log.i("changeStudent Error: ", String.valueOf(response.code()));
                     return;
                 }
 
                 // Student aus Response holen
                 StudentAPI studResponseAPI = response.body();
                 Student studResponse = studResponseAPI.getStudent();
-                Log.i("DataRepository", "sendStudent() response: " + response.toString());
-                Log.i("DataRepository", "sendStudent() response.body(): " + response.body().toString());
-                Log.i("DataRepository", "sendStudent() studResponse: " + studResponse.toString());
 
                 // Student in Gruppe ändern
                 changeStudentLiveData(studResponse);
@@ -547,7 +510,7 @@ public class DataRepository {
             @Override
             public void onFailure(Call<StudentAPI> call, Throwable t) {
                 // something went completely south (like no internet connection)
-                Log.i("TEST Error", t.getMessage() + "Error");
+                Log.i("changeStudent Failure: ", t.getMessage());
             }
         });
     }
@@ -563,7 +526,7 @@ public class DataRepository {
 
                 //wenn HTTP-Request nicht erfolgreich:
                 if (!response.isSuccessful()) {
-                    Log.i("TEST Error get Tasks ", String.valueOf(response.code()));
+                    Log.i("fetchTasks Error: ", String.valueOf(response.code()));
                     return;
                 }
 
@@ -571,17 +534,16 @@ public class DataRepository {
                 TasksAPI taskAPI = response.body();
                 // ArrayList mit Tasks in taskList-LiveData speichern
                 ArrayList<Task> tempTaskList = new ArrayList<>(taskAPI.getTaskList());
-                for (Task task: tempTaskList) {
+                for (Task task : tempTaskList) {
                     fetchTask(groupID, task.getId());
                 }
                 taskList.setValue(tempTaskList);
-                Log.i("DataRepository", "fetchTasks() taskList: " + taskList.getValue().toString());
             }
 
             @Override
             public void onFailure(Call<TasksAPI> call, Throwable t) {
                 // something went completely south (like no internet connection)
-                Log.i("TEST Error", t.getMessage() + "Error");
+                Log.i("fetchTasks Failure: ", t.getMessage());
             }
         });
     }
@@ -597,14 +559,13 @@ public class DataRepository {
 
                 //wenn HTTP-Request nicht erfolgreich:
                 if (!response.isSuccessful()) {
-                    Log.i("DataRepository ", "fetchTask() Response unsuccessfull: " + String.valueOf(response.code()));
+                    Log.i("fetchTask Error: ", String.valueOf(response.code()));
                     return;
                 }
 
                 //wenn HTTP-Request erfolgreich:
                 TaskAPI taskAPI = response.body();
                 Task responseTask = taskAPI.getTask();
-                Log.i("DataRepository", "fetchTask() response.body(): " + response.body());
 
                 // Taskdetails in existierendem Task-Objekt speichern
                 addDetailsToTask(responseTask);
@@ -613,16 +574,15 @@ public class DataRepository {
             @Override
             public void onFailure(Call<TaskAPI> call, Throwable t) {
                 // something went completely south (like no internet connection)
-                Log.i("DataRepository", "fetchTask() onFailure(): " + t.getMessage());
+                Log.i("fetchTask Failure: ", t.getMessage());
             }
         });
     }
 
     // Lösung(en) einer Aufgabe einer Gruppe abschicken
-    public void sendAnswer (final Answer answer) {
+    public void sendAnswer(final Answer answer) {
         correctPasswordLiveData.setValue(null);
         Call<AnswerAPI> call = downloadJSONRetrofit.sendAnswer(answer);
-
 
         // execute on background-thread
         call.enqueue(new Callback<AnswerAPI>() {
@@ -631,7 +591,7 @@ public class DataRepository {
 
                 //wenn HTTP-Request nicht erfolgreich:
                 if (!response.isSuccessful()) {
-                    Log.i("DataRepository ", "sendAnswer() Response unsuccessfull: " + String.valueOf(response.code()));
+                    Log.i("sendAnswer Error: ", String.valueOf(response.code()));
                     correctPasswordLiveData.setValue(false);
                     return;
                 }
@@ -639,13 +599,12 @@ public class DataRepository {
                 //wenn HTTP-Request erfolgreich:
                 Answer answer = response.body().getAnswer();
                 correctPasswordLiveData.setValue(true);
-                Log.i("DataRepository", "sendAnswer() response.body(): " + response.body());
             }
 
             @Override
             public void onFailure(Call<AnswerAPI> call, Throwable t) {
                 // something went completely south (like no internet connection)
-                Log.i("DataRepository", "sendAnswer() onFailure(): " + t.getMessage());
+                Log.i("sendAnswer Failure: ", t.getMessage());
             }
         });
     }
@@ -661,7 +620,7 @@ public class DataRepository {
 
                 //wenn HTTP-Request nicht erfolgreich:
                 if (!response.isSuccessful()) {
-                    Log.i("TEST Error: getGroup ", String.valueOf(response.code()));
+                    Log.i("fetchGroup Error: ", String.valueOf(response.code()));
                     return;
                 }
 
@@ -679,7 +638,7 @@ public class DataRepository {
             @Override
             public void onFailure(Call<GroupAPI> call, Throwable t) {
                 // something went completely south (like no internet connection)
-                Log.i("TEST Error", t.getMessage() + "Error");
+                Log.i("fetchGroup Failure: ", t.getMessage());
             }
         });
     }

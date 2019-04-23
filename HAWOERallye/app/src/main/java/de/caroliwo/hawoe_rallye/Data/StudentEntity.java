@@ -5,17 +5,16 @@ import android.arch.persistence.room.PrimaryKey;
 
 //Entität Student der Datenbank
 
-@Entity (tableName = "student_table")
+@Entity(tableName = "student_table")
 public class StudentEntity {
 
-    @PrimaryKey (autoGenerate = true)
+    @PrimaryKey(autoGenerate = true)
     private int id;
     private int studentId;
     private String first_name;
     private String last_name;
     private String course;
     private int groupId;
-
 
     public StudentEntity(int studentId, String first_name, String last_name, String course, int groupId) {
         this.studentId = studentId;

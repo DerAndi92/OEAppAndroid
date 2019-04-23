@@ -13,13 +13,10 @@ import android.util.Log;
 import java.util.ArrayList;
 
 import de.caroliwo.hawoe_rallye.Data.DataViewModel;
-import de.caroliwo.hawoe_rallye.DownloadJSONRetrofit;
 import de.caroliwo.hawoe_rallye.Group;
 import de.caroliwo.hawoe_rallye.R;
 import de.caroliwo.hawoe_rallye.Student;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+
 
 public class GroupActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
@@ -30,20 +27,17 @@ public class GroupActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        if (debug) Log.i("GroupActivity-Log","1");
         super.onCreate(savedInstanceState);
-        Log.i("Test", "start GroupActivity");
 
         // ViewModel-Instanz holen
         viewModel = ViewModelProviders.of(this).get(DataViewModel.class);
+
         // Gruppen laden
         viewModel.fetchGroups();
 
-//        if (debug) Log.i("GroupActivity-Log","2");
+        //Layouts und Elemente zuweisen
         setContentView(R.layout.activity_group);
-//        if (debug) Log.i("GroupActivity-Log","3");
         recyclerView = findViewById(R.id.chooseGroupRV);
-//        if (debug) Log.i("GroupActivity-Log","4");
 
         //Daten von LoadingActivity holen
         Intent intentFromLogIn = getIntent();
@@ -52,27 +46,25 @@ public class GroupActivity extends AppCompatActivity {
         // Gruppen holen
         groupsList = viewModel.getGroupListLiveData().getValue();
         // Falls groupList noch nicht verfügbar leere ArrayList zuweisen (wird später vom Observer geupdated)
-        if (groupsList == null) { groupsList = new ArrayList<>(); }
+        if (groupsList == null) {
+            groupsList = new ArrayList<>();
+        }
 
         //RecyclerView mit Gruppen füllen
-//        if (debug) Log.i("GroupActivity-Log","5");
         final GroupRecyclerViewAdapter adapter = new GroupRecyclerViewAdapter(this, groupsList, student);
 
         // groupsList-LiveData observieren
         viewModel.getGroupListLiveData().observe(this, new Observer<ArrayList<Group>>() {
             @Override
             public void onChanged(@Nullable ArrayList<Group> groups) {
-
                 // Bei Änderung Adapter updaten
                 adapter.setGroups(groups);
             }
         });
 
-//        if (debug) Log.i("GroupActivity-Log","6");
+        //LayoutManager und Adapter setzen
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        Log.i("GroupActivity-Log test","7");
         recyclerView.setAdapter(adapter);
-        Log.i("GroupActivity-Log test","8");
 
     }
 }

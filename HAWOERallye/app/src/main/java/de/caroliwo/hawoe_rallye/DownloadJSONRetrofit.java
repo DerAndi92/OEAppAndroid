@@ -6,7 +6,6 @@ import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
-import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -15,25 +14,25 @@ public interface DownloadJSONRetrofit {
     //Hier werden die Requests an die API definiert, die von Retrofit genutzt werden
 
     //Konfiguration laden
-    @GET ("configuration")
+    @GET("configuration")
     Call<ConfigurationAPI> getConfiguration();
 
     //---------------Groups----------------
     //Alle Gruppen laden
-    @GET ("group")
+    @GET("group")
     Call<GroupsAPI> getGroups();
 
     //Gruppe mit Studierenden laden
-    @GET ("group/{groupID}")
-    Call<GroupAPI> getGroup (@Path("groupID") int groupID);
+    @GET("group/{groupID}")
+    Call<GroupAPI> getGroup(@Path("groupID") int groupID);
 
     //Gruppe bearbeiten
-    @PATCH ("group/{groupID}")
+    @PATCH("group/{groupID}")
     Call<GroupAPI> changeGroup(@Path("groupID") int groupID, @Body Group group);
 
     //---------------Students----------------
     //Studierenden hinzufügen
-    @POST ("student")
+    @POST("student")
     Call<StudentAPI> sendStudent(@Body Student student);
 
     //Studierenden bearbeiten
@@ -41,7 +40,7 @@ public interface DownloadJSONRetrofit {
     Call<StudentAPI> changeStudent(@Path("studentID") int studentID, @Body Student student);
 
     //Studierenden löschen
-    @DELETE ("student/{studentID}")
+    @DELETE("student/{studentID}")
     Call<Void> deleteStudent(@Path("studentID") int studentID);
 
     //---------------Tasks----------------
@@ -51,10 +50,10 @@ public interface DownloadJSONRetrofit {
 
     //Eine Aufgabe einer Gruppe laden
     @GET("task/{taskID}/byGroup")
-    Call<TaskAPI> getTask (@Path("taskID") int taskID, @Query("group") int groupID);
+    Call<TaskAPI> getTask(@Path("taskID") int taskID, @Query("group") int groupID);
 
     //Lösung einer Aufgabe abschicken
-    @POST ("task/field")
+    @POST("task/field")
     Call<AnswerAPI> sendAnswer(@Body Answer answer);
 
 }

@@ -16,12 +16,15 @@ public class GroupsAPI {
     public List<Group> getGroupList() {
         return groupList;
     }
+
     public void setGroupList(List<Group> groupList) {
         this.groupList = groupList;
     }
+
     public String getMessage() {
         return message;
     }
+
     public void setMessage(String message) {
         this.message = message;
     }

@@ -1,6 +1,7 @@
 package de.caroliwo.hawoe_rallye;
 
 import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 //Group-Klasse, mit der die Instanzen der einzelnen Gruppen erstellt werden können
@@ -29,7 +30,6 @@ public class Group {
         this.groupId = groupId;
         this.name = name;
     }
-
 
     //GETTER + SETTER
     public int getGroupId() {
