@@ -8,6 +8,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,13 +62,14 @@ public class TasksRecyclerViewAdapter extends RecyclerView.Adapter<TasksRecycler
     // Wird für jede Aufgabe ausgeführt
     @Override
     public void onBindViewHolder(@NonNull TasksViewHolder tasksViewHolder, int i) {
+        Task task = taskList.get(i);
         // Namen der Aufgabe zu TextView zuweisen
-        tasksViewHolder.textView.setText(taskList.get(i).getName());
+        tasksViewHolder.textView.setText(task.getName());
         // Icon der Aufgabe zuweisen
-        int id = context.getResources().getIdentifier(taskList.get(i).getIcon(), "drawable", "de.caroliwo.hawoe_rallye");
+        int id = context.getResources().getIdentifier(task.getIcon(), "drawable", "de.caroliwo.hawoe_rallye");
         tasksViewHolder.imageView.setImageResource(id);
-
-        if (taskList.get(i).isCompleted()) {
+        tasksViewHolder.imageView.setColorFilter(null);
+        if (task.isCompleted()) {
             tasksViewHolder.imageView.setColorFilter(Color.parseColor("#00FF00"));
         }
     }

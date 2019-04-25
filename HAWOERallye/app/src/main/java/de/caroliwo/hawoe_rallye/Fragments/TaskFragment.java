@@ -286,7 +286,7 @@ public class TaskFragment extends Fragment {
                     fieldsContainer.addView(textInvisible, layoutParams);
                     break;
 
-                default: //TODO: Muss hier was hin?
+                default:
             }
         }
         //Zurück-Button

@@ -127,6 +127,7 @@ public class DataRepository {
                 tempList.set(tempList.indexOf(task), newTask);
             }
         }
+        this.taskList.setValue(tempList);
     }
 
     public void removeTaskLiveData(Task task) {
