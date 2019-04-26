@@ -332,7 +332,7 @@ public class TaskFragment extends Fragment {
             DateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
             configTimeParsed = format.parse(configTime);
             // feststellen, ob Abgabe-Zeit vor der momentanen Uhrzeit liegt
-            if (/*configTimeParsed.after(currentTime) || configTime.equals(currentTime)*/true) { //TODO: vor Abgabe Kommentare wegmachen
+            if (configTimeParsed.after(currentTime) || configTime.equals(currentTime)) {
                 viewModel.sendAnswer(task1);
                 viewModel.getCorrectPasswordLiveData().observe(this, new Observer<Boolean>() {
                     @Override

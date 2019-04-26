@@ -53,7 +53,10 @@ public class TimesAdapter extends ArrayAdapter {
         String time_to = (String) taskList.get(position).getTime().getTime_to();
         if (time_from != null && time_to != null) {
             timeTV.setText(time_from + "-" + time_to + " Uhr");
-        } else {
+        } else if (time_from != null && time_to== null) {
+            timeTV.setText(time_from + " Uhr");
+        }
+        else {
             timeTV.setText("Durchgehend geöffnet");
         }
 
