@@ -117,6 +117,7 @@ public class LoadingActivity extends AppCompatActivity {
 
     public void progressCheck() {
         if (progressBar.getProgress() == 100) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             applicationContext.startActivity(intent);
         }
     }
