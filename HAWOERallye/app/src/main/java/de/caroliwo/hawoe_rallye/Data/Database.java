@@ -1,12 +1,12 @@
 package de.caroliwo.hawoe_rallye.Data;
 
-import android.arch.persistence.room.Room;
-import android.arch.persistence.room.RoomDatabase;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
 import android.content.Context;
 
 //Datenbank
 
-@android.arch.persistence.room.Database(entities = {ConfigurationEntity.class, StudentEntity.class}, version = 3, exportSchema = false)
+@androidx.room.Database(entities = {ConfigurationEntity.class, StudentEntity.class}, version = 3, exportSchema = false)
 public abstract class Database extends RoomDatabase {
 
     private static Database instance;

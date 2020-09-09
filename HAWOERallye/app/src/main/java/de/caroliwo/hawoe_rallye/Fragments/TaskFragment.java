@@ -1,15 +1,16 @@
 package de.caroliwo.hawoe_rallye.Fragments;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -236,9 +237,22 @@ public class TaskFragment extends Fragment {
                     NumberPicker numberPicker = new NumberPicker(context);
                     numberPicker.setMinValue(0);
                     numberPicker.setMaxValue(24);
-                    setNumberPickerColor(numberPicker, Color.parseColor("#ffffff"));
+                    setNumberPickerColor(numberPicker, Color.WHITE);
                     if (field.getValue() != null) {
-                        numberPicker.setValue(Integer.valueOf(field.getValue()));
+
+                       String timeString = field.getValue();
+
+                       if (timeString.contains(":")) {
+                           timeString = timeString.split(":")[0];
+                       }
+
+                       Integer timeInt = Integer.valueOf(timeString);
+
+                       if (timeInt < numberPicker.getMinValue() || timeInt > numberPicker.getMaxValue()) {
+                           numberPicker.setValue(0);
+                       } else {
+                           numberPicker.setValue(timeInt);
+                       }
                     }
                     numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
                         @Override
@@ -358,46 +372,53 @@ public class TaskFragment extends Fragment {
 
     public static void setNumberPickerColor(NumberPicker numberPicker, int color) {
 
-        //TextColor
-        try {
-            Field selectorWheelPaintField = numberPicker.getClass()
-                    .getDeclaredField("mSelectorWheelPaint");
-            selectorWheelPaintField.setAccessible(true);
-            ((Paint) selectorWheelPaintField.get(numberPicker)).setColor(color);
-        } catch (NoSuchFieldException e) {
-            Log.w("setNumberPickerTextCol", e);
-        } catch (IllegalAccessException e) {
-            Log.w("setNumberPickerTextCol", e);
-        } catch (IllegalArgumentException e) {
-            Log.w("setNumberPickerTextCol", e);
-        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            numberPicker.setTextColor(color);
 
-        final int count = numberPicker.getChildCount();
-        for (int i = 0; i < count; i++) {
-            View child = numberPicker.getChildAt(i);
-            if (child instanceof EditText)
-                ((EditText) child).setTextColor(color);
-        }
-        numberPicker.invalidate();
+        } else {
 
-
-        //Divider
-        java.lang.reflect.Field[] pickerFields = NumberPicker.class.getDeclaredFields();
-        for (java.lang.reflect.Field pf : pickerFields) {
-            if (pf.getName().equals("mSelectionDivider")) {
-                pf.setAccessible(true);
-                try {
-                    ColorDrawable colorDrawable = new ColorDrawable(color);
-                    pf.set(numberPicker, colorDrawable);
-                } catch (IllegalArgumentException e) {
-                    e.printStackTrace();
-                } catch (Resources.NotFoundException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-                break;
+            //TextColor
+            try {
+                Field selectorWheelPaintField = numberPicker.getClass()
+                        .getDeclaredField("mSelectorWheelPaint");
+                selectorWheelPaintField.setAccessible(true);
+                ((Paint) selectorWheelPaintField.get(numberPicker)).setColor(color);
+            } catch (NoSuchFieldException e) {
+                Log.w("setNumberPickerTextCol", e);
+            } catch (IllegalAccessException e) {
+                Log.w("setNumberPickerTextCol", e);
+            } catch (IllegalArgumentException e) {
+                Log.w("setNumberPickerTextCol", e);
             }
+
+            final int count = numberPicker.getChildCount();
+            for (int i = 0; i < count; i++) {
+                View child = numberPicker.getChildAt(i);
+                if (child instanceof EditText)
+                    ((EditText) child).setTextColor(color);
+            }
+            numberPicker.invalidate();
+
+            //Divider
+            Field[] pickerFields = NumberPicker.class.getDeclaredFields();
+            for (Field pf : pickerFields) {
+                if (pf.getName().equals("mSelectionDivider")) {
+                    pf.setAccessible(true);
+                    try {
+                        ColorDrawable colorDrawable = new ColorDrawable(color);
+                        pf.set(numberPicker, colorDrawable);
+                    } catch (IllegalArgumentException e) {
+                        e.printStackTrace();
+                    } catch (Resources.NotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                }
+            }
+
+            numberPicker.invalidate();
         }
     }
 }

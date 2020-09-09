@@ -1,7 +1,7 @@
 package de.caroliwo.hawoe_rallye.Data;
 
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 //Entität Student der Datenbank
 

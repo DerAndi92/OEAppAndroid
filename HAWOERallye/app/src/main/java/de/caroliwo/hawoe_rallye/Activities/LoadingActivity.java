@@ -1,17 +1,16 @@
 package de.caroliwo.hawoe_rallye.Activities;
 
-import android.arch.lifecycle.Observer;
+import androidx.lifecycle.Observer;
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 
 import de.caroliwo.hawoe_rallye.Data.ConfigurationEntity;
 import de.caroliwo.hawoe_rallye.Data.DataViewModel;

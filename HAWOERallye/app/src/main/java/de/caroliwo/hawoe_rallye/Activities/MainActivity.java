@@ -1,21 +1,21 @@
 package de.caroliwo.hawoe_rallye.Activities;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.navigation.NavigationView;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import androidx.appcompat.widget.Toolbar;
+
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -33,6 +33,8 @@ import de.caroliwo.hawoe_rallye.Fragments.TasksFragment;
 import de.caroliwo.hawoe_rallye.Fragments.TimesFragment;
 import de.caroliwo.hawoe_rallye.Group;
 import de.caroliwo.hawoe_rallye.R;
+
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
@@ -116,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // Intent zu Loading-Activity
                 Context applicationContext = getApplicationContext();
                 Intent intent = new Intent(applicationContext, LoadingActivity.class);
+                intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
                 applicationContext.startActivity(intent);
             }
         });

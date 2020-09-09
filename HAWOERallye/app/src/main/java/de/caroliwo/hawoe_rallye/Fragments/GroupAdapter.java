@@ -2,7 +2,7 @@ package de.caroliwo.hawoe_rallye.Fragments;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
